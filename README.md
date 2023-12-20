@@ -15,7 +15,7 @@ yarn = 1.22.21
 ## Install Dependencies
 백엔드 환경  
 conda create -n {env_name} python=3.10  
-pip install -r requirement.txt  
+pip install -r requirements.txt
 
 프론트엔드 환경  
 // node, npm 버전 확인하기  
