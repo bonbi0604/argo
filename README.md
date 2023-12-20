@@ -14,7 +14,7 @@ yarn = 1.22.21
 
 ## Install Dependencies
 백엔드 환경  
-conda create -n {env_name} python=3.7  
+conda create -n {env_name} python=3.10
 pip install -r requirement.txt  
 
 프론트엔드 환경  
