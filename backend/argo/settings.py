@@ -85,6 +85,17 @@ DATABASES = {
     }
 }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'aivle_big',
+#         'USER': 'aivle0412',
+#         'PASSWORD': 'aivle20230412',
+#         'HOST': 'db.aivle0412.duckdns.org',
+#         'PORT': '10622',
+#     }
+# }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
