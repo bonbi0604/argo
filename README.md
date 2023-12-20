@@ -17,7 +17,7 @@ yarn = 1.22.21
 conda create -n {env_name} python=3.7  
 pip install -r requirement.txt  
 
-프론트엔드 환경
+프론트엔드 환경  
 // node, npm 버전 확인하기  
 // yarn 설치  
 npm install -g yarn  
@@ -25,5 +25,8 @@ npm install -g yarn
 yarn install   
 
 ## 실행
-conda activate {env_name}  
-yarn start  
+// frontend    
+yarn start   
+// backend    
+conda activate {env_name}    
+python manage.py runserver
