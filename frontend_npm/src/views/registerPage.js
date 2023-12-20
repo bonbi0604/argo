@@ -63,6 +63,11 @@ function Register() {
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // 이메일이 올바르지 않은 경우 회원가입 처리를 중단합니다.
+    if (!validateEmail(email)) {
+      alert("이메일 형식이 올바르지 않습니다.");
+      return;
+    }
     // 회원가입 함수 호출
     registerUser(username, password, password2, email, dept);
   };
@@ -91,7 +96,7 @@ function Register() {
             placeholder="Password"
             required
           />
-          <p>{pwdMsg}</p> {/* 비밀번호 유효성 메시지 */}
+          <p style={{ color: validatePwd(password) ? 'green' : 'red' }}>{pwdMsg}</p> {/* 비밀번호 유효성 메시지 */}
         </div>
         <div>
           <label htmlFor="confirm-password">Confirm Password</label>
@@ -102,7 +107,7 @@ function Register() {
             placeholder="Confirm Password"
             required
           />
-          <p>{password2 !== password ? "Passwords do not match" : ""}</p> {/* 비밀번호 일치 여부 메시지 */}
+          <p style={{ color: password2 === password ? 'green' : 'red' }}>{password2 === password ? "비밀번호가 일치합니다." : "비밀번호가 일치하지 않습니다."}</p> {/* 비밀번호 일치 여부 메시지 */}
         </div>
         <div>
           <label htmlFor="email">Email</label>
@@ -113,7 +118,7 @@ function Register() {
             placeholder="Email"
             required
           />
-          <p>{emailMsg}</p> {/* 이메일 유효성 메시지 */}
+          <p style={{ color: validateEmail(email) ? 'green' : 'red' }}>{emailMsg}</p> {/* 이메일 유효성 메시지 */}
         </div>
         <div>
           <label htmlFor="dept">Dept</label>
