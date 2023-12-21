@@ -7,7 +7,7 @@ console.log("homepage");
 const Home = () => {
 
   const { user } = useContext(AuthContext);
-  
+
   return (
     <section>
       {user && <UserInfo user={user} />}
