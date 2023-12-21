@@ -1,13 +1,18 @@
-import { useContext } from "react";
-import AuthContext from "../context/AuthContext";
+import { useContext } from "react"; // 리액트에서 useContext 모듈을 가져옵니다.
+import AuthContext from "../context/AuthContext"; // 커스텀 인증 컨텍스트를 가져옵니다.
 
 const LoginPage = () => {
-  const { loginUser } = useContext(AuthContext);
+  const { loginUser } = useContext(AuthContext); // AuthContext에서 loginUser 함수를 가져옵니다.
+
   const handleSubmit = e => {
-    e.preventDefault();
-    const username = e.target.username.value;
+    e.preventDefault(); // 폼 제출 기본 동작을 막습니다. 페이지 리로드를 방지합니다.
+
+    // 폼에서 사용자명(username)과 비밀번호(password)를 가져옵니다.
+    const email = e.target.email.value;
     const password = e.target.password.value;
-    username.length > 0 && loginUser(username, password);
+
+    // 사용자명이 비어 있지 않은 경우에만 loginUser 함수를 호출하여 로그인을 시도합니다.
+    email.length > 0 && loginUser(email, password);
   };
 
   return (
@@ -15,11 +20,13 @@ const LoginPage = () => {
       <form onSubmit={handleSubmit}>
         <h1>Login </h1>
         <hr />
-        <label htmlFor="username">Username</label>
-        <input type="text" id="username" placeholder="Enter Username" />
+        <label htmlFor="username">Email</label>
+        <input type="text" id="email" placeholder="Enter Email" />
+        <br/>
         <label htmlFor="password">Password</label>
         <input type="password" id="password" placeholder="Enter Password" />
-        <button type="submit">Login</button>
+        <br/>
+        <button type="submit">Login</button> {/* 폼 제출을 위한 로그인 버튼 */}
       </form>
     </section>
   );
