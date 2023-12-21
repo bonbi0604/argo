@@ -60,14 +60,17 @@ function Register() {
       .match(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?:\.[A-Za-z]{2,})?$/);
   };
 
+  // 유효성 검사 함수로 정리
+  const isEmailValid = validateEmail(email);
+  const isPwdValid = validatePwd(password);
+  const isConfirmPwd = password === password2;
+
+  // 유효성 검사를 묶기
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd;
+
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // 이메일이 올바르지 않은 경우 회원가입 처리를 중단합니다.
-    if (!validateEmail(email)) {
-      alert("이메일 형식이 올바르지 않습니다.");
-      return;
-    }
     // 회원가입 함수 호출
     registerUser(name, password, password2, email, dept);
   };
@@ -128,7 +131,7 @@ function Register() {
             <option value="3">부서3</option>
           </select>
         </div>
-        <button>회원가입</button>
+        <button type="submit" disabled={!isAllValid}>회원가입</button>
       </form>
     </section>
   );

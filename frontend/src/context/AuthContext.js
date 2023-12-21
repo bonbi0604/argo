@@ -68,6 +68,12 @@ export const AuthProvider = ({ children }) => {
     });
     if (response.status === 201) {
       navigate("/login");
+    } else if (response.status === 400) {
+      // 이메일 중복 에러인 경우
+      return response.json().then(data => {
+        alert("이미 등록된 이메일입니다."); 
+        window.location.reload();
+      }); 
     } else {
       alert("Something went wrong!");
     }
