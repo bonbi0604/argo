@@ -34,6 +34,7 @@ def getRoutes(request):
 from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
+from django.db import IntegrityError
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -42,7 +43,11 @@ def testEndPoint(request):
         data = f"Congratulation {request.user}, your API just responded to GET request"
         return Response({'response': data}, status=status.HTTP_200_OK)
     elif request.method == 'POST':
-        text = request.POST.get('text')
-        data = f'Congratulation your API just responded to POST request with text: {text}'
-        return Response({'response': data}, status=status.HTTP_200_OK)
+        try:
+            text = request.POST.get('text')
+            data = f'Congratulation your API just responded to POST request with text: {text}'
+            return Response({'response': data}, status=status.HTTP_200_OK)
+        except IntegrityError:
+            # 중복된 이메일이 발생한 경우
+            return JsonResponse({'error': 'Email is already taken'}, status=400)
     return Response({}, status.HTTP_400_BAD_REQUEST)
