@@ -1,9 +1,14 @@
 const Footer = () => {
-    return (
-      <div>
-        <h4>Created By You</h4>
+  return (
+    <footer className="footer">
+    <div className="footer-container">
+      <div className="footer-content">
+        <p>&copy; 2023 ARGO by Team12</p>
+        <p>Contact: wonbo123@gmail.com</p>
       </div>
-    );
-  };
-  
-  export default Footer;
+    </div>
+  </footer>
+  )
+}
+
+export default Footer
