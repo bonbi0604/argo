@@ -8,11 +8,11 @@ const LoginPage = () => {
     e.preventDefault(); // 폼 제출 기본 동작을 막습니다. 페이지 리로드를 방지합니다.
 
     // 폼에서 사용자명(username)과 비밀번호(password)를 가져옵니다.
-    const username = e.target.username.value;
+    const email = e.target.email.value;
     const password = e.target.password.value;
 
     // 사용자명이 비어 있지 않은 경우에만 loginUser 함수를 호출하여 로그인을 시도합니다.
-    username.length > 0 && loginUser(username, password);
+    email.length > 0 && loginUser(email, password);
   };
 
   return (
@@ -20,8 +20,8 @@ const LoginPage = () => {
       <form onSubmit={handleSubmit}>
         <h1>Login </h1>
         <hr />
-        <label htmlFor="username">Username</label>
-        <input type="text" id="username" placeholder="Enter Username" />
+        <label htmlFor="username">Email</label>
+        <input type="text" id="email" placeholder="Enter Email" />
         <br/>
         <label htmlFor="password">Password</label>
         <input type="password" id="password" placeholder="Enter Password" />

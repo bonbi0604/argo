@@ -3,7 +3,7 @@ import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져�
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
-  const [username, setUsername] = useState(""); // 사용자 이름 상태
+  const [name, setName] = useState(""); // 사용자 이름 상태
   const [password, setPassword] = useState(""); // 비밀번호 상태
   const [password2, setPassword2] = useState(""); // 비밀번호 확인 상태
   const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
@@ -69,7 +69,7 @@ function Register() {
       return;
     }
     // 회원가입 함수 호출
-    registerUser(username, password, password2, email, dept);
+    registerUser(name, password, password2, email, dept);
   };
 
   return (
@@ -78,12 +78,12 @@ function Register() {
         <h1>Register</h1>
         <hr />
         <div>
-          <label htmlFor="username">사원번호</label>
+          <label htmlFor="name">이름</label>
           <input
             type="text"
-            id="username"
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Username"
+            id="name"
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Name"
             required
           />
         </div>
