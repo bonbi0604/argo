@@ -1,4 +1,5 @@
-from django.contrib.auth.models import User
+# from django.contrib.auth.models import User
+from account.models import User
 # from django.conf import settings
 
 from django.contrib.auth.password_validation import validate_password
@@ -15,8 +16,10 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     def get_token(cls, user):
         token = super().get_token(user)
         # Frontend에서 더 필요한 정보가 있다면 여기에 추가적으로 작성
-        token['username'] = user.username
+        token['name'] = user.name
         token['email'] = user.email
+        token['dept'] = user.dept
+        token['id'] = user.id
         return token
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -25,7 +28,7 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('username', 'password', 'password2')
+        fields = ('password', 'password2', 'email', 'dept', 'name')
 
     def validate(self, attrs):
         if attrs['password'] != attrs['password2']:
@@ -36,7 +39,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         user = User.objects.create(
-            username=validated_data['username']
+            name=validated_data['name'],
+            dept=validated_data['dept'],
+            email=validated_data['email']
         )
 
         user.set_password(validated_data['password'])
