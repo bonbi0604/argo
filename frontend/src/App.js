@@ -18,7 +18,7 @@ function App() {
       <div className="flex flex-col min-h-screen overflow-hidden">
         <AuthProvider>
           <HeaderMenu />
-          <Navbar />
+          {/* <Navbar /> */}
           <Routes>
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
