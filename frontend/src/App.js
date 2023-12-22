@@ -1,11 +1,12 @@
 // App.js
 import React from "react"
 import "./index.css"
+import "./App.css"
 import Footer from "./components/Footer"
 import HeaderMenu from "./components/HeaderMenu"
 import Navbar from "./components/Navbar"
 import { BrowserRouter as Router,  Routes,  Route} from "react-router-dom"
-import PrivateRoute from "./utils/PrivateRoute"
+// import PrivateRoute from "./utils/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext"
 import Home from "./views/homePage"
 import Login from "./views/loginPage"
@@ -26,8 +27,8 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Home />} />
           </Routes>
+          <Footer />
         </AuthProvider>
-        <Footer />
       </div>
     </Router>
   )
