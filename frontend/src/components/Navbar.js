@@ -29,7 +29,7 @@ const Navbar = () => {
             IMPORTANT: 임시로 로그인 안한 상태로 보이도록 작업해둠.
             추후 !user -> user 로 변경 하기
           */}
-          {!user ? (
+          {
             <>
               <ul className={`nav-menu ${isOpen ? 'active' : ''}`}>
                 {/** nav bar items */}
@@ -58,10 +58,7 @@ const Navbar = () => {
                 </li>
               </ul>
             </>
-          ) : (
-            <>
-            </>
-          )}
+          }
         </div>
       </div>
     </header>
