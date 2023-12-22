@@ -14,18 +14,21 @@ import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
 import Dashboard from "./views/Dashboard"
 
+import CommunicationPage from "./views/CommunicationPage"
+
 function App() {
   return (
     <Router>
       <div className="flex flex-col min-h-screen overflow-hidden">
         <AuthProvider>
           <HeaderMenu />
-          <Navbar />
+          {/* <Navbar /> */}
           <Routes>
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Home />} />
+            <Route path="/learn/communication" element={<CommunicationPage />} />
           </Routes>
           <Footer />
         </AuthProvider>
