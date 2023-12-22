@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import './HeaderMenu.css'
 
 // sanity check - 추후 완성되면 지우기
 console.log("header menu");
@@ -61,14 +62,15 @@ const HeaderMenu = () => {
         <div className="header-login">
           {user ? (
             <button className="logout-button" onClick={logoutUser}>
-              Logout
+              로그아웃
             </button>
           ) : (
             <>
               <Link to="/login" className="login-button">
-                Login
+                로그인
               </Link>
-              <Link to="/register">Register</Link>
+              &nbsp; | &nbsp;
+              <Link to="/register">회원가입</Link>
             </>
           )}
         </div>

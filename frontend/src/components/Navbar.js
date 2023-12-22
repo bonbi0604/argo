@@ -1,6 +1,7 @@
 import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import './Navbar.css'
 
 // sanity check - 추후 완성되면 지우기
 console.log("navbar");
