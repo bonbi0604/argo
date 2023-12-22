@@ -18,6 +18,10 @@ import WritePost from './views/WritePost'
 import Chatbot from "./components/Chatbot"
 import Chat from "./views/chat"
 
+import CommunicationPage from "./views/CommunicationPage"
+
+import LearningPage from "./views/learningPage"
+
 function App() {
   return (
     <Router>
@@ -34,6 +38,8 @@ function App() {
             <Route path="/writepost" element={<WritePost />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />
+            <Route path="/learn/communication" element={<CommunicationPage />} />
+            <Route path="/learn" element={<LearningPage />} />
           </Routes>
           <Footer />
         </AuthProvider>
