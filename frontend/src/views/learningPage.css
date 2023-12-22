@@ -1,8 +1,4 @@
-.learning-page {
-    /* 레이아웃과 패딩을 설정합니다. */
-  }
-  
-  .scoreboard {
+    .scoreboard {
     /* 점수판 스타일을 설정합니다. */
   }
 
@@ -13,11 +9,6 @@
     display: flex; /* Flexbox를 사용하여 요소들을 가로로 배치합니다. */
     flex-direction: column; /* 요소들을 세로로 정렬합니다. */
     align-items: flex-end; /* 요소들을 오른쪽으로 정렬합니다. */
-  }
-  
-  .test{
-    display: flex;
-    flex-direction: column;
   }
 
   .score-item {

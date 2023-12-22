@@ -12,8 +12,8 @@ import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
 import Dashboard from "./views/Dashboard"
-
 import LearningPage from "./views/learningPage"
+import EthicPage from "./views/ethicPage"
 
 function App() {
   return (
@@ -27,6 +27,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Home />} />
             <Route path="/learn" element={<LearningPage />} />
+            <Route path="/learn/ethic" element={<EthicPage />} />
           </Routes>
           <Footer />
         </AuthProvider>

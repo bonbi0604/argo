@@ -17,6 +17,9 @@ const LearningPage = () => {
   const { user } = useContext(AuthContext);
 
   return (
+    <>
+    <div height="5rem" padding-top="5rem" margin-bottom="5rem">&nbsp;</div>
+    
     <section className="learning-page">
       <h2>{user.name}</h2> 
       
@@ -38,6 +41,7 @@ const LearningPage = () => {
         ))}
       </div>
     </section>
+    </>
   );
 };
 
