@@ -1,15 +1,18 @@
 .header-menu {
   background-color: rgba(157, 194, 237, 0.7);
+  padding: 1rem;
   color: white;
   position: fixed;
   width: 100%;
   z-index: 1000;
-  margin-top: -1.5rem;
+  top: 0;
+  left: 0;
 }
 
 .header-container {
+  max-width: 1200px;
   display: flex;
-  margin: 2rem 1.5rem 1.5rem 1.5rem;
+  margin: 0 auto;
   height: 3rem;
   justify-content: space-between;
   align-items: center;

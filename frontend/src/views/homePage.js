@@ -10,7 +10,6 @@ const Home = () => {
 
   return (
     <>
-    <div height="5rem" padding-top="5rem" margin-bottom="5rem">&nbsp;</div>
     <div className="main-section">
       <section>
         {/* user가 존재하는 경우 UserInfo 컴포넌트를 렌더링합니다. */}
