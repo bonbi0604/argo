@@ -7,7 +7,6 @@ import os
 from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
-from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
@@ -25,7 +24,7 @@ template = """You are an assitant for new employee. If you don't know, just say 
 Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI(temperature=0.3,
+model = ChatOpenAI(temperature=0.1,
                     max_tokens=2048,
                     model_name='gpt-3.5-turbo-1106',)
 output_parser = StrOutputParser()
@@ -45,7 +44,5 @@ def chatbot_response(request):
         return JsonResponse({'reply': chatbot_response})
 
 def generate_response(message):
-    # Implement your logic to generate a response to the message
-    # This could involve calling an AI model or another service
     return chain.invoke(message)
 
