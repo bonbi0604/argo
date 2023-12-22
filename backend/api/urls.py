@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import checkId
+from .views import checkId, checkEmail
 
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -11,6 +11,7 @@ urlpatterns = [
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('register/', views.RegisterView.as_view(), name='auth_register'),
     path('checkId/', checkId, name='checkId'),
+    path('checkEmail/', checkEmail, name='checkEmail'),
     path('', views.getRoutes),
     path('password_reset/', include('django.contrib.auth.urls'))  # 패스워드 재설정
 ]

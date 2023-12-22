@@ -36,6 +36,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.db import IntegrityError
+import json
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -56,11 +57,26 @@ def testEndPoint(request):
 @csrf_exempt
 def checkId(request):
     try:
-        # POST 요청에서 아이디 가져오기
-        user_id = request.POST.get('id')
+        # 아이디 가져오기
+        data = json.loads(request.body)
+        user_id = data.get('id')
         
-        # 아이디 중복 체크 로직을 구현
+        # 아이디 중복 체크 로직을 수정
         is_duplicate = User.objects.filter(id=user_id).exists()
+
+        return JsonResponse({'isDuplicate': is_duplicate})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+@csrf_exempt
+def checkEmail(request):
+    try:
+        # 이메일 가져오기
+        data = json.loads(request.body)
+        user_email = data.get('email')
+        
+        # 이메일 중복 체크 로직을 수정
+        is_duplicate = User.objects.filter(email=user_email).exists()
 
         return JsonResponse({'isDuplicate': is_duplicate})
     except Exception as e:

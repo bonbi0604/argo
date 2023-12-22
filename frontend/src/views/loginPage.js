@@ -8,11 +8,11 @@ const LoginPage = () => {
   const handleSubmit = e => {
     e.preventDefault(); // 폼 제출 기본 동작을 막습니다. 페이지 리로드를 방지합니다.
 
-    // 폼에서 사용자명(username)과 비밀번호(password)를 가져옵니다.
-    const id = e.target.Id.value;
+    // 폼에서 아이디(id)과 비밀번호(password)를 가져옵니다.
+    const id = e.target.id.value;
     const password = e.target.password.value;
 
-    // 사용자명이 비어 있지 않은 경우에만 loginUser 함수를 호출하여 로그인을 시도합니다.
+    // 아이디가 비어 있지 않은 경우에만 loginUser 함수를 호출하여 로그인을 시도합니다.
     id.length > 0 && loginUser(id, password);
   };
 
@@ -22,10 +22,10 @@ const LoginPage = () => {
         <h1>Login </h1>
         <hr />
         <label htmlFor="id">Id</label>
-        <input type="text" id="id" placeholder="Enter Id" />
+        <input type="text" id="id" name="id" placeholder="Enter Id" />
         <br/>
         <label htmlFor="password">Password</label>
-        <input type="password" id="password" placeholder="Enter Password" />
+        <input type="password" id="password" name="password" placeholder="Enter Password" />
         <br/>
         <button type="submit">Login</button> {/* 폼 제출을 위한 로그인 버튼 */}
       </form>

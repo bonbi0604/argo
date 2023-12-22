@@ -1,5 +1,6 @@
 import React, { useState, useContext, useCallback } from "react"; // 리액트 및 필요한 모듈 가져오기
 import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져오기
+import styles from "./registerPage.css";
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
@@ -11,10 +12,31 @@ function Register() {
   const [dept, setDept] = useState("1"); // 부서 선택 상태 (기본값: 부서1)
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("")
+  const [confirmPwdMsg, setConfirmPwdMsg] = useState("") //비번 확인
+  const [idMsg, setIdMsg] = useState("") // 아이디 중복 메세지
+  const [idIsCuplicate, setIdIsDuplicate] = useState(false) //아이디 중복인지(True,False)
+  const [emailIsDuplicate, setEmailIsDuplicate] = useState(false); // 이메일 중복여부(True,False)
 
   // 비밀번호 및 이메일 관련 메시지를 나타내는 상태 변수
   const [pwdMsg, setPwdMsg] = useState(''); // 비밀번호 유효성 메시지
   const [emailMsg, setEmailMsg] = useState(""); // 이메일 유효성 메시지
+
+  // warning 색
+  const [idMsgColor, setIdMsgColor] = useState("red"); // 초기값을 빨강으로 설정
+  const [emailMsgColor, setEmailMsgColor] = useState("red");
+
+
+  //비밀번호 확인
+  const onChangeConfirmPwd = useCallback((e) => {
+    const currConfirmPwd = e.target.value;
+    setPassword2(currConfirmPwd);
+
+    if (currConfirmPwd !== password) {
+      setConfirmPwdMsg("비밀번호가 일치하지 않습니다.")
+    } else {
+      setConfirmPwdMsg("올바른 비밀번호입니다.")
+    }
+  }, [password])
 
   // 비밀번호 변경 핸들러
   const onChangePwd = useCallback((e) => {
@@ -43,8 +65,10 @@ function Register() {
     // 입력된 이메일의 유효성을 검사하고, 메시지를 설정합니다.
     if (!validateEmail(currEmail)) {
       setEmailMsg("이메일 형식이 올바르지 않습니다.");
+      setEmailMsgColor("red")
     } else {
       setEmailMsg("올바른 이메일 형식입니다.");
+      setEmailMsgColor('green')
     }
   }, []);
 
@@ -62,24 +86,8 @@ function Register() {
       .match(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?:\.[A-Za-z]{2,})?$/);
   };
 
-  // 유효성 검사 함수로 정리
-  const isEmailValid = validateEmail(email);
-  const isPwdValid = validatePwd(password);
-  const isConfirmPwd = password === password2;
-
-  // 유효성 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd;
-
-  // 회원가입 양식 제출 핸들러
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    // 회원가입 함수 호출
-    registerUser(name, password, password2, email, dept, phone, id);
-  };
-
-  
   // 아이디 중복체크
-  const checkDuplicateId = async () => {
+  const checkDuplicateId = useCallback(async () => {
     try {
       // 백엔드 API 호출하여 아이디 중복 여부 확인
       const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
@@ -95,9 +103,12 @@ function Register() {
 
       if (response.ok) {
         if (data.isDuplicate) {
-          alert("이미 사용 중인 아이디입니다.");
+          setIdMsg("이미 사용 중인 아이디입니다.");
+          setIdMsgColor("red")
         } else {
-          alert("사용 가능한 아이디입니다.");
+          setIdMsg("사용 가능한 아이디입니다.");
+          setIdIsDuplicate(true);
+          setIdMsgColor("green");
         }
       } else {
         console.error("Failed to check duplicate id.");
@@ -105,13 +116,13 @@ function Register() {
     } catch (error) {
       console.error("Error occurred while checking duplicate id:", error);
     }
-  };
+  }, [id]);
 
   // 이메일 중복체크
-  const checkDuplicateEmail = async () => {
+  const checkDuplicateEmail = useCallback(async () => {
     try {
       // 백엔드 API 호출하여 이메일 중복 여부 확인
-      const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
+      const response = await fetch(`http://127.0.0.1:8000/api/checkEmail/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,9 +135,12 @@ function Register() {
 
       if (response.ok) {
         if (data.isDuplicate) {
-          alert("이미 사용 중인 이메일입니다.");
+          setEmailMsg("이미 사용 중인 이메일입니다.");
+          setEmailMsgColor("red")
         } else {
-          alert("사용 가능한 이메일입니다.");
+          setEmailMsg("사용 가능한 이메일입니다.");
+          setEmailIsDuplicate(true);
+          setEmailMsgColor("green");
         }
       } else {
         console.error("Failed to check duplicate id.");
@@ -134,6 +148,23 @@ function Register() {
     } catch (error) {
       console.error("Error occurred while checking duplicate id:", error);
     }
+  }, [email]);
+
+  // 검사 함수로 정리
+  const isEmailValid = validateEmail(email);
+  const isPwdValid = validatePwd(password);
+  const isConfirmPwd = password === password2;
+  // const isDuId = checkDuplicateId(id);
+  // const isDuEmail = checkDuplicateEmail(email);
+
+  // 검사를 묶기
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd;
+
+  // 회원가입 양식 제출 핸들러
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // 회원가입 함수 호출
+    registerUser(name, password, password2, email, dept, phone, id);
   };
 
 
@@ -160,8 +191,10 @@ function Register() {
             onChange={(e) => setId(e.target.value)}
             placeholder="Id"
             required
+            disabled={idIsCuplicate}
           />
           <button type="button" onClick={checkDuplicateId}>중복 확인</button>
+          <p style={{ color: idMsgColor }}>{idMsg}</p>
         </div>
         <div>
           <label htmlFor="password">Password</label>
@@ -179,11 +212,11 @@ function Register() {
           <input
             type="password"
             id="confirm-password"
-            onChange={(e) => setPassword2(e.target.value)}
+            onChange={onChangeConfirmPwd}
             placeholder="Confirm Password"
             required
           />
-          <p style={{ color: password2 === password ? 'green' : 'red' }}>{password2 === password ? "비밀번호가 일치합니다." : "비밀번호가 일치하지 않습니다."}</p> {/* 비밀번호 일치 여부 메시지 */}
+          <p style={{ color: password2 === password ? 'green' : 'red' }}>{confirmPwdMsg}</p> {/* 비밀번호 일치 여부 메시지 */}
         </div>
         <div>
           <label htmlFor="email">Email</label>
@@ -192,10 +225,11 @@ function Register() {
             id="email"
             onChange={onChangeEmail}
             placeholder="Email"
+            disabled={emailIsDuplicate}
             required
           />
           <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
-          <p style={{ color: validateEmail(email) ? 'green' : 'red' }}>{emailMsg}</p> {/* 이메일 유효성 메시지 */}
+          <p style={{ color: emailMsgColor }}>{emailMsg}</p>
         </div>
         <div>
           <label htmlFor="phone">폰 번호</label>
