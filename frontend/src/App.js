@@ -11,6 +11,7 @@ import Home from "./views/homePage"
 import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
+import Chatbot from "./components/chatbot"
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           </Routes>
         </AuthProvider>
         <Footer />
+        <Chatbot />
       </div>
     </Router>
   )
