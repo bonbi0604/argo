@@ -12,6 +12,8 @@ import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
 import Dashboard from "./views/Dashboard"
+import Chatbot from "./components/Chatbot"
+import Chat from "./views/chat"
 
 function App() {
   return (
@@ -23,10 +25,12 @@ function App() {
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />
           </Routes>
           <Footer />
         </AuthProvider>
+        <Chatbot />
       </div>
     </Router>
   )
