@@ -17,10 +17,9 @@ import Dashboard from "./views/Dashboard"
 import WritePost from './views/WritePost'
 import Chatbot from "./components/Chatbot"
 import Chat from "./views/chat"
-
 import CommunicationPage from "./views/CommunicationPage"
-
 import LearningPage from "./views/learningPage"
+import EthicPage from "./views/ethicPage"
 
 function App() {
   return (
@@ -40,6 +39,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/learn/communication" element={<CommunicationPage />} />
             <Route path="/learn" element={<LearningPage />} />
+            <Route path="/learn/ethic" element={<EthicPage />} />
           </Routes>
           <Footer />
         </AuthProvider>
