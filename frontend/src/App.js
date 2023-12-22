@@ -12,6 +12,7 @@ import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
 import Dashboard from "./views/Dashboard"
+import WritePost from './views/WritePost'
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/writepost" element={<WritePost />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </AuthProvider>
