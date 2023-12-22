@@ -24,8 +24,8 @@ template = """You are an assitant for new employee. If you don't know, just say 
 Question: {question}
 """
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI(temperature=0.1,
-                    max_tokens=2048,
+model = ChatOpenAI(temperature=0.3,
+                    max_tokens=4000,
                     model_name='gpt-3.5-turbo-1106',)
 output_parser = StrOutputParser()
 setup_and_retrieval = RunnableParallel(
