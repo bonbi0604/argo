@@ -26,7 +26,7 @@ const HeaderMenu = () => {
             로그인 관리.
             로그인 여부에 따라 보이는 내용이 다르도록
           */}
-          {!user ? (
+          {
           /** header navigation items
            * designed to be different whether if user is logged in or not
           */
@@ -44,15 +44,7 @@ const HeaderMenu = () => {
                 게시판
               </Link>
             </>
-          ) : (
-            /** If the user is not logged in
-             * do not show menu.
-            */
-            <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-            </>
-          )}
+          }
         </div>
         <div className="header-login">
           {user ? (

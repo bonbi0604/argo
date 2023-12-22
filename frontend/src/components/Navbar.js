@@ -1,3 +1,8 @@
+/**
+ * 일단 폐기... 추후 살릴지 고민
+ */
+
+
 import { useState } from "react";
 import { Link } from "react-router-dom";
 // import AuthContext from "../context/AuthContext";
@@ -8,7 +13,7 @@ console.log("navbar");
 
 // 좌측 중단 사이드 네비게이션 바
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
   // const { user, logoutUser } = useContext(AuthContext);
 
   const toggleNavbar = () => {
