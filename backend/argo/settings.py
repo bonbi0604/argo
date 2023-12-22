@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'api',
     'account',
-    
+    'chatbot',
 ]
 
 AUTH_USER_MODEL = 'account.User'

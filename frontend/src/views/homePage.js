@@ -3,9 +3,6 @@ import UserInfo from "../components/UserInfo"; // UserInfo 컴포넌트를 가�
 import AuthContext from "../context/AuthContext"; // 커스텀 인증 컨텍스트를 가져옵니다.
 import "./homePage.css"
 
-// css import
-import styles from "./homePage.css";
-
 console.log("homepage"); // "homepage"을 콘솔에 출력합니다.
 
 const Home = () => {
@@ -17,7 +14,7 @@ const Home = () => {
       {/* {user && <UserInfo user={user} />} */}
       <div id="body"></div>
     </section>
-  );
-};
+  )
+}
 
 export default Home;
