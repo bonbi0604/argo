@@ -1,6 +1,6 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import AuthContext from "../context/AuthContext";
+// import AuthContext from "../context/AuthContext";
 import './Navbar.css'
 
 // sanity check - 추후 완성되면 지우기
@@ -9,7 +9,7 @@ console.log("navbar");
 // 좌측 중단 사이드 네비게이션 바
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logoutUser } = useContext(AuthContext);
+  // const { user, logoutUser } = useContext(AuthContext);
 
   const toggleNavbar = () => {
     setIsOpen(!isOpen);
@@ -30,7 +30,7 @@ const Navbar = () => {
             IMPORTANT: 임시로 로그인 안한 상태로 보이도록 작업해둠.
             추후 !user -> user 로 변경 하기
           */}
-          {!user ? (
+          {
             <>
               <ul className={`nav-menu ${isOpen ? 'active' : ''}`}>
                 {/** nav bar items */}
@@ -59,10 +59,7 @@ const Navbar = () => {
                 </li>
               </ul>
             </>
-          ) : (
-            <>
-            </>
-          )}
+          }
         </div>
       </div>
     </header>
