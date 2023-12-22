@@ -12,6 +12,8 @@ import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
 
+import LearningPage from "./views/learningPage"
+
 function App() {
   return (
     <Router>
@@ -23,6 +25,7 @@ function App() {
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Home />} />
+            <Route path="/learn" element={<LearningPage />} />
           </Routes>
         </AuthProvider>
         <Footer />
