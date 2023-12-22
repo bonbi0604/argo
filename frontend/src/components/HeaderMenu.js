@@ -31,9 +31,6 @@ const HeaderMenu = () => {
            * designed to be different whether if user is logged in or not
           */
             <>
-              <Link to="/" className="header-link">
-                Home
-              </Link>
               {/** 역량개발 페이지로 이동 TODO: 링크 추가 */}
               <Link to="/learn" className="header-link">
                 역량개발
