@@ -11,6 +11,8 @@ import Home from "./views/homePage"
 import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
+import FindId from "./views/find/findIdPage"
+import FindPw from "./views/find/findPwPage"
 
 function App() {
   return (
@@ -22,6 +24,8 @@ function App() {
           <Routes>
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/findId" element={<FindId />} />
+            <Route path="/findPw" element={<FindPw />} />
             <Route path="/" element={<Home />} />
           </Routes>
         </AuthProvider>

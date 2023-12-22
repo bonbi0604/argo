@@ -8,6 +8,7 @@ from rest_framework import generics
 # from django.contrib.auth.models import User
 from account.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.views.decorators.csrf import csrf_exempt;
 
 # Create your views here.
 
@@ -51,3 +52,16 @@ def testEndPoint(request):
             # 중복된 이메일이 발생한 경우
             return JsonResponse({'error': 'Email is already taken'}, status=400)
     return Response({}, status.HTTP_400_BAD_REQUEST)
+
+@csrf_exempt
+def checkId(request):
+    try:
+        # POST 요청에서 아이디 가져오기
+        user_id = request.POST.get('id')
+        
+        # 아이디 중복 체크 로직을 구현
+        is_duplicate = User.objects.filter(id=user_id).exists()
+
+        return JsonResponse({'isDuplicate': is_duplicate})
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)

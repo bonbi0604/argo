@@ -9,6 +9,8 @@ function Register() {
   const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
   const [email, setEmail] = useState(""); // 이메일 상태
   const [dept, setDept] = useState("1"); // 부서 선택 상태 (기본값: 부서1)
+  const [phone, setPhone] = useState("");
+  const [id, setId] = useState("")
 
   // 비밀번호 및 이메일 관련 메시지를 나타내는 상태 변수
   const [pwdMsg, setPwdMsg] = useState(''); // 비밀번호 유효성 메시지
@@ -72,8 +74,68 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 회원가입 함수 호출
-    registerUser(name, password, password2, email, dept);
+    registerUser(name, password, password2, email, dept, phone, id);
   };
+
+  
+  // 아이디 중복체크
+  const checkDuplicateId = async () => {
+    try {
+      // 백엔드 API 호출하여 아이디 중복 여부 확인
+      const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id
+        })
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.isDuplicate) {
+          alert("이미 사용 중인 아이디입니다.");
+        } else {
+          alert("사용 가능한 아이디입니다.");
+        }
+      } else {
+        console.error("Failed to check duplicate id.");
+      }
+    } catch (error) {
+      console.error("Error occurred while checking duplicate id:", error);
+    }
+  };
+
+  // 이메일 중복체크
+  const checkDuplicateEmail = async () => {
+    try {
+      // 백엔드 API 호출하여 이메일 중복 여부 확인
+      const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email
+        })
+      });
+      const data = await response.json();
+
+      if (response.ok) {
+        if (data.isDuplicate) {
+          alert("이미 사용 중인 이메일입니다.");
+        } else {
+          alert("사용 가능한 이메일입니다.");
+        }
+      } else {
+        console.error("Failed to check duplicate id.");
+      }
+    } catch (error) {
+      console.error("Error occurred while checking duplicate id:", error);
+    }
+  };
+
 
   return (
     <section>
@@ -89,6 +151,17 @@ function Register() {
             placeholder="Name"
             required
           />
+        </div>
+        <div>
+          <label htmlFor="id">아이디</label>
+          <input
+            type="text"
+            id="id"
+            onChange={(e) => setId(e.target.value)}
+            placeholder="Id"
+            required
+          />
+          <button type="button" onClick={checkDuplicateId}>중복 확인</button>
         </div>
         <div>
           <label htmlFor="password">Password</label>
@@ -121,7 +194,18 @@ function Register() {
             placeholder="Email"
             required
           />
+          <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
           <p style={{ color: validateEmail(email) ? 'green' : 'red' }}>{emailMsg}</p> {/* 이메일 유효성 메시지 */}
+        </div>
+        <div>
+          <label htmlFor="phone">폰 번호</label>
+          <input
+            type="text"
+            id="phone"
+            onChange={(e) => setPhone(e.target.value)}
+            placeholder="Phone"
+            required
+          />
         </div>
         <div>
           <label htmlFor="dept">Dept</label>
