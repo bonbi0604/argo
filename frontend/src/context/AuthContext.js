@@ -28,14 +28,14 @@ export const AuthProvider = ({ children }) => {
 
   const navigate = useNavigate(); // react router dom 6버전 이상부터는 useHistory대신 useNavigate 사용
 
-  const loginUser = async (email, password) => {
+  const loginUser = async (id, password) => {
     const response = await fetch("http://127.0.0.1:8000/api/token/", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        email,
+        id,
         password
       })
     });
@@ -52,7 +52,7 @@ export const AuthProvider = ({ children }) => {
     }
   };
   
-  const registerUser = async (name, password, password2, email, dept) => {
+  const registerUser = async (name, password, password2, email, dept, phone, id) => {
     const response = await fetch("http://127.0.0.1:8000/api/register/", {
       method: "POST",
       headers: {
@@ -63,7 +63,9 @@ export const AuthProvider = ({ children }) => {
         password,
         password2,
         email,
-        dept
+        dept,
+        phone,
+        id
       })
     });
     if (response.status === 201) {

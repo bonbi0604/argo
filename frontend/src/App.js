@@ -11,6 +11,8 @@ import Home from "./views/homePage"
 import Login from "./views/loginPage"
 import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
+import FindId from "./views/find/findIdPage"
+import FindPw from "./views/find/findPwPage"
 import Dashboard from "./views/Dashboard"
 import WritePost from './views/WritePost'
 import Chatbot from "./components/Chatbot"
@@ -22,9 +24,12 @@ function App() {
       <div className="flex flex-col min-h-screen overflow-hidden">
         <AuthProvider>
           <HeaderMenu />
+          {/* <Navbar /> */}
           <Routes>
             <Route path="/login"  element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/findId" element={<FindId />} />
+            <Route path="/findPw" element={<FindPw />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/writepost" element={<WritePost />} />
             <Route path="/chat" element={<Chat />} />

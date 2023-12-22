@@ -9,15 +9,11 @@ const Home = () => {
   const { user } = useContext(AuthContext); // AuthContext에서 user 정보를 가져옵니다.
 
   return (
-    <>
-    <div className="main-section">
-      <section>
-        {/* user가 존재하는 경우 UserInfo 컴포넌트를 렌더링합니다. */}
-        {user && <UserInfo user={user} />}
-        <h1>You are on home page!</h1> {/* 홈 페이지 안내 메시지 */}
-      </section>
-    </div>
-    </>
+    <section>
+      {/* user가 존재하는 경우 UserInfo 컴포넌트를 렌더링합니다. */}
+      {/* {user && <UserInfo user={user} />} */}
+      <div id="body"></div>
+    </section>
   )
 }
 
