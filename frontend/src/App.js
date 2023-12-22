@@ -1,11 +1,12 @@
 // App.js
 import React from "react"
 import "./index.css"
+import "./App.css"
 import Footer from "./components/Footer"
 import HeaderMenu from "./components/HeaderMenu"
 import Navbar from "./components/Navbar"
 import { BrowserRouter as Router,  Routes,  Route} from "react-router-dom"
-import PrivateRoute from "./utils/PrivateRoute"
+// import PrivateRoute from "./utils/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext"
 import Home from "./views/homePage"
 import Login from "./views/loginPage"
@@ -13,6 +14,7 @@ import Register from "./views/registerPage"
 import ProtectedPage from "./views/protectedPage"
 import FindId from "./views/find/findIdPage"
 import FindPw from "./views/find/findPwPage"
+import Dashboard from "./views/Dashboard"
 
 function App() {
   return (
@@ -26,10 +28,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/findId" element={<FindId />} />
             <Route path="/findPw" element={<FindPw />} />
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/" element={<Home />} />
           </Routes>
+          <Footer />
         </AuthProvider>
-        <Footer />
       </div>
     </Router>
   )
