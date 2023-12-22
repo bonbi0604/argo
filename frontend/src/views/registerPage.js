@@ -7,19 +7,21 @@ function Register() {
   const [name, setName] = useState(""); // 사용자 이름 상태
   const [password, setPassword] = useState(""); // 비밀번호 상태
   const [password2, setPassword2] = useState(""); // 비밀번호 확인 상태
-  const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
   const [email, setEmail] = useState(""); // 이메일 상태
   const [dept, setDept] = useState("1"); // 부서 선택 상태 (기본값: 부서1)
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("")
+  const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
+  
+  // 확인
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("") //비번 확인
-  const [idMsg, setIdMsg] = useState("") // 아이디 중복 메세지
   const [idIsCuplicate, setIdIsDuplicate] = useState(false) //아이디 중복인지(True,False)
   const [emailIsDuplicate, setEmailIsDuplicate] = useState(false); // 이메일 중복여부(True,False)
 
-  // 비밀번호 및 이메일 관련 메시지를 나타내는 상태 변수
+  // 메시지
   const [pwdMsg, setPwdMsg] = useState(''); // 비밀번호 유효성 메시지
   const [emailMsg, setEmailMsg] = useState(""); // 이메일 유효성 메시지
+  const [idMsg, setIdMsg] = useState("") // 아이디 중복 메세지
 
   // warning 색
   const [idMsgColor, setIdMsgColor] = useState("red"); // 초기값을 빨강으로 설정
