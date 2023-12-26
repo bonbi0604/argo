@@ -1,6 +1,9 @@
+// 중복검사 공백도 들어감
+// 아이디 특수문자 사용가능?
+
 import React, { useState, useContext, useCallback } from "react"; // 리액트 및 필요한 모듈 가져오기
 import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져오기
-import styles from "./registerPage.css";
+import "./registerPage.css";
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
