@@ -41,9 +41,10 @@ function App() {
             <Route path="/learn" element={<LearningPage />} />
             <Route path="/learn/ethic" element={<EthicPage />} />
           </Routes>
+          <Chatbot />
           <Footer />
         </AuthProvider>
-        <Chatbot />
+        
       </div>
     </Router>
   )

@@ -4,12 +4,17 @@ import './Chatbot.css';
 const Chatbot = () => {
     const [input, setInput] = useState(''); // 사용자 입력을 저장
     const [messages, setMessages] = useState([]); // 메시지 목록을 저장
-    const [sessionId, setSessionId] = useState(null); // 채팅 세션 ID를 저장
+    // const [sessionId, setSessionId] = useState(null); // 채팅 세션 ID를 저장
+    const [isExpanded, setIsExpanded] = useState(false); //채팅창 열고 닫는 상태 저장
 
     const handleInputChange = (event) => { // 입력 필드가 변경될 때마다 실행되는 함수
       setInput(event.target.value);
     };
-  
+    
+    const toggleChatbot = () => { // 채팅창 열고 닫는 함수
+      setIsExpanded(!isExpanded);
+    };
+
     const handleSubmit = async () => {  // 'Send' 버튼을 클릭하거나 엔터 키를 누를 때 실행하는 함수
         if (!input.trim()) return; // 입력이 비어있는 경우 메시지를 안보냄
       
@@ -47,29 +52,33 @@ const Chatbot = () => {
     
 
     return (
-      <div className="chatbot-container">
-        <div className="chat-messages">
-          {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
-            {message.text}
+      <div>
+        <div className={`chatbot-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
+          <button onClick={toggleChatbot} className="toggle-chatbot">{isExpanded ? '◀' : "▶"}</button>
+          <div className="chatbot-container">
+            <div className="chat-messages">
+              {messages.map((message, index) => (
+                <div key={index} className={`message ${message.sender}`}>
+                  {message.text}
+                </div>
+              ))}
+            </div>
+            <div className="chat-input-container">
+              <input
+                type="text"
+                className="chat-input"
+                value={input}
+                onChange={handleInputChange}
+                placeholder="질문을 입력하세요"
+                onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+              />
+              <button className="chat-submit" onClick={handleSubmit}>
+                Send
+              </button>
+            </div>
           </div>
-        ))}
-        </div>
-        <div className="chat-input-container">
-          <input
-            type="text"
-            className="chat-input"
-            value={input}
-            onChange={handleInputChange}
-            placeholder="질문을 입력하세요"
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-          />
-          <button className="chat-submit" onClick={handleSubmit}>
-            Send
-          </button>
         </div>
       </div>
     );
   };
-  
-  export default Chatbot;
+ export default Chatbot;
