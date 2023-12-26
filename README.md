@@ -9,7 +9,7 @@ https://www.notion.so/aivle4-12/56c6dc8b7c2e4c95926be643bcb3fc76?v=49325af3c6264
 python = 3.10
 node = 20.9.0
 npm = 10.1.0 
-yarn = 1.22.21
+yarn = 1.22.21 
 
 
 ## Install Dependencies
