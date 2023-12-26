@@ -12,6 +12,14 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
+from rest_framework import viewsets
+from .models import ChatSession
+from .serializers import ChatSessionSerializer
+
+class ChatSessionViewSet(viewsets.ModelViewSet):
+    queryset = ChatSession.objects.all()
+    serializer_class = ChatSessionSerializer
+    
 # os.environ["OPENAI_API_KEY"] = "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"
 # persist_directory = str(settings.BASE_DIR)
 
