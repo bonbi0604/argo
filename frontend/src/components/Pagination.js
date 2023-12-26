@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 
 const Pagination = ({ totalItems, itemsPerPage, currentPage, setCurrentPage }) => {
-    // 전체 페이지 수 계산
     const pageCount = Math.ceil(totalItems / itemsPerPage);
+    const pageNumbers = [];
+  
+    for (let i = 1; i <= pageCount; i++) {
+      pageNumbers.push(i); // 모든 페이지 번호를 추가
+    }
+  
+    const goToPage = (number) => {
+      setCurrentPage(number); // 함수 호출 변경
+    };
 
     // 페이지 번호 배열 생성
-    const pageNumbers = [];
-    for (let i = 1; i <= pageCount; i++) {
-        pageNumbers.push(i);
-    }
 
-    // 페이지 이동 핸들러
-    const goToPage = (number) => {
-        setCurrentPage(number);
-    };
+
 
     return (
         <div className="flex justify-between items-center mt-4">

@@ -1,32 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
+import Pagination from "../components/Pagination";
 
 const NoticeBoard = () => {
   const [posts, setPosts] = useState([]); // 게시물 상태
   const [selectedTab, setSelectedTab] = useState('notices'); // 선택된 탭 상태
   const api = useAxios(); // 커스텀 Axios 훅을 사용하여 API 요청을 수행합니다.
+  const itemsPerPage = 10;
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
+    // 현재 페이지에 맞는 데이터를 가져오는 API 요청
+    const offset = (currentPage - 1) * itemsPerPage;
+
     const fetchPosts = async () => {
       try {
-        const response = await api.get('http://127.0.0.1:8000/noticeboard/posts/');
-        
-        if (response.status === 200) {
-          setPosts(response.data); // 게시물 목록을 업데이트
+        const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/?limit=${itemsPerPage}&offset=${offset}`);
+        if (response.status === 200 && Array.isArray(response.data)) {
+          // 가정: API가 배열로 데이터를 보냄
+          setPosts(response.data); // posts 상태 업데이트
         } else {
           // 실패 처리
+          console.error('Data is not an array', response.data);
         }
       } catch (error) {
         console.error('게시물 가져오기 오류', error);
       }
     };
 
-    fetchPosts(); // 컴포넌트가 마운트될 때 게시물을 가져옵니다.
-  }, [selectedTab]); // selectedTab을 의존성 배열에 추가
+    fetchPosts();
+  }, [currentPage, selectedTab, itemsPerPage]); // currentPage도 의존성 배열에 추가
 
   const dataToShow = selectedTab === 'notices' ? posts : posts; // 필요에 따라 데이터를 조건에 따라 필터링합니다.
-
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = posts.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <div className="mt-6">
@@ -58,17 +70,24 @@ const NoticeBoard = () => {
             </tr>
           </thead>
           <tbody>
-            {dataToShow.map((item) => (
-              <tr key={item.id}> {/* 게시글의 고유 ID를 key로 사용 */}
-                <td className="p-4">{item.id}</td>
-                <td className="p-4">{item.title}</td>
-                <td className="p-4">{item.author_id}</td>
-                <td className="p-4">{item.timestamp}</td>
-              </tr>
-            ))}
-          </tbody>
+          {currentItems.map((item) => (
+            <tr key={item.id}>
+              <td className="p-4">{item.id}</td>
+              <td className="p-4">{item.title}</td>
+              <td className="p-4">{item.author_id}</td>
+              <td className="p-4">{item.timestamp}</td>
+            </tr>
+          ))}
+        </tbody>
         </table>
       </div>
+      {/* 페이지네이션 */}
+      <Pagination
+        totalItems={posts.length}
+        itemsPerPage={itemsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+      />
     </div>
   );
 };
