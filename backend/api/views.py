@@ -8,8 +8,9 @@ from rest_framework import generics
 # from django.contrib.auth.models import User
 from account.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from .models import Post
-from .serializer import PostSerializer
+# 올바른 임포트:
+from noticeboard.models import Post
+from noticeboard.serializer import PostSerializer
 from django.views.decorators.csrf import csrf_exempt
 
 # Create your views here.
@@ -59,17 +60,7 @@ def testEndPoint(request):
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
 # @csrf_exempt
-def post_list_create(request):
-    if request.method == 'GET':
-        posts = Post.objects.all()
-        serializer = PostSerializer(posts, many=True)
-        return Response(serializer.data)
-    elif request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save(author=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 @csrf_exempt
 def checkId(request):
     try:

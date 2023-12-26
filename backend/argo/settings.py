@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'api',
     'account',
     'chatbot',
+    'noticeboard',
 ]
 
 AUTH_USER_MODEL = 'account.User'
