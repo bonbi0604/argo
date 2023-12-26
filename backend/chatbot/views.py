@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 import json
 import os
@@ -12,7 +13,8 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
 # os.environ["OPENAI_API_KEY"] = "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"
-# persist_directory = 'C:/Users/user/Desktop/argo/Argo/backend/'
+# persist_directory = str(settings.BASE_DIR)
+
 # embedding = OpenAIEmbeddings()
 # vectordb = Chroma(
 #     persist_directory=persist_directory,
@@ -45,5 +47,5 @@ def chatbot_response(request):
 
 def generate_response(message):
     # return chain.invoke(message)
-    return "안녕~~~"
+    return "안녕 수리중이야~"
 
