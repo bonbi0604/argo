@@ -24,7 +24,8 @@ import EthicPage from "./views/ethicPage"
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen overflow-hidden">
+      {/* <div className="flex flex-col min-h-screen overflow-hidden"> */}
+      <div className="App">
         <AuthProvider>
           <HeaderMenu />
           {/* <Navbar /> */}
@@ -43,7 +44,7 @@ function App() {
           </Routes>
           <Footer />
         </AuthProvider>
-        <Chatbot />
+        {/* <Chatbot /> */}
       </div>
     </Router>
   )
