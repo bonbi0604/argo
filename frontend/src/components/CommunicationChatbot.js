@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import './chatbot.css';
+import './CommunicationChatbot.css';
 
-const Chatbot = () => {
+const CommunicationChatbot = () => {
     const [input, setInput] = useState(''); // 사용자 입력을 저장
     const [messages, setMessages] = useState([]); // 메시지 목록을 저장
     const [sessionId, setSessionId] = useState(null); // 채팅 세션 ID를 저장
+    const [subject, setsubject] = useState('정보를 불러오는 중입니다...');
 
     const handleInputChange = (event) => { // 입력 필드가 변경될 때마다 실행되는 함수
       setInput(event.target.value);
@@ -24,7 +25,7 @@ const Chatbot = () => {
         setInput(''); // 입력 필드 비우기
       
         try {
-            const response = await fetch('http://127.0.0.1:8000/chatbot/', { // 백엔드 서버에 메시지를 POST 요청
+            const response = await fetch('http://127.0.0.1:8000/learn/communication/study/', { // 백엔드 서버에 메시지를 POST 요청
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
@@ -44,10 +45,44 @@ const Chatbot = () => {
             console.error("Error sending message to the chatbot API:", error); // 에러가 발생하면 콘솔에 에러를 로깅
         }
     };
+
+
+    useEffect(() => {
+        // 컴포넌트가 마운트되면 초기 챗봇 메시지를 보내는 로직 추가
+        const sendInitialMessage = async () => {
+            console.log("startDom2");
+            try {
+                const response = await fetch('http://127.0.0.1:8000/learn/communication/study/', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message: '<START>' }), // 초기 메시지 내용
+                  });
+
+                const data = await response.json(); 
+
+                setsubject(data.title);
+
+                setMessages((currentMessages) => {
+                    const updatedMessages = [...currentMessages, { text: data.reply, sender: 'bot' }];
+                    return updatedMessages;
+                });
+                
+            } catch (error) {
+                console.error("Error sending initial message to the chatbot API:", error);
+            }
+        };
+
+        sendInitialMessage(); // 초기 메시지 보내기
+    }, []); // 빈 배열을 전달하여 컴포넌트가 처음 마운트될 때만 실행되도록 함
     
 
     return (
       <div className="chatbot-container">
+        <div className="comm-chatbot-title">
+            <h1>{subject}</h1>
+        </div>
         <div className="chat-messages">
           {messages.map((message, index) => (
           <div key={index} className={`message ${message.sender}`}>
@@ -72,4 +107,4 @@ const Chatbot = () => {
     );
   };
   
-  export default Chatbot;
+  export default CommunicationChatbot;

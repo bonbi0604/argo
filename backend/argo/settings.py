@@ -185,3 +185,10 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# 세션 백엔드 설정
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# 세션 저장소 설정
+SESSION_COOKIE_NAME = 'my_chat_session'
+# SESSION_SAVE_EVERY_REQUEST = True

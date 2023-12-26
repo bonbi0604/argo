@@ -15,7 +15,7 @@ import FindId from "./views/find/findIdPage"
 import FindPw from "./views/find/findPwPage"
 import Dashboard from "./views/Dashboard"
 import WritePost from './views/WritePost'
-import Chatbot from "./components/Chatbot"
+// import Chatbot from "./components/Chatbot"
 import Chat from "./views/chat"
 import CommunicationPage from "./views/CommunicationPage"
 import LearningPage from "./views/learningPage"
@@ -43,7 +43,7 @@ function App() {
           </Routes>
           <Footer />
         </AuthProvider>
-        <Chatbot />
+        {/* <Chatbot /> */}
       </div>
     </Router>
   )
