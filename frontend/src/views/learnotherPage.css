@@ -1,0 +1,12 @@
+#learn_other {
+    height: 100%;
+    background-color: white;
+    padding: 5% 8%;
+}
+
+#learn_body {
+    border: 1px solid black;
+    width: 75%;
+    margin-left: 25%;
+}
+
