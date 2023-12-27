@@ -43,7 +43,9 @@ function App() {
             <Route path="/learn/communication" element={<><CommunicationPage /><Chatbot /></>} />
             <Route path="/learn" element={<><LearningPage /><Chatbot /></>} />
             <Route path="/learn/ethic" element={<><EthicPage /><Chatbot /></>} />
-            <Route path="/learn/common-sense" element={<LearnOtherPage />} />
+            <Route path="/learn/common-sense" element={<><LearnOtherPage /><Chatbot /></>} />
+            <Route path="/PostDetail/:id" element={<><PostDetail /><Chatbot /></>} />
+            <Route path="/UpdatePost/:id/" element={<><UpdatePost /><Chatbot /></>} />
           </Routes>
           <Footer />
         </AuthProvider>
