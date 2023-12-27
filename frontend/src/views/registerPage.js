@@ -224,7 +224,7 @@ function Register() {
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid;
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
