@@ -4,6 +4,8 @@ import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
 import './learningPage.css'; // 스타일시트를 추가합니다.
 import Scorebar from "../components/Scorebar";
+import LearnNav from "../components/LearnNav";
+import DonutCharts from "../components/DonutCharts";
 
 const scores = {
   occupation: { avg: 75, score: 80 }, // 직무이해 점수
@@ -23,13 +25,13 @@ const LearningPage = () => {
   
   return (
     <section className="learning-page">
-      <h2>{user.name}</h2> 
+      <LearnNav />
       <div className="score-container">
-        {/* key 값 넘겨줘야함!!!!!!!!!!!!!!! */}
         {Object.entries(scores).map(([cat, { avg, score }]) => 
-          <Scorebar cat={cat} avg={avg} score={score} />
+          <Scorebar key={cat} cat={cat} avg={avg} score={score} />
         )}
       </div>
+      <DonutCharts data={scores}/>
     </section>
   )
 }

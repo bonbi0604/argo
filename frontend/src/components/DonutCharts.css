@@ -1,0 +1,12 @@
+.donutcharts {
+    width: 25em;
+    height: 25em;
+    position :relative;
+}
+
+.donutchart_element {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

@@ -1,22 +1,30 @@
-import { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import UserInfo from "../components/UserInfo";
-import AuthContext from "../context/AuthContext";
 import './LearnNav.css';
-import Scorebar from "../components/Scorebar";
+import { NavLink } from "react-router-dom";
 
 const LearningPage = () => {
   
   return (
-    <div id="learn_nav">
-        <ol type="1">
-            <li>1. 직무이해</li>
-            <li>2. 커뮤니케이션</li>
-            <li>3. 시사/상식</li>
-            <li>4. 도구</li>  
-            <li>5. 윤리</li>          
-        </ol>
-    </div>
+    <>
+      <div id="learn_nav">
+        <div className="learn_button_group">
+          <div className="learn_button">
+            <NavLink to="/learn/occupation">1. 직무이해</NavLink>
+          </div>
+          <div className="learn_button">
+            <NavLink to="/learn/communication">2. 커뮤니케이션</NavLink>
+          </div>
+          <div className="learn_button">
+            <NavLink to="/learn/common-sense">3. 시사/상식</NavLink>
+          </div>
+          <div className="learn_button">
+            <NavLink to="/learn/tools">4. 도구</NavLink>
+          </div>
+          <div className="learn_button">
+            <NavLink to="/learn/ethic">5. 윤리</NavLink>
+          </div> 
+        </div>
+      </div>
+    </>
   )
 }
 
