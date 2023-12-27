@@ -13,7 +13,11 @@ const ChatHistory = ({ onSessionSelect }) => {
       }
       const data = await response.json();
       console.log('Session data:', data);
-      onSessionSelect(data.chat_content);
+
+      // onSessionSelect 콜백을 호출하여 채팅 세션 데이터 전달
+      if (onSessionSelect) {
+        onSessionSelect(data.id, data.chat_content); // 세션 ID와 채팅 내용 전달
+      }
     } catch (error) {
       console.error('Error fetching session data:', error);
     }
@@ -40,9 +44,9 @@ const ChatHistory = ({ onSessionSelect }) => {
 
   return (
     <div className="session-list">
-      {sessions.map((session) => (
+      {sessions.map(session => (
         <button key={session.id} onClick={() => handleSessionClick(session.id)}>
-          Session {session.id}
+          {session.session_title}
         </button>
       ))}
     </div>

@@ -1,31 +1,29 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './ChatPageChatbot.css';
 
-let sessionCounter = parseInt(localStorage.getItem('sessionCounter')) || 1;
-
-function generateSessionId() {
-  const sessionId = sessionCounter.toString();
-  sessionCounter++; // 다음 세션을 위해 카운터 증가
-  localStorage.setItem('sessionCounter', sessionCounter.toString());
-  return sessionId;
-}
-
 const ChatPageChatbot = ({ chatContent }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
-  const [sessionId, setSessionId] = useState(null);
+  const [sessionTitle, setSessionTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
 
   const saveChatSession = async () => {
+    if (!sessionTitle) return; // 세션 제목이 없으면 저장하지 않음
+
     const chatContent = messages.map((m) => m.text).join('\n');
-    const response = await fetch('http://127.0.0.1:8000/chatbot/api/chat-sessions/', {
-      method: 'POST',
+    const method = sessionTitle ? 'PUT' : 'POST';
+    const url = sessionTitle 
+      ? `http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionTitle}/`
+      : 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
+
+    const response = await fetch(url, {
+      method: method,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        session_id: sessionId,
+        session_title: sessionTitle,
         chat_content: chatContent,
       }),
     });
@@ -51,15 +49,24 @@ const ChatPageChatbot = ({ chatContent }) => {
 
 
   useEffect(() => {
-    // This effect is for updating the chat messages when chatContent changes
+    // 채팅 내용을 설정하는 useEffect
     if (chatContent) {
       const newMessages = chatContent.split('\n').map(text => ({
         text,
-        sender: 'user'
+        sender: 'user' // 'user' 또는 'bot'에 따라 조정하세요.
       }));
       setMessages(newMessages);
     }
   }, [chatContent]);
+
+  useEffect(() => {
+    // 초기 세션 ID 설정 또는 기존 세션 ID 사용
+    if (initialSessionId) {
+      setSessionId(initialSessionId);
+    } else {
+      setSessionId(generateSessionId());
+    }
+  }, [initialSessionId]);
 
   const handleMouseEnter = () => {
     chatMessagesRef.current.addEventListener('wheel', handleScroll);
@@ -96,6 +103,10 @@ const ChatPageChatbot = ({ chatContent }) => {
     setIsSubmitting(true);
 
     const userMessage = { text: input, sender: 'user' };
+    if (!sessionTitle && messages.length === 0) {
+      // 첫 번째 사용자 메시지를 세션 제목으로 설정
+      setSessionTitle(input);
+    }
     setMessages((currentMessages) => [...currentMessages, userMessage]);
 
     setInput('');
