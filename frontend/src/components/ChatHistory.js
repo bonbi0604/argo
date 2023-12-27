@@ -39,7 +39,7 @@ const ChatHistory = () => {
   }, []);
 
   return (
-    <div>
+    <div className="session-list">
       {sessions.map((session, index) => (
         <button key={index} onClick={() => handleSessionClick(session.session_id)}>
           Session {session.session_id}
