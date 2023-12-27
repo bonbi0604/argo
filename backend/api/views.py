@@ -111,7 +111,7 @@ def mailSend(request):
 
         subject = '[ARGO] 인증번호를 입력해주세요.' # 타이틀
         message = f'이메일 인증번호: {code}\n인증 창에 입력하세요.' # 본문 내용
-        from_email = "sy.hong9001@gmail.com"    # 발신할 이메일 주소
+        from_email = "ARGO"    # 발신할 이메일 주소
         to = [user_email]   # 수신할 이메일 주소
         print(user_email)
         

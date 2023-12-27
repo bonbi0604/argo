@@ -20,6 +20,7 @@ import Chat from "./views/chat"
 import CommunicationPage from "./views/CommunicationPage"
 import LearningPage from "./views/learningPage"
 import EthicPage from "./views/ethicPage"
+import LearnOtherPage from "./views/learnotherPage"
 
 function App() {
   return (
@@ -41,6 +42,7 @@ function App() {
             <Route path="/learn/communication" element={<CommunicationPage />} />
             <Route path="/learn" element={<LearningPage />} />
             <Route path="/learn/ethic" element={<EthicPage />} />
+            <Route path="/learn/common-sense" element={<LearnOtherPage />} />
           </Routes>
           <Chatbot />
           <Footer />
