@@ -1,18 +1,17 @@
 #learn_other {
     background-color: white;
+    display: flex;
+    flex-direction: row;
 }
 
 #learn_body {
-    border: 1px solid black;
-    width: 60%;
-    margin-left: 28%;
-    height: 100%;
+    width: 65%;
+    margin-left: 3%;
+    height: 80%;
 }
 
 #learn_up {
-    border: 1px solid green;
     height: 14%;
-    margin-top: 4%;
     display: flex;
     flex-direction: row; /* 수평으로 배치 */
     align-items: center; /* 세로 가운데 정렬 */
@@ -22,9 +21,51 @@
     margin-left: 5%;
 }
 
-.learningPage {
-    height: calc(100% - 5em);
-    width: 100%;
-    background-color: #fff;
+#learnBtn {
+    padding: 10px 20px;
+    font-size: 1em;
+    width: 20%;
+    background-color: #BDD98E;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
-    
+#learnBtn:hover {
+    background-color: #b3d675;
+}
+
+#learn_up > button {
+    padding: 10px 20px;
+    font-size: 1em;
+    background-color: #BDD98E;
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#learn_up > button:hover {
+    background-color: #b3d675;
+}
+
+#learn_up_left {
+    width: 50%;
+    display: flex;
+    flex-direction: row; 
+    align-items: center;
+    padding-right: 20%;
+    padding-left: 5%;
+}
+
+#learn_down {
+    height: 86%;
+    display: flex;
+    flex-direction: row; /* 수평으로 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+
+

@@ -1,38 +1,47 @@
-import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
 import './learnotherPage.css'; 
 import LearnNavComponent from '../components/LearnNav';
-import IconSense from '../icon/IconSense'
-import Scorebar from "../components/Scorebar";
+import LearnDown from "../components/LearnDown_1"
+import LearnUpLeft from "../components/LearnUpLeft";
+import React, { useState, useContext, useCallback } from "react";
 
 
 const LearningPage = () => {
   const { user } = useContext(AuthContext);
+  const cat = "commonsense";
+  const avg = 50;
+  const score = 40;
+  const [learnDownContent, setLearnDownContent] = useState(<LearnDown/>);
+  const [learnUpContent, setLearnUpContent] = useState(<LearnUpLeft/>);
+  const [buttonValue, setButtonValue] = useState("문제 풀기")
 
 //   if (!user){
 //     console.log("redirect");
 //     return (<Navigate to='/login'  />)
 //   }
+
+  const handleButtonClick = () => {
+    // 버튼 클릭 시 learn_body 내부의 내용을 변경
+    setLearnDownContent("HELLO");
+    setLearnUpContent(<button id="learnBtn">다음</button>)
+    setButtonValue('학습 종료')
+  };
   
   return (
     <section id="learn_other">
-      {/* <h2>{user.name}</h2> 
-      <div className="score-container">
-        key 값 넘겨줘야함!!!!!!!!!!!!!!!
-        {Object.entries(scores).map(([cat, { avg, score }]) => 
-          <Scorebar key={cat} cat={cat} avg={avg} score={score} />
-        )}
-      </div> */}
-      <LearnNavComponent />
+      <LearnNavComponent cat={cat} />
       <div id="learn_body">
         <div id="learn_up">
-            <IconSense />
-            <span>시사/상식</span>
-            <Scorebar/>
+          <div id="learn_up_left">
+            {learnUpContent}
+          </div>
+          <button onClick={handleButtonClick}>{buttonValue}</button>
         </div>
-        <div id="learn_down"></div>
+        <div id="learn_down">
+            {learnDownContent}
+        </div>
       </div>
     </section>
   )
