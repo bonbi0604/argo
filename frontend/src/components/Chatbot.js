@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import './chatbot.css';
+import './Chatbot.css';
 
 const Chatbot = () => {
     const [input, setInput] = useState(''); // 사용자 입력을 저장
