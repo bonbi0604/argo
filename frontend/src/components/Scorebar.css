@@ -18,7 +18,20 @@
   
 .score-item label {
     display: block;
-    margin: 5px;
+    margin: 0.1em;
+}
+
+.score-label{
+    width: 8em;
+    text-align:right;
+    margin: auto 1em;
+}
+
+.score-bars {
+    width: calc(100% - 8em);
+    margin: auto 1em;
+    height: 2em;
+    padding-top: 0.5em;
 }
 
 .score-label{

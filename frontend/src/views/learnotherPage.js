@@ -4,7 +4,7 @@ import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
 import './learnotherPage.css'; 
 import LearnNavComponent from '../components/LearnNav';
-import IconSense from '../components/IconSense'
+import IconSense from '../icon/IconSense'
 import Scorebar from "../components/Scorebar";
 
 
