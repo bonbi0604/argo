@@ -9,4 +9,5 @@ router.register(r'chat-sessions', ChatSessionViewSet)
 urlpatterns = [
     path('', chatbot_response, name='chatbot_response'),
     path('api/', include(router.urls)),
+    path('save-session/', views.save_chat_session, name='save_chat_session'),
 ]
