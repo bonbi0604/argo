@@ -20,6 +20,8 @@ import Chat from "./views/chat"
 import CommunicationPage from "./views/CommunicationPage"
 import LearningPage from "./views/learningPage"
 import EthicPage from "./views/ethicPage"
+import PostDetail from "./views/PostDetail"
+import UpdatePost from "./views/UpdatePost"
 
 function App() {
   return (
@@ -35,6 +37,8 @@ function App() {
             <Route path="/findPw" element={<FindPw />} />
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/writepost" element={<WritePost />} />
+            <Route path="/PostDetail/:id" element={<PostDetail />} />
+            <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />
             <Route path="/learn/communication" element={<CommunicationPage />} />

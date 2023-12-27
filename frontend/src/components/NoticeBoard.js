@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
 
@@ -9,26 +9,27 @@ const NoticeBoard = () => {
   const api = useAxios(); // 커스텀 Axios 훅을 사용하여 API 요청을 수행합니다.
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
 
   useEffect(() => {
-    // 현재 페이지에 맞는 데이터를 가져오는 API 요청
+    // API request to retrieve data appropriate for the current page
     const offset = (currentPage - 1) * itemsPerPage;
-
+  
     const fetchPosts = async () => {
       try {
         const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/?limit=${itemsPerPage}&offset=${offset}`);
         if (response.status === 200 && Array.isArray(response.data)) {
-          // 가정: API가 배열로 데이터를 보냄
-          setPosts(response.data); // posts 상태 업데이트
+          // Reverse the order of the data
+          const reversedPosts = [...response.data].reverse();
+          setPosts(reversedPosts);
         } else {
-          // 실패 처리
           console.error('Data is not an array', response.data);
         }
       } catch (error) {
-        console.error('게시물 가져오기 오류', error);
+        console.error('Error retrieving post', error);
       }
     };
-
+  
     fetchPosts();
   }, [currentPage, selectedTab, itemsPerPage]); // currentPage도 의존성 배열에 추가
 
@@ -70,15 +71,15 @@ const NoticeBoard = () => {
             </tr>
           </thead>
           <tbody>
-          {currentItems.map((item) => (
-            <tr key={item.id}>
-              <td className="p-4">{item.id}</td>
-              <td className="p-4">{item.title}</td>
-              <td className="p-4">{item.author_id}</td>
-              <td className="p-4">{item.timestamp}</td>
-            </tr>
-          ))}
-        </tbody>
+            {currentItems.map((item) => (
+              <tr key={item.id} onClick={() => navigate(`/PostDetail/${item.id}/`)}>
+                <td className="p-4">{item.id}</td>
+                <td className="p-4">{item.title}</td>
+                <td className="p-4">{item.author_id}</td>
+                <td className="p-4">{item.timestamp}</td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
       {/* 페이지네이션 */}
