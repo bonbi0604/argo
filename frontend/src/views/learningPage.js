@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { Navigate } from "react-router-dom";
 import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
-import './learningPage.css'; // 스타일시트를 추가합니다.
+import styles from './learningPage.module.css'; // 스타일시트를 추가합니다.
 import Scorebar from "../components/Scorebar";
 
 const scores = {
@@ -22,12 +22,12 @@ const LearningPage = () => {
   }
   
   return (
-    <section className="learning-page">
+    <section className={styles.learningPage}>
       <h2>{user.name}</h2> 
       <div className="score-container">
         {/* key 값 넘겨줘야함!!!!!!!!!!!!!!! */}
         {Object.entries(scores).map(([cat, { avg, score }]) => 
-          <Scorebar cat={cat} avg={avg} score={score} />
+          <Scorebar key={cat} cat={cat} avg={avg} score={score} />
         )}
       </div>
     </section>
