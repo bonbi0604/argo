@@ -1,18 +1,17 @@
-import { useContext, useState } from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
+import './HeaderMenu.css'
 
 // sanity check - 추후 완성되면 지우기
 console.log("header menu");
 
 // 상단 네비게이션 바
 const HeaderMenu = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const { user, logoutUser } = useContext(AuthContext);
+  // const [isOpen, setIsOpen] = useState(false)
+  const { user, logoutUser } = useContext(AuthContext)
 
-  const toggleHeader = () => {
-    setIsOpen(!isOpen);
-  };
+  // const toggleHeader = () => {setIsOpen(!isOpen)}
 
   return (
     <header className="header-menu">
@@ -27,48 +26,40 @@ const HeaderMenu = () => {
             로그인 관리.
             로그인 여부에 따라 보이는 내용이 다르도록
           */}
-          {!user ? (
+          {
           /** header navigation items
            * designed to be different whether if user is logged in or not
           */
             <>
-              <Link to="/" className="header-links">
-                Home
-              </Link>
               {/** 역량개발 페이지로 이동 TODO: 링크 추가 */}
-              <Link to="/" className="header-links">
+              <Link to="/learn" className="header-link">
                 역량개발
               </Link>
               {/** 역량평가 페이지로 이동 TODO: 링크 추가 */}
-              <Link to="/" className="header-links">
+              <Link to="/result" className="header-link">
                 역량평가
               </Link>
               {/** 게시판으로 이동 TODO: 링크 추가 */}
-              <Link to="/" className="header-links">
+              <Link to="/notice" className="header-link">
                 게시판
               </Link>
             </>
-          ) : (
-            /** If the user is not logged in
-             * do not show menu.
-            */
-            <>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
-            </>
-          )}
+          }
         </div>
         <div className="header-login">
           {user ? (
             <button className="logout-button" onClick={logoutUser}>
-              Logout
+              로그아웃
             </button>
           ) : (
             <>
               <Link to="/login" className="login-button">
-                Login
+                로그인
               </Link>
-              <Link to="/register">Register</Link>
+              &nbsp; | &nbsp;
+              <Link to="/register" className="login-button">
+                회원가입
+              </Link>
             </>
           )}
         </div>

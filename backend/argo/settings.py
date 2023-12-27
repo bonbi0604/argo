@@ -40,8 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'api',
-    'account'
-    
+    'account',
+    'chatbot',
 ]
 
 AUTH_USER_MODEL = 'account.User'

@@ -1,17 +1,37 @@
-import { useContext } from "react"; // 리액트에서 useContext 모듈을 가져옵니다.
-import UserInfo from "../components/UserInfo"; // UserInfo 컴포넌트를 가져옵니다.
-import AuthContext from "../context/AuthContext"; // 커스텀 인증 컨텍스트를 가져옵니다.
+import { useContext } from "react";
+import { Navigate } from "react-router-dom";
+import UserInfo from "../components/UserInfo";
+import AuthContext from "../context/AuthContext";
+import './learningPage.css'; // 스타일시트를 추가합니다.
+import Scorebar from "../components/Scorebar";
+
+const scores = {
+  occupation: { avg: 75, score: 80 }, // 직무이해 점수
+  communication: { avg: 60, score: 90 }, // 커뮤니케이션 점수
+  commonsense: { avg: 79, score: 40 }, // 시사/상식 점수
+  tools: { avg: 90, score: 80 }, // 도구 점수
+  ethic: { avg: 50, score: 70 }, // 윤리 점수
+};
 
 const LearningPage = () => {
-  const { user } = useContext(AuthContext); // AuthContext에서 user 정보를 가져옵니다.
+  const { user } = useContext(AuthContext);
 
+  if (!user){
+    console.log("redirect");
+    return (<Navigate to='/login'  />)
+  }
+  
   return (
-    <section>
-      {/* user가 존재하는 경우 UserInfo 컴포넌트를 렌더링합니다. */}
-      {user && <UserInfo user={user} />}
-      <h1>You are on learning page!</h1> {/* 홈 페이지 안내 메시지 */}
+    <section className="learning-page">
+      <h2>{user.name}</h2> 
+      <div className="score-container">
+        {/* key 값 넘겨줘야함!!!!!!!!!!!!!!! */}
+        {Object.entries(scores).map(([cat, { avg, score }]) => 
+          <Scorebar cat={cat} avg={avg} score={score} />
+        )}
+      </div>
     </section>
-  );
-};
+  )
+}
 
 export default LearningPage;
