@@ -10,7 +10,7 @@ function generateSessionId() {
   return sessionId;
 }
 
-const ChatPageChatbot = () => {
+const ChatPageChatbot = ({ chatContent }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [sessionId, setSessionId] = useState(null);
@@ -41,7 +41,6 @@ const ChatPageChatbot = () => {
       e.preventDefault();
       saveChatSession();
     };
-
   
     window.addEventListener('beforeunload', handleBeforeUnload);
 
@@ -49,6 +48,18 @@ const ChatPageChatbot = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [messages, sessionId]);
+
+
+  useEffect(() => {
+    // This effect is for updating the chat messages when chatContent changes
+    if (chatContent) {
+      const newMessages = chatContent.split('\n').map(text => ({
+        text,
+        sender: 'user'
+      }));
+      setMessages(newMessages);
+    }
+  }, [chatContent]);
 
   const handleMouseEnter = () => {
     chatMessagesRef.current.addEventListener('wheel', handleScroll);

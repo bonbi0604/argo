@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './ChatHistory.css';
 
-const ChatHistory = () => {
+const ChatHistory = ({ onSessionSelect }) => {
   const [sessions, setSessions] = useState([]);
 
   const handleSessionClick = async (id) => {
@@ -13,6 +13,7 @@ const ChatHistory = () => {
       }
       const data = await response.json();
       console.log('Session data:', data);
+      onSessionSelect(data.chat_content);
     } catch (error) {
       console.error('Error fetching session data:', error);
     }
