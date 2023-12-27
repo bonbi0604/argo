@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import './HeaderMenu.css'
 
+
 // sanity check - 추후 완성되면 지우기
 console.log("header menu");
 
@@ -40,7 +41,7 @@ const HeaderMenu = () => {
                 역량평가
               </Link>
               {/** 게시판으로 이동 TODO: 링크 추가 */}
-              <Link to="/notice" className="header-link">
+              <Link to="/DashBoard" className="header-link">
                 게시판
               </Link>
             </>

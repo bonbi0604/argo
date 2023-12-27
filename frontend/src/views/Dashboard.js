@@ -9,7 +9,6 @@ const Dashboard = () => {
             <div className="container mx-auto mt-10 p-4 bg-white shadow-lg rounded-lg">
                 <HeaderMenu />
                 <NoticeBoard />
-                <Pagination />
             </div>
         </div>
     );

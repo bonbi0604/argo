@@ -1,44 +1,48 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; // useNavigate 훅을 임포트합니다.
-import HeaderMenu from '../components/HeaderMenu';
-
-const userToken = localStorage.getItem('token'); // 사용자 토큰을 로컬 스토리지에서 가져옵니다.
+import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import useAxios from "../utils/useAxios";
+import AuthContext from "../context/AuthContext";
 
 const WritePost = () => {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const navigate = useNavigate(); // useNavigate를 가져옵니다.
+    const { user } = useContext(AuthContext); // 현재 로그인한 사용자 정보를 가져옵니다.
+    const [title, setTitle] = useState(''); // 게시물 제목 상태
+    const [content, setContent] = useState(''); // 게시물 내용 상태
+    const navigate = useNavigate(); // React Router의 네비게이션 함수
+    const api = useAxios(); // 커스텀 Axios 훅을 사용하여 API 요청을 수행합니다.
 
+    // 게시물 제출 핸들러
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        const newPost = { title, content };
-      
+        e.preventDefault(); // 폼 제출 기본 동작을 막습니다.
+
+        // 제목과 내용이 비어 있는지 확인
+        if (!title.trim() || !content.trim()) {
+            console.error("제목과 내용을 입력해야 합니다.");
+            return;
+        }
+
+        // 새로운 게시물 데이터
+        const newPost = {
+            title,
+            content,
+            // author: user.id // 현재 사용자의 ID를 작성자로 설정
+        };
+
         try {
-            const response = await fetch('http://127.0.0.1:8000/api/posts/', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${userToken}`
-              },
-              body: JSON.stringify(newPost)
-            });
-      
-            if (response.ok) {
-                console.log('Post created successfully!');
-                navigate('/noticeboard', { replace: true });
-                window.location.reload(); // 페이지를 새로고침하여 새 데이터를 반영합니다.
-              } else {
-                console.error('Failed to create post');
-              }
-            } catch (error) {
-              console.error('Error submitting post', error);
+            const response = await api.post('http://127.0.0.1:8000/noticeboard/posts/', newPost);
+
+            if (response.status === 201 || response.status === 200) {
+                navigate('/DashBoard'); // 게시물이 성공적으로 작성되면 게시판 페이지로 이동
+            } else {
+                // 다른 상태 코드를 처리할 수 있습니다.
             }
-      };
+        } catch (error) {
+            console.error('게시물 제출 중 오류 발생', error);
+        }
+    };
 
     return (
         <div className="write-post-page-background">
             <div className="write-post-container">
-                <HeaderMenu />
                 <div className="write-post-form-container">
                     <h2 className="write-post-heading">새 게시물 작성</h2>
                     <form onSubmit={handleSubmit} className="write-post-form">
@@ -66,7 +70,7 @@ const WritePost = () => {
                                 rows="10"
                                 value={content}
                                 onChange={(e) => setContent(e.target.value)}
-                            />
+                                />
                         </div>
                         <div className="write-post-submit-group">
                             <button

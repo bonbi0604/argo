@@ -1,0 +1,24 @@
+.scoreboard {
+  /* 점수판 스타일을 설정합니다. */
+}
+
+.learning-page {
+  background-color: white;
+  display: flex;
+  flex-direction: row;
+}
+
+.learning-page .user-name {
+  margin: 0;
+}
+
+.score-container {
+  min-width: 26em;
+  width: 40%;
+}
+
+.donut-chart {
+  width: 40%;
+  height: 60%
+}
+

@@ -1,0 +1,7 @@
+#comLearnDown {
+    height: 86%;
+    width: 100%;
+    display: flex;
+    flex-direction: row; /* 수평으로 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
