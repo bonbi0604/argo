@@ -3,6 +3,11 @@ html, body, #root {
   width: 100%;
 }
 
+section {
+  height: calc(100% - 5em);
+  width: 100%;
+}
+
 .App {
   text-align: center;
   background-color: #9DC2ED;

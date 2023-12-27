@@ -1,11 +1,7 @@
 import { useContext } from "react";
-import { Navigate } from "react-router-dom";
-import UserInfo from "../components/UserInfo";
-import AuthContext from "../context/AuthContext";
 import './LearnNav.css';
-import Scorebar from "../components/Scorebar";
 
-const LearningPage = () => {
+const LearnNav = () => {
   
   return (
     <div id="learn_nav">
@@ -20,4 +16,4 @@ const LearningPage = () => {
   )
 }
 
-export default LearningPage;
+export default LearnNav;
