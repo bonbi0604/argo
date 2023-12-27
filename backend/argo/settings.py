@@ -81,23 +81,24 @@ WSGI_APPLICATION = 'argo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'aivle_practice',
+        'USER': 'aivle0412',
+        'PASSWORD': 'aivle20230412',
+        'HOST': 'db.aivle0412.duckdns.org',
+        'PORT': '10622',
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'aivle_big',
-#         'USER': 'aivle0412',
-#         'PASSWORD': 'aivle20230412',
-#         'HOST': 'db.aivle0412.duckdns.org',
-#         'PORT': '10622',
-#     }
-# }
 
 
 # Password validation
