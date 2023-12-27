@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.conf import settings
 
 import json
 import os
@@ -11,8 +12,43 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
+from rest_framework import viewsets
+from .models import ChatSession
+from .serializers import ChatSessionSerializer
+from rest_framework.response import Response
+from rest_framework import status
+        
+class ChatSessionViewSet(viewsets.ModelViewSet):
+    queryset = ChatSession.objects.all()
+    serializer_class = ChatSessionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    def perform_create(self, serializer):
+        # 여기에서 추가 로직이 필요할 수 있음
+        serializer.save()
+
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        return Response(serializer.data)
+
+    def perform_update(self, serializer):
+        # 여기에서 추가 로직이 필요할 수 있음
+        serializer.save()
+        
 # os.environ["OPENAI_API_KEY"] = "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"
-# persist_directory = 'C:/Users/user/Desktop/argo/Argo/backend/'
+# persist_directory = str(settings.BASE_DIR)
+
 # embedding = OpenAIEmbeddings()
 # vectordb = Chroma(
 #     persist_directory=persist_directory,
@@ -45,5 +81,5 @@ def chatbot_response(request):
 
 def generate_response(message):
     # return chain.invoke(message)
-    return "안녕~~~"
+    return "안녕 수리중이야~"
 

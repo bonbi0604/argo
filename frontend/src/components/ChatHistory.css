@@ -1,13 +1,38 @@
+.chat-history-container {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 10px;
+  background-color: #f9f9f9;
+}
+
 .chat-history {
-    background-color: white;
-    width: 250px;
-    height: 100%;
-    overflow-y: auto;
-    border-right: 1px solid #d0d0d0;
-  }
-  
-  .history-item {
-    padding: 10px;
-    border-bottom: 1px solid black;
-    list-style-type: none;
-  }
+  overflow-y: auto;
+  max-height: 300px; /* Adjust as needed */
+  margin-bottom: 10px;
+}
+
+.history-item {
+  margin-bottom: 5px;
+  padding: 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.chat-history-buttons {
+  display: flex;
+  justify-content: space-around;
+}
+
+.chat-history-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #4CAF50;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.chat-history-button:hover {
+  background-color: #45a049;
+}
