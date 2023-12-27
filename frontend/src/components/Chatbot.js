@@ -29,7 +29,7 @@ const Chatbot = () => {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        session_id: sessionId, // 세션 ID를 백엔드로 보냄
+        // session_id: sessionId, // 세션 ID를 백엔드로 보냄
         chat_content: chatContent,
       }),
     });
@@ -104,7 +104,7 @@ const Chatbot = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input, session_id: sessionId }), // 세션 ID를 포함하여 백엔드로 전송
+        body: JSON.stringify({ message: input}), // 세션 ID를 포함하여 백엔드로 전송
       });
 
       const data = await response.json();

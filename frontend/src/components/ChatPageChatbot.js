@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
-
+ 
 const ChatPageChatbot = ({ chatContent }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [sessionTitle, setSessionTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
-
+ 
   const { user } = useContext(AuthContext);
-
+ 
   const saveChatSession = async () => {
     if (!sessionTitle || messages.length === 0) return;
-
+ 
     const chatContent = messages.map((m) => m.text).join('\n');
-    await fetch('http://127.0.0.1:8000/chatbot/save-session/', { 
+    await fetch('http://127.0.0.1:8000/chatbot/api/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -36,67 +36,67 @@ const ChatPageChatbot = ({ chatContent }) => {
       e.preventDefault();
       saveChatSession();
     };
-  
-//     window.addEventListener('beforeunload', handleBeforeUnload);
-
+ 
+    window.addEventListener('beforeunload', handleBeforeUnload);
+ 
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [messages]);
-
-  
+ 
+ 
   useEffect(() => {
     if (chatContent) {
       const newMessages = chatContent.split('\n').map(text => ({
         text,
-        sender: 'user' 
+        sender: 'user'
       }));
       setMessages(newMessages);
     }
   }, [chatContent]);
-
-//   const handleMouseEnter = () => {
-//     chatMessagesRef.current.addEventListener('wheel', handleScroll);
-//   };
-
-//   const handleMouseLeave = () => {
-//     chatMessagesRef.current.removeEventListener('wheel', handleScroll);
-//   };
-
-//   const handleScroll = (event) => {
-//     event.preventDefault();
-//     chatMessagesRef.current.scrollTop += event.deltaY;
-//   };
-
-//   const handleInputChange = (event) => {
-//     setInput(event.target.value);
-//   };
-
-//   const handleKeyDown = (event) => {
-//     if (event.key === 'Enter' && !event.shiftKey) {
-//       if (isSubmitting) {
-//         event.preventDefault();
-//         return;
-//       }
-
-//       event.preventDefault();
-//       handleSubmit();
-//     }
-//   };
-
-//   const handleSubmit = async () => {
-//     if (!input.trim() || isSubmitting) return;
-
-//     setIsSubmitting(true);
-
+ 
+  const handleMouseEnter = () => {
+    chatMessagesRef.current.addEventListener('wheel', handleScroll);
+  };
+ 
+  const handleMouseLeave = () => {
+    chatMessagesRef.current.removeEventListener('wheel', handleScroll);
+  };
+ 
+  const handleScroll = (event) => {
+    event.preventDefault();
+    chatMessagesRef.current.scrollTop += event.deltaY;
+  };
+ 
+  const handleInputChange = (event) => {
+    setInput(event.target.value);
+  };
+ 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      if (isSubmitting) {
+        event.preventDefault();
+        return;
+      }
+ 
+      event.preventDefault();
+      handleSubmit();
+    }
+  };
+ 
+  const handleSubmit = async () => {
+    if (!input.trim() || isSubmitting) return;
+ 
+    setIsSubmitting(true);
+ 
     const userMessage = { text: input, sender: 'user' };
     if (!sessionTitle && messages.length === 0) {
       setSessionTitle(input);
     }
     setMessages((currentMessages) => [...currentMessages, userMessage]);
-
-//     setInput('');
-
+ 
+    setInput('');
+ 
     try {
       const response = await fetch('http://127.0.0.1:8000/chatbot/', {
         method: 'POST',
@@ -105,7 +105,7 @@ const ChatPageChatbot = ({ chatContent }) => {
         },
         body: JSON.stringify({ message: input }),
       });
-
+ 
       const data = await response.json();
       setMessages((currentMessages) => [...currentMessages, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
@@ -114,7 +114,7 @@ const ChatPageChatbot = ({ chatContent }) => {
       setIsSubmitting(false);
     }
   };
-
+ 
   return (
     <div className="chatbot-container">
       <div className="chat-messages" ref={chatMessagesRef}>
@@ -142,5 +142,5 @@ const ChatPageChatbot = ({ chatContent }) => {
     </div>
   );
 };
-
-// export default ChatPageChatbot;
+ 
+export default ChatPageChatbot;
