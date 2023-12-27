@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
+from .models import Question, Answer, Category, Result
+from django.db.models import Max
+import random
 import json
 import os
 # from langchain.vectorstores import Chroma
@@ -103,3 +105,14 @@ def chatbot_response(request):
 def generate_response(message, session_history):
     # return chain.invoke({"example":dialog_example, "history":session_history, "message":message, "subject":dialog_subject})
     return "hello"
+
+# fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
+def wrong_list():
+    wrong = Result.objects.filter(is_correct = 0)
+    wrong = [{i+1 : result.question_no.content} for i,result in enumerate(wrong)]
+    return wrong
+
+# def search_list(str):
+#     search = Result.objects.filter(is_correct = 0)
+#     search = [{i+1 : result.question_no.content} for i, result in enumerate(search)]
+#     return search

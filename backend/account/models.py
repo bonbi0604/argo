@@ -46,6 +46,7 @@ class User(AbstractBaseUser):
         max_length=255,
         unique=True,
     )
+    
     dept = models.IntegerField()
     name = models.CharField(max_length=255)
     phone = models.IntegerField()
