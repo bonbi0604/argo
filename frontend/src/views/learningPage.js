@@ -15,6 +15,8 @@ const scores = {
   ethic: { avg: 50, score: 70 }, // 윤리 점수
 };
 
+
+
 const LearningPage = () => {
   const { user } = useContext(AuthContext);
 

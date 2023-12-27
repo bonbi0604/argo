@@ -17,7 +17,7 @@ const DonutChart = ({cat, color, score, size}) => {
     ],
   };
 
-  const temp = (1-2/Number(size.slice(0, -2)))*100;
+  const temp = (1-7/Number(size.slice(0, -1)))*100;
 
   const options = {
     cutout : temp.toString() + "%",
@@ -26,7 +26,7 @@ const DonutChart = ({cat, color, score, size}) => {
 
   return (
     <div className="donutchart_element" style={{ width: size, height: size }}>
-      <Doughnut data={data} options={options} />
+      <Doughnut data={data} options={options} style={{ width: "100%", height: "100%" }}/>
     </div>
   );
 };
