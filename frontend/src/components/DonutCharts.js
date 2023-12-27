@@ -2,7 +2,7 @@ import DonutChart from "./DonutChart";
 import "./DonutCharts.css";
 
 const DonutCharts = ({data}) => {
-    const sizelist = ['19em', '20.5em', '22em', '23.5em', '25em']
+    const sizelist = ['13em', '16em', '19em', '22em', '25em']
     const colorlist = ['#FA9DA3', '#FAE3A9', '#BDD98E', '#9DC2ED', '#E2ACF5']
 
     return (

@@ -17,8 +17,10 @@ const DonutChart = ({cat, color, score, size}) => {
     ],
   };
 
+  const temp = (1-2/Number(size.slice(0, -2)))*100;
+
   const options = {
-    cutout : '90%',
+    cutout : temp.toString() + "%",
     maintainAspectRatio: false,
   };
 

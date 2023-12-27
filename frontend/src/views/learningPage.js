@@ -26,12 +26,13 @@ const LearningPage = () => {
   return (
     <section className="learning-page">
       <LearnNav />
+      <DonutCharts data={scores}/>
       <div className="score-container">
         {Object.entries(scores).map(([cat, { avg, score }]) => 
           <Scorebar key={cat} cat={cat} avg={avg} score={score} />
         )}
       </div>
-      <DonutCharts data={scores}/>
+      
     </section>
   )
 }
