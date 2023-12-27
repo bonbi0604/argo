@@ -4,16 +4,16 @@ import ChatHistory from '../components/ChatHistory';
 import ChatPageChatbot from '../components/ChatPageChatbot';
 
 const Chat = () => {
-  const [chatHistory, setChatHistory] = useState([]);
+  const [selectedChat, setSelectedChat] = useState(''); // Add this state to handle the selected chat content
 
-  const addToChatHistory = (message) => {
-    setChatHistory(prevHistory => [...prevHistory, message]);
+  const handleSessionSelect = (chatContent) => {
+    setSelectedChat(chatContent); // Update this function to handle the selected chat content
   };
 
   return (
     <div className="chat-container">
-      <ChatHistory history={chatHistory} />
-      <ChatPageChatbot />
+      <ChatHistory onSessionSelect={handleSessionSelect} />
+      <ChatPageChatbot chatContent={selectedChat} />
     </div>
   );
 };

@@ -3,17 +3,15 @@ import './ChatHistory.css';
 
 const ChatHistory = () => {
   const [sessions, setSessions] = useState([]);
-  const handleSessionClick = async (sessionId) => {
+
+  const handleSessionClick = async (id) => {
     try {
-      console.log('Clicked Session ID:', sessionId); // 세션 ID 출력
-      const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionId}`);
+      console.log('Clicked ID:', id);
+      const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${id}/`);
       if (!response.ok) {
         throw new Error('Failed to fetch session data');
       }
       const data = await response.json();
-      
-      // Chatbot 컴포넌트로 데이터 전달
-      // 여기에서는 콘솔에 데이터만 출력합니다. 실제로는 상태 또는 프롭스로 전달해야 합니다.
       console.log('Session data:', data);
     } catch (error) {
       console.error('Error fetching session data:', error);
@@ -28,8 +26,9 @@ const ChatHistory = () => {
           throw new Error('Failed to fetch sessions');
         }
         const data = await response.json();
-        console.log('Fetched sessions:', data);
-        setSessions(data);
+        const validSessions = data.filter(session => session.id != null); // id가 존재하는 세션만 필터링
+        console.log('Fetched sessions:', validSessions);
+        setSessions(validSessions);
       } catch (error) {
         console.error('Error fetching sessions:', error);
       }
@@ -40,9 +39,9 @@ const ChatHistory = () => {
 
   return (
     <div className="session-list">
-      {sessions.map((session, index) => (
-        <button key={index} onClick={() => handleSessionClick(session.session_id)}>
-          Session {session.session_id}
+      {sessions.map((session) => (
+        <button key={session.id} onClick={() => handleSessionClick(session.id)}>
+          Session {session.id}
         </button>
       ))}
     </div>

@@ -42,6 +42,7 @@ const ChatPageChatbot = () => {
       saveChatSession();
     };
 
+  
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return () => {
