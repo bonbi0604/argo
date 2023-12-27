@@ -33,6 +33,19 @@
     height: 2em;
     padding-top: 0.5em;
 }
+
+.score-label{
+    width: 8em;
+    text-align:right;
+    margin: auto 1em;
+}
+
+.score-bars {
+    width: calc(100% - 8em);
+    margin: auto 1em;
+    height: 3em;
+    padding-top: 0.5em;
+}
   
 .score-bar {
     background: #ccc; /* 평균 점수 막대의 기본 색상 */

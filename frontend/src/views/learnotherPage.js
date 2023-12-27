@@ -4,15 +4,9 @@ import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
 import './learnotherPage.css'; 
 import LearnNavComponent from '../components/LearnNav';
+import IconSense from '../icon/IconSense'
 import Scorebar from "../components/Scorebar";
 
-const scores = {
-  occupation: { avg: 75, score: 80 }, // 직무이해 점수
-  communication: { avg: 60, score: 90 }, // 커뮤니케이션 점수
-  commonsense: { avg: 79, score: 40 }, // 시사/상식 점수
-  tools: { avg: 90, score: 80 }, // 도구 점수
-  ethic: { avg: 50, score: 70 }, // 윤리 점수
-};
 
 const LearningPage = () => {
   const { user } = useContext(AuthContext);
@@ -33,8 +27,12 @@ const LearningPage = () => {
       </div> */}
       <LearnNavComponent />
       <div id="learn_body">
-        <div></div>
-        <div></div>
+        <div id="learn_up">
+            <IconSense />
+            <span>시사/상식</span>
+            <Scorebar/>
+        </div>
+        <div id="learn_down"></div>
       </div>
     </section>
   )

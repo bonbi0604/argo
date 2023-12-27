@@ -46,6 +46,16 @@ INSTALLED_APPS = [
 
 AUTH_USER_MODEL = 'account.User'
 
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+EMAIL_HOST_USER = 'sy.hong9001@gmail.com' # env('NODEMAILER_USER')  # 이메일을 보낼 G-mail 계정
+EMAIL_HOST_PASSWORD = 'jyxf ygmh qtba qxpz' # env('NODEMAILER_PASS')  # 설정한 앱 비밀번호
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

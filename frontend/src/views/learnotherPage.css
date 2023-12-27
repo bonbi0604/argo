@@ -1,12 +1,30 @@
 #learn_other {
-    height: 100%;
     background-color: white;
-    padding: 5% 8%;
 }
 
 #learn_body {
     border: 1px solid black;
-    width: 75%;
-    margin-left: 25%;
+    width: 60%;
+    margin-left: 28%;
+    height: 100%;
 }
 
+#learn_up {
+    border: 1px solid green;
+    height: 14%;
+    margin-top: 4%;
+    display: flex;
+    flex-direction: row; /* 수평으로 배치 */
+    align-items: center; /* 세로 가운데 정렬 */
+}
+
+#learn_up > span {
+    margin-left: 5%;
+}
+
+.learningPage {
+    height: calc(100% - 5em);
+    width: 100%;
+    background-color: #fff;
+}
+    

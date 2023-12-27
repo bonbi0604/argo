@@ -11,6 +11,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from .models import Post
 from .serializer import PostSerializer
 from django.views.decorators.csrf import csrf_exempt
+from django.core.mail import EmailMessage
+
 
 # Create your views here.
 
@@ -39,6 +41,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes
 from django.db import IntegrityError
 import json
+from smtplib import SMTPException
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsAuthenticated])
@@ -97,3 +100,29 @@ def checkEmail(request):
         return JsonResponse({'isDuplicate': is_duplicate})
     except Exception as e:
         return JsonResponse({'error': str(e)}, status=500)
+    
+
+@csrf_exempt
+def mailSend(request):
+    if request.method == 'POST':
+        data = json.loads(request.body)
+        user_email = data.get('email')
+        code = generate_random_code(6)
+
+        subject = '[ARGO] 인증번호를 입력해주세요.' # 타이틀
+        message = f'이메일 인증번호: {code}\n인증 창에 입력하세요.' # 본문 내용
+        from_email = "ARGO"    # 발신할 이메일 주소
+        to = [user_email]   # 수신할 이메일 주소
+        print(user_email)
+        
+        try:
+            EmailMessage(subject=subject, body=message, to=to, from_email=from_email).send()
+            return JsonResponse({'code': code})
+        except SMTPException as e:
+            return JsonResponse({'error': str(e)}, status=500)
+    
+import random
+import string
+
+def generate_random_code(length):
+    return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))

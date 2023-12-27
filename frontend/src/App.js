@@ -25,6 +25,7 @@ import LearnOtherPage from "./views/learnotherPage"
 function App() {
   return (
     <Router>
+      {/* <div className="flex flex-col min-h-screen overflow-hidden"> */}
       <div className="App">
         <AuthProvider>
           <HeaderMenu />
@@ -43,9 +44,9 @@ function App() {
             <Route path="/learn/ethic" element={<EthicPage />} />
             <Route path="/learn/common-sense" element={<LearnOtherPage />} />
           </Routes>
+          <Chatbot />
           <Footer />
         </AuthProvider>
-        {/* <Chatbot /> */}
       </div>
     </Router>
   )
