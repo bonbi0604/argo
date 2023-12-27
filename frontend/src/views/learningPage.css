@@ -1,0 +1,56 @@
+    .scoreboard {
+    /* 점수판 스타일을 설정합니다. */
+  }
+
+  .score-container {
+    height: 60vh;
+    width: 60vw;
+    border: solid gray;
+    display: flex; /* Flexbox를 사용하여 요소들을 가로로 배치합니다. */
+    flex-direction: column; /* 요소들을 세로로 정렬합니다. */
+    align-items: flex-end; /* 요소들을 오른쪽으로 정렬합니다. */
+  }
+
+  .score-item {
+    margin: 5px; /* 각 점수 항목 사이의 여백을 조정합니다. */
+    border: solid;
+  }
+
+  .score-box {
+    width: 400px;
+  }
+  
+  .score-item label {
+    display: block;
+    margin: 5px;
+  }
+  
+  .score-bar {
+    background: #ccc; /* 평균 점수 막대의 기본 색상 */
+    height: 20px;
+    margin-bottom: 5px; /* 막대 사이의 여백 */
+    border-radius: 10px;
+  }
+
+  /* 각 항목에 해당하는 클래스와 색상 값을 추가합니다. */
+.score-bar.user-score.occupation {
+    background: #FA9DA3;
+  }
+  
+  .score-bar.user-score.communication {
+    background: #FAE3A9;
+  }
+  
+  .score-bar.user-score.commonsense {
+    background: #BDD98E;
+  }
+  
+  .score-bar.user-score.tools {
+    background: #9DC2ED;
+  }
+  
+  .score-bar.user-score.ethic {
+    background: #E2ACF5;
+  }
+  
+  
