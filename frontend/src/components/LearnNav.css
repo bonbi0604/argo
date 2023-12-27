@@ -1,0 +1,27 @@
+#learn_nav {
+    width: 20%;
+    height: 60%;
+    background-color: #D3E3F7;
+    border-radius: 10px;
+    padding-top: 2%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    float: left;
+}
+
+#learn_nav ol {
+    list-style-type: none;
+    padding: 0;
+}
+
+#learn_nav li {
+    font-size: 16px;
+    padding: 10%;
+    cursor: pointer;
+    font-size: 1.3em;
+    color: #4378b5;
+    font-weight: bold;
+}
+
+#learn_nav li:hover {
+    background-color: #c4dcfa;
+}
