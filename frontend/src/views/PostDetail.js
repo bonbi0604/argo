@@ -10,6 +10,7 @@ const PostDetail = () => {
     const [newComment, setNewComment] = useState(''); // 새 댓글 입력 상태
     const { user } = useContext(AuthContext);
     const navigate = useNavigate();
+    const [editingComment, setEditingComment] = useState(null);
     const api = useAxios();
 
     useEffect(() => {
@@ -81,7 +82,7 @@ const PostDetail = () => {
         try {
           const response = await api.delete(`http://127.0.0.1:8000/noticeboard/comments/${commentId}/delete/`);
           if (response.status === 200 || response.status === 204) {
-            setComments(comments.filter(comment => comment.id !== commentId));
+            setComments(comments.filter(comment => comment.comm_no !== commentId));
           }
         } catch (error) {
           console.error('댓글 삭제 중 오류 발생', error);
@@ -90,8 +91,27 @@ const PostDetail = () => {
     
     // 댓글 수정 핸들러
     const handleEditComment = (comment) => {
-        // 수정 로직 구현
-    };
+        setEditingComment({ id: comment.comm_no, content: comment.content });
+      };
+
+      const handleUpdateComment = async (commentId, content) => {
+        try {
+          const response = await api.put(`http://127.0.0.1:8000/noticeboard/comments/${commentId}/update/`, { content });
+          if (response.status === 200) {
+            // 댓글 목록에서 해당 댓글을 업데이트합니다.
+            setComments(comments.map((comment) => {
+              if (comment.comm_no === commentId) {
+                return { ...comment, content };
+              }
+              return comment;
+            }));
+            // 수정 모드를 종료합니다.
+            setEditingComment(null);
+          }
+        } catch (error) {
+          console.error('댓글 수정 중 오류 발생', error);
+        }
+      };
 
   return (
     <div>
@@ -104,13 +124,29 @@ const PostDetail = () => {
       <h2>{post.title}</h2>
       <p>{post.content}</p>
 
-        {comments.map((comment, index) => (
-    <div key={index} style={{ display: 'flex', alignItems: 'center' }}>
-        <div style={{ marginRight: '10px' }}>{comment.content}</div>
-        {user && user.id === post.author_id && ( // 현재 사용자가 댓글 작성자인 경우에만 버튼 표시
+    {comments.map((comment) => (
+    <div key={comment.comm_no} style={{ display: 'flex', alignItems: 'center' }}>
+        {editingComment && editingComment.id === comment.comm_no ? (
+        // 수정 모드 활성화
         <div>
-            <button onClick={() => handleDeleteComment(comment.id)}>삭제</button>
-            <button onClick={() => handleEditComment(comment)}>수정</button>
+            <input
+            type="text"
+            value={editingComment.content}
+            onChange={(e) => setEditingComment({ ...editingComment, content: e.target.value })}
+            />
+            <button onClick={() => handleUpdateComment(editingComment.id, editingComment.content)}>수정 완료</button>
+        </div>
+        ) : (
+        // 기본 댓글 표시
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+            
+            <div style={{ marginRight: '10px' }}>{comment.content}</div>
+            {user && user.id === post.author_id && (
+            <div>
+                <button onClick={() => handleEditComment(comment)}>수정</button>
+                <button onClick={() => handleDeleteComment(comment.comm_no)}>삭제</button>
+            </div>
+            )}
         </div>
             )}
         </div>

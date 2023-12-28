@@ -116,8 +116,9 @@ def delete_comment(request, id):
 @api_view(['PUT'])
 def update_comment(request, id):
     comment = get_object_or_404(Comment, pk=id)
-    serializer = CommentSerializer(comment, data=request.data)
+    serializer = CommentSerializer(comment, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

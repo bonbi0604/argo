@@ -14,8 +14,7 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['id', 'author', 'title', 'content', 'timestamp']
 
 class CommentSerializer(serializers.ModelSerializer):
-    # 필요한 경우 user_no 필드를 User 모델을 참조하도록 변경합니다.
-    user_no = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    user_no = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
 
     class Meta:
         model = Comment
