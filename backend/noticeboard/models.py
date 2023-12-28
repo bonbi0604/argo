@@ -12,3 +12,10 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+class Comment(models.Model):
+    comm_no = models.AutoField(primary_key=True)
+    board_no = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
+    user_no = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.CharField(max_length=45)
+    timestamp = models.DateTimeField(auto_now_add=True)    

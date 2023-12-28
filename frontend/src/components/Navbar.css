@@ -7,6 +7,7 @@
   color: white;
   padding: 1rem;
   z-index: 1000;
+  margin: auto 5%;
 }
 
 .navbar-container {
@@ -18,7 +19,7 @@
 .navbar-logo {
   color: white;
   text-decoration: none;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .menu-icon {
