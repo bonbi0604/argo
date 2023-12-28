@@ -1,6 +1,7 @@
 import DonutChart from "./DonutChart";
 import "./DonutCharts.css";
 import IconStructure from "../icon/IconStructure";
+import IconUserImage from "../icon/IconUserImage";
 
 const colorlist = ['#FA9DA3', '#FAE3A9', '#BDD98E', '#9DC2ED', '#E2ACF5']
 
@@ -102,6 +103,10 @@ const DonutCharts = ({data}) => {
                     )}
                 </div>
             </div>
+            <div className="donut_pentagon_chart_inner">
+                <IconUserImage size={`${30}%`} />
+            </div>
+            
         </div>
 
         
