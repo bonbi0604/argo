@@ -81,25 +81,14 @@ def chatbot_response(request):
         data = json.loads(request.body)
         user_message = data['message']
         
-        # 현재 세션에 저장된 대화 내역을 가져오기
-        session_history = request.session.get('chat_history', [])
 
-        # 현재 사용자의 메시지를 대화 내역에 추가
-        session_history.append({"speaker": "user", "message": user_message})
+        chatbot_response = generate_response(user_message, data['history'])
+        
 
-        chatbot_response = generate_response(user_message, session_history)
-        
-        
-        # chatbot 응답 메시지를 대화 내역에 추가
-        session_history.append({"speaker": "chat", "message": chatbot_response})
-        
-        # 대화 내역을 세션에 저장
-        request.session['chat_history'] = session_history
-        # request.session.save()
-        print(user_message, session_history)
+        print(data['history'], user_message)
         
         return JsonResponse({'reply': chatbot_response, 'title':dialog_subject})
 
-def generate_response(message, session_history):
-    # return chain.invoke({"example":dialog_example, "history":session_history, "message":message, "subject":dialog_subject})
-    return "hello"
+def generate_response(message, history):
+    return chain.invoke({"example":dialog_example, "history":history, "message":message, "subject":dialog_subject})
+    # return "hello"
