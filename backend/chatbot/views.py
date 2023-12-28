@@ -25,36 +25,37 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
     queryset = ChatSession.objects.all()
     serializer_class = ChatSessionSerializer
     
-    # def perform_create(self, serializer):
-    #     user_id_str = self.request.data.get('user')
-    #     session_title = self.request.data.get('session_title')
-    #     chat_content = self.request.data.get('chat_content')
-    #     try:
-    #         user = User.objects.get(user_no=user_id_str)
-    #     except User.DoesNotExist:
-    #         return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    #     serializer.save(user=user, session_title=session_title, chat_content=chat_content)
+    def perform_create(self, serializer):
+        user_id_str = self.request.data.get('user')
+        session_title = self.request.data.get('session_title')
+        chat_content = self.request.data.get('chat_content')
+        try:
+            user = User.objects.get(user_no=user_id_str)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer.save(user=user, session_title=session_title, chat_content=chat_content)
     
-    # def get_queryset(self):
-    #     user_no = self.request.query_params.get('user_no')
-    #     if user_no is not None:
-    #         return ChatSession.objects.filter(user__user_no=user_no)
-    #     return ChatSession.objects.all()
+    def get_queryset(self):
+        user_no = self.request.query_params.get('user_no')
+        print(user_no)
+        if user_no is not None:
+            return ChatSession.objects.filter(user_no_id=user_no)
+        return ChatSession.objects.all()
 
-    # def update(self, request, pk=None):
-    #     try:
-    #         session = ChatSession.objects.get(pk=pk)
-    #     except ChatSession.DoesNotExist:
-    #         return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
+    def update(self, request, pk=None):
+        try:
+            session = ChatSession.objects.get(pk=pk)
+        except ChatSession.DoesNotExist:
+            return Response({'error': 'Session not found'}, status=status.HTTP_404_NOT_FOUND)
 
-    #     serializer = self.get_serializer(session, data=request.data, partial=True)
-    #     if serializer.is_valid():
-    #         serializer.save()
-    #         return Response(serializer.data)
-    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = self.get_serializer(session, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    # def destroy(self, request, *args, **kwargs):
-    #     return super().destroy(request, *args, **kwargs)
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
     
 # os.environ["OPENAI_API_KEY"] = "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"
 # persist_directory = str(settings.BASE_DIR)

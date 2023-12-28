@@ -40,14 +40,14 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
       endpoint += `${id}/`;
       method = 'PUT';
     }
-
+    console.log(user.user_no, localSessionTitle, chatContent);
     await fetch(endpoint, { 
       method: method,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user: user.user_no,  // 사용자 ID
+        user_no: user.user_no,  // 사용자 no
         session_title: localSessionTitle,  // 세션 제목
         chat_content: chatContent,  // 채팅 내용
       }),

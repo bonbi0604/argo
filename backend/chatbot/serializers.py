@@ -4,4 +4,4 @@ from .models import ChatSession
 class ChatSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatSession
-        fields = ['id', 'user','session_title', 'chat_content']
+        fields = ['id', 'user_no','session_title', 'chat_content']
