@@ -19,6 +19,7 @@ const PostDetail = () => {
             const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/${id}/`);
             if (response.status === 200 && response.data) {
               setPost(response.data);
+              console.log(response.data);
             } else {
               console.error('응답 오류:', response);
             }
@@ -123,6 +124,10 @@ const PostDetail = () => {
       )}
       <h2>{post.title}</h2>
       <p>{post.content}</p>
+      {/* 파일 다운로드 링크 추가 */}
+      {post.file_url && (
+            <a href={post.file_url} download>파일 다운로드</a>
+        )}
 
     {comments.map((comment) => (
     <div key={comment.comm_no} style={{ display: 'flex', alignItems: 'center' }}>

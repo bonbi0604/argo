@@ -7,11 +7,16 @@ from noticeboard.models import Post
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.id')
+    file_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
-        fields = ['id', 'author', 'title', 'content', 'timestamp']
+        fields = ['id', 'title', 'content', 'author_id', 'timestamp', 'file_url']
+
+    def get_file_url(self, obj):
+        if obj.file:
+            return obj.file.url
+        return None
 
 class CommentSerializer(serializers.ModelSerializer):
     user_no = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)

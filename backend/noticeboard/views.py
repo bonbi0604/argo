@@ -30,7 +30,7 @@ def post_list_create(request):
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(author=request.user)
+            serializer.save(author=request.user, file=request.FILES.get('file'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
@@ -45,7 +45,8 @@ def post_detail(request, id):
             "title": post.title,
             "content": post.content,
             "author_id": post.author.id,
-            "timestamp": post.timestamp.strftime("%Y-%m-%d %H:%M:%S")
+            "timestamp": post.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            'file_url': post.file.url if post.file else None,
         }
         return JsonResponse(post_data)    
     elif request.method == 'PUT':

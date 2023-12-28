@@ -9,6 +9,7 @@ class Post(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    file = models.FileField(upload_to='uploads/', null=False, blank=True)
 
     def __str__(self):
         return self.title
