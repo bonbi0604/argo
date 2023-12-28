@@ -11,7 +11,7 @@ const QustList = () => {
   return (
     <div id="comLearnDown">
         <WrongAnswers cat={categoryValue}/>
-        <QuestionList/>
+        <QuestionList totalItems='20' itemsPerPage='4' currentPage='1' setCurrentPage='1'/>
     </div>
   )
 }

@@ -5,11 +5,13 @@ import React, { useState, useContext, useCallback } from "react";
 
 const LearnUpLeft = () => {
   const cat = "commonsense";
+  const avg = 80
+  const score = 70
 
   return (
-    <div id="comLearnDown">
-        <IconSense cat={cat} />
-        <Scorebar cat={cat}/>
+    <div id="comLearnUpLeft">
+        <IconSense />
+        <Scorebar cat={cat} avg={avg} score={score}/>
     </div>
   )
 }
