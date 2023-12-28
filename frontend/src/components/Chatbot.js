@@ -62,7 +62,7 @@ const Chatbot = () => {
 
   const handleSubmit = async () => {
     if (!input.trim() || isSubmitting) return;
-
+    console.log(user.user_no)
     setIsSubmitting(true);
 
     const userMessage = { text: input, sender: 'user' };
@@ -104,7 +104,7 @@ const Chatbot = () => {
     try {
       const endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
       const method = 'POST';
-
+      
       await fetch(endpoint, { 
         method: method,
         headers: {

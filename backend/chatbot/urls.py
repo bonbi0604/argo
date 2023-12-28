@@ -1,6 +1,6 @@
 from django.urls import path, include
 from . import views
-from .views import chatbot_response,ChatSessionViewSet
+from .views import chatbot_response, ChatSessionViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()

@@ -70,7 +70,6 @@ const ChatHistory = ({ onSessionSelect }) => {
           
         </div>
       ))}
-      <button className='check-check'>확인용</button>
     </div>
   );
 };
