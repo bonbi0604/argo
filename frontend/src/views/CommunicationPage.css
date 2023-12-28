@@ -1,0 +1,60 @@
+.communication_page {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+}
+
+.communication_page_button {
+    width: 7em;
+    height: 3em;
+    border-radius: 1em;
+    border: none;
+    min-width: 5em;
+    margin: auto;
+}
+
+.communication_page_top {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+}
+
+.communication_page_scorebar{
+    width: 80%;
+    min-width: 25em;
+    margin: auto;
+}
+
+.communication_page_contents {
+    width: 100%;
+    height: 85%;
+    margin: auto;
+}
+
+.communication_page_inner {
+    width: 80%;
+    height: 100%;
+    display: flex;
+    margin-right: 5em;
+}
+
+.communication_page_icon {
+    height: 100%;
+    aspect-ratio: 1;
+    display: flex;
+}
+
+.communication_page_inner2 {
+    width: 80%;
+    height: 60%;
+    min-height: 32em;
+    margin: auto;
+}
+
+.communication_page_icon .inner {
+    width: 80%;
+    aspect-ratio: 1;
+    margin: auto;
+}
