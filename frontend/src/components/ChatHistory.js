@@ -70,7 +70,9 @@ const ChatHistory = ({ onSessionSelect }) => {
           
         </div>
       ))}
+      <button className="check-check">안녕</button>
     </div>
+    
   );
 };
 

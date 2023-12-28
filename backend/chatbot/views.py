@@ -19,25 +19,25 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from account.models import User
 
 # ChatSessionViewSet 정의
 class ChatSessionViewSet(viewsets.ModelViewSet):
     queryset = ChatSession.objects.all()
     serializer_class = ChatSessionSerializer
-    
+        
     def perform_create(self, serializer):
-        user_id_str = self.request.data.get('user')
+        user_id_str = self.request.data.get('user_no')
         session_title = self.request.data.get('session_title')
         chat_content = self.request.data.get('chat_content')
         try:
-            user = User.objects.get(user_no=user_id_str)
+            user = User.objects.get(pk=user_id_str)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-        serializer.save(user=user, session_title=session_title, chat_content=chat_content)
+        serializer.save(user_no=user_id_str, session_title=session_title, chat_content=chat_content)
     
     def get_queryset(self):
         user_no = self.request.query_params.get('user_no')
-        print(user_no)
         if user_no is not None:
             return ChatSession.objects.filter(user_no_id=user_no)
         return ChatSession.objects.all()
