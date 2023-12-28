@@ -16,7 +16,6 @@ from datetime import timedelta
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -42,6 +41,8 @@ INSTALLED_APPS = [
     'api',
     'account',
     'chatbot',
+    'noticeboard',
+    'learn',
 ]
 
 AUTH_USER_MODEL = 'account.User'
@@ -54,6 +55,14 @@ EMAIL_HOST_USER = 'sy.hong9001@gmail.com' # env('NODEMAILER_USER')  # 이메일�
 EMAIL_HOST_PASSWORD = 'jyxf ygmh qtba qxpz' # env('NODEMAILER_PASS')  # 설정한 앱 비밀번호
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# AUTHENTICATION_BACKENDS = {
+#     # Needed to login by username in Django admin, regardless of `allauth`
+#     'django.contrib.auth.backends.ModelBackend',
+
+#     # `allauth` specific authentication methods, such as login by e-mail
+#     'allauth.account.auth_backends.AuthenticationBackend',
+# }
 
 
 MIDDLEWARE = [
@@ -91,23 +100,24 @@ WSGI_APPLICATION = 'argo.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'aivle_practice',
+        'USER': 'aivle0412',
+        'PASSWORD': 'aivle20230412',
+        'HOST': 'db.aivle0412.duckdns.org',
+        'PORT': '10622',
     }
 }
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'aivle_big',
-#         'USER': 'aivle0412',
-#         'PASSWORD': 'aivle20230412',
-#         'HOST': 'db.aivle0412.duckdns.org',
-#         'PORT': '10622',
-#     }
-# }
 
 
 # Password validation
@@ -194,3 +204,10 @@ SIMPLE_JWT = {
 }
 
 CORS_ALLOW_ALL_ORIGINS = True
+
+# 세션 백엔드 설정
+SESSION_ENGINE = "django.contrib.sessions.backends.db"
+
+# 세션 저장소 설정
+SESSION_COOKIE_NAME = 'my_chat_session'
+# SESSION_SAVE_EVERY_REQUEST = True
