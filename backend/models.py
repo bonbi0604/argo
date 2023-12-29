@@ -73,7 +73,7 @@ class Question(models.Model):
 
 
 class Result(models.Model):
-    result_no = models.IntegerField(primary_key=True)
+    result_no = models.AutoField(primary_key=True)
     user_no = models.ForeignKey('User', models.DO_NOTHING, db_column='user_no')
     answer_no = models.ForeignKey(Answer, models.DO_NOTHING, db_column='answer_no')
     timestamp = models.DateTimeField()

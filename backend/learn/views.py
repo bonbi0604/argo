@@ -6,11 +6,11 @@ from django.db.models import Max
 import random, json
 from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_protect
+from django.views.decorators.csrf import csrf_exempt
 from django.core.serializers import serialize
-from account.models import *
+from account.models import User
  
-# 틀린문제 뽑기.
+# 틀린문제 뽑기. question에 있는 모든 내용 가져오기
 def get_wrong_question_list(filter_no, count, user_no=None):
     specific_user = Result.objects.filter(user_no = user_no)
     value = specific_user.filter(is_correct=0)
@@ -30,26 +30,22 @@ def get_wrong_question_list(filter_no, count, user_no=None):
 
 @csrf_exempt
 def wrong_question_list(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        cat = data.get('cat')
-        # user_no = data.get('user_no')
-        if cat == 'occupation':
-            filter_no = 4
-            question = get_wrong_question_list(filter_no, 20)
-        elif cat=='commonsense':
-            english = get_wrong_question_list(1, 7)
-            korean  = get_wrong_question_list(2, 6)
-            sisa = get_wrong_question_list(3,6)
-            question = english + korean + sisa 
-        elif cat =='tools':
-            filter_no =5
-            question = get_wrong_question_list(filter_no, 20)
-        elif cat =='ethic':
-            pass
-        return JsonResponse({'wrong_question_list' : question }, status=200)
-    else:
-        return JsonResponse({'error': 'Only POST requests are allowed'}, status=405)
+    data = json.loads(request.body)
+    cat = data.get('cat')
+    user_no = data.get('user_no')
+    if cat == 'occupation':
+        question = get_wrong_question_list(4, 20, user_no)
+    elif cat=='commonsense':
+        english = get_wrong_question_list(1, 7, user_no)
+        korean  = get_wrong_question_list(2, 6, user_no)
+        sisa = get_wrong_question_list(3,6, user_no)
+        
+        question = english + korean + sisa 
+    elif cat =='tools':
+        question = get_wrong_question_list(5, 20, user_no)
+    elif cat =='ethic':
+        pass
+    return JsonResponse({'wrong_question' : question })
     
           
 @csrf_exempt
@@ -62,9 +58,8 @@ def search_list(request):
         content_list = [{'content': item['question_no__content']} for item in content_list]
     else:
         pass
-    return Response(content_list)
+    return Response(content_list)    
 
-@csrf_exempt
 def give_question(request):
     # 랜덤으로 한문제씩 출제
     data = json.loads(request.body)
@@ -77,13 +72,13 @@ def give_question(request):
         number = 5
     elif cat =='ethic':
         pass
-   
+    
     question = Question.objects.filter(category_no = number).order_by('?').first()
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
-   
+    
     answer = None
-    # 주관식이면 0
+    # 주관식이면 0 
     # 객관식이면 1
     is_many_choice = None
     for item in choice:
@@ -92,14 +87,15 @@ def give_question(request):
             'answer_no': item.answer_no
         }
         choice_list.append(tmp_dic)
-       
+        
         if item.is_correct ==1:
             answer = item.content
     if len(choice_list) ==1:
         is_many_choice = 0
     else:
         is_many_choice = 1
-   
+
+    
     data = {
         'question_no': question.question_no,
         'question_content': question.content,
@@ -107,20 +103,22 @@ def give_question(request):
         'correct_answer': answer,
         'is_many_choice' : is_many_choice
     }
-    return JsonResponse({'wrong_question' : data })
+    return JsonResponse({'wrong_question' : data })        
+
+# def result_save(request):
 
 @csrf_exempt
 def insertResult(request):
     data = json.loads(request.body)
     user = data.get('user_no')
-    # user = User.objects.get(user_no = user)
+    user = User.objects.get(user_no = user)
     answer = data.get('answer_no')
-    # answer = Answer.objects.get(answer_no = answer)
+    answer = Answer.objects.get(answer_no = answer)
     question = data.get('question_no')
-    # question = Question.objects.get(question_no = question)
+    question = Question.objects.get(question_no = question)
     content = data.get('user_content')
     is_correct = None
-   
+    
     value = Answer.objects.get(answer_no=answer)
     # 객관식 일때
     if content == '':
@@ -133,8 +131,7 @@ def insertResult(request):
         if content != value.answer_no.content:
             is_correct = 0
         else:
-            is_correct = 1
-           
+            is_correct = 1   
     save = {
             'user_no' : user,
             'answer_no' : answer,
@@ -144,3 +141,4 @@ def insertResult(request):
     }
     new_user = Result.objects.create(**save)
     new_user.save()
+# objects.create()를 사용하여 새로운 User 레코드 생성 및 저장

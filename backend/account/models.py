@@ -41,6 +41,7 @@ class User(AbstractBaseUser):
     id = models.CharField(max_length=128, unique=True)
     password = models.CharField(max_length=128)
     is_admin = models.BooleanField(default=False)
+    image = models.TextField(blank=True, null=True)
     email = models.EmailField(
         verbose_name='email',
         max_length=255,
