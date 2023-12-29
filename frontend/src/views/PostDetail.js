@@ -125,9 +125,13 @@ const PostDetail = () => {
       <h2>{post.title}</h2>
       <p>{post.content}</p>
       {/* 파일 다운로드 링크 추가 */}
-      {post.file_url && (
-            <a href={post.file_url} download>파일 다운로드</a>
-        )}
+      <div>
+                {post.files && post.files.map((file, index) => (
+                    <div key={index}>
+                        <a href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                    </div>
+                ))}
+            </div>
 
     {comments.map((comment) => (
     <div key={comment.comm_no} style={{ display: 'flex', alignItems: 'center' }}>

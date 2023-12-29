@@ -7,47 +7,38 @@ const WritePost = () => {
     const { user } = useContext(AuthContext); // 현재 로그인한 사용자 정보를 가져옵니다.
     const [title, setTitle] = useState(''); // 게시물 제목 상태
     const [content, setContent] = useState(''); // 게시물 내용 상태
-    const [selectedFile, setSelectedFile] = useState(null); // 선택한 파일 상태
+    const [files, setFiles] = useState([]); // 파일들을 저장할 상태
     const navigate = useNavigate(); // React Router의 네비게이션 함수
     const api = useAxios(); // 커스텀 Axios 훅을 사용하여 API 요청을 수행합니다.
 
+    
     // 게시물 제출 핸들러
     const handleSubmit = async (e) => {
         e.preventDefault(); // 폼 제출 기본 동작을 막습니다.
 
-        // 제목과 내용이 비어 있는지 확인
-        if (!title.trim() || !content.trim()) {
-            console.error("제목과 내용을 입력해야 합니다.");
-            return;
-        }
-
-        // 새로운 게시물 데이터
-        const formData = new FormData();
+        let formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
-        if (selectedFile) {
-            formData.append('file', selectedFile);
+        for (let i = 0; i < files.length; i++) {
+            formData.append('file_field_name', files[i]); // 각 파일을 FormData에 추가
+            formData.append('file_name', files[i].name); // 각 파일 이름을 FormData에 추가
         }
-
         try {
             const response = await api.post('http://127.0.0.1:8000/noticeboard/posts/', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+                    'Content-Type': 'multipart/form-data'
+                }
             });
-            if (response.status === 201 || response.status === 200) {
-                navigate('/DashBoard'); // 게시물이 성공적으로 작성되면 게시판 페이지로 이동
-            } else {
-                // 다른 상태 코드를 처리할 수 있습니다.
+            if (response.status === 201) {
+                navigate('/Dashboard'); 
             }
         } catch (error) {
-            console.error('게시물 제출 중 오류 발생', error);
+            console.error('게시글 작성 오류', error);
         }
     };
 
     const handleFileChange = (e) => {
-        const file = e.target.files[0]; // 선택한 파일 가져오기
-        setSelectedFile(file); // 선택한 파일을 상태에 저장
+        setFiles(e.target.files); // 여러 파일 업로드를 처리
     };
 
     return (
@@ -80,6 +71,7 @@ const WritePost = () => {
                                 className="write-post-file-input"
                                 accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt" // 허용할 파일 형식 지정
                                 onChange={handleFileChange} // 파일 선택 핸들러 연결
+                                multiple
                             />
                         </div>
 
