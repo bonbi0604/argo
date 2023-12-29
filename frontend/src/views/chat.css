@@ -20,3 +20,16 @@
     margin-left: 10px; /* 왼쪽 여백 조정 */
     padding: 10px; /* 내부 여백 추가 */
   }
+
+  .chat-container {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .chat-history {
+    flex: 1; 
+  }
+  
+  .chat-page-chatbot {
+    flex: 1; 
+  }

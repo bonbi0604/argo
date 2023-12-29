@@ -9,11 +9,10 @@ from django.db import models
 from account.models import User
 
 class ChatSession(models.Model):
-    session_title = models.CharField(max_length=255)
-    chat_content = models.TextField()
-    user_no = models.ForeignKey(User, models.DO_NOTHING, db_column='user_no',on_delete=models.CASCADE)
-    id = models.AutoField(primary_key=True)
-                          
+    session_title = models.CharField(max_length=255, blank=True, null=True)
+    chat_content = models.TextField(blank=True, null=True)
+    user_no = models.ForeignKey(User, on_delete=models.CASCADE, db_column='user_no', blank=True, null=True)
+
     class Meta:
         managed = False
         db_table = 'chat_session'
