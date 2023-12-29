@@ -101,6 +101,25 @@ def wrong_list():
     wrong = [{i+1 : result.question_no.content} for i,result in enumerate(wrong)]
     return wrong
 
+
+
+from django.views.decorators.http import require_http_methods
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def recommendation(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no', 0)
+    result = Result.objects.filter(user_no=user_no, is_correct=0).order_by('timestamp').first()
+    if result:
+        question = result.question_no
+        category_no = question.category_no
+        class_name = category_no.classification
+        return JsonResponse({'result': class_name})
+    else:
+        return JsonResponse({'error': 'No incorrect problems found'}, status=404)
+
+
 # def search_list(str):
 #     search = Result.objects.filter(is_correct = 0)
 #     search = [{i+1 : result.question_no.content} for i, result in enumerate(search)]
