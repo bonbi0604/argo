@@ -24,6 +24,7 @@ from django.core.serializers import serialize
 from account.models import User
 
 ### learn-communication
+from rest_framework.response import Response
 
 # 쿼리 날려서 DB에서 가져오기
 user_name = "wendy"
@@ -144,6 +145,10 @@ def chatbot_response(request):
         
         return JsonResponse({'reply': chatbot_response, 'title':dialog_subject})
 
+def generate_response(message, history):
+    return chain.invoke({"example":dialog_example, "history":history, "message":message, "subject":dialog_subject})
+    # return "hello"
+
 # fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
 def wrong_list():
     wrong = Result.objects.filter(is_correct = 0)
@@ -170,12 +175,8 @@ def recommendation(request):
         return JsonResponse({'result': class_name_eng})
     else:
         return JsonResponse({'error': 'No incorrect problems found'}, status=404)
-    
-from django.views.decorators.http import require_http_methods
-
 
 @csrf_exempt
-@require_http_methods(["POST"])
 def score(request):
     data = json.loads(request.body)
     user_no = data.get('user_no', 0)
@@ -342,9 +343,7 @@ def give_question(request):
         'correct_answer': answer,
         'is_many_choice' : is_many_choice
     }
-    return JsonResponse({'wrong_question' : data })        
-
-# def result_save(request):
+    return JsonResponse({'wrong_question' : data })
 
 @csrf_exempt
 def insertResult(request):
@@ -369,9 +368,9 @@ def insertResult(request):
         else:
             is_correct = 1  
     save = {
-            'user_no' : User.objects.get(user_no = user),
-            'answer_no' : Answer.objects.get(answer_no = answer),
-            'question_no' : Question.objects.get(question_no = question),
+            'user_no' : User.objects.get(user_no = User.objects.get(user_no = user)),
+            'answer_no' : Answer.objects.get(answer_no = Answer.objects.get(answer_no = answer)),
+            'question_no' : Question.objects.get(question_no = Question.objects.get(question_no = question)),
             'is_correct' : is_correct,
             'content' : content
     }
