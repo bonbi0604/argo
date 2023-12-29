@@ -6,16 +6,18 @@ import ChatPageChatbot from '../components/ChatPageChatbot';
 const Chat = () => {
   const [selectedSessionId, setSelectedSessionId] = useState(null);
   const [selectedChatContent, setSelectedChatContent] = useState(null);
+  const [selectedTitle, setSelectedSessionTitle] = useState(null);
 
-  const handleSessionSelect = (sessionId, chatContent) => {
+  const handleSessionSelect = (sessionId, chatContent, sessionTitle) => {
     setSelectedSessionId(sessionId);
     setSelectedChatContent(chatContent);
+    setSelectedSessionTitle(sessionTitle);
   };
 
   return (
     <div className="chat-container">
       <ChatHistory onSessionSelect={handleSessionSelect} />
-      <ChatPageChatbot sessionId={selectedSessionId} chatContent={selectedChatContent} />
+      <ChatPageChatbot id={selectedSessionId} chatContent={selectedChatContent} sessionTitle={selectedTitle}/>
     </div>
   );
 };
