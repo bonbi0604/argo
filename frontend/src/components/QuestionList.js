@@ -1,7 +1,7 @@
 import "./QuestionList.css"
 import Pagination from "./Pagination"
 
-const QuestionList = () => {
+const QuestionList = ({wrongList}) => {
   const changeWrongQuestion = () => {
     console.log("HELLO")
     // 여기에 정의해도 실행이 되나?
@@ -25,12 +25,11 @@ const QuestionList = () => {
       </div>
       <div id="q_container">
         {/* 클릭하면 오답노트쪽이 해당 문제로 바뀜 */}
-        <div className="q_content" onClick={changeWrongQuestion}>
-          <div>125. 시사문제 제목</div>
-        </div>
-        <div className="q_content"></div>
-        <div className="q_content"></div>
-        <div className="q_content"></div>
+        {Array.isArray(wrongList) && wrongList.map((item) => (
+          <div key={item.question_no} className="q_content" onClick={changeWrongQuestion}>
+            <p>{item.question_no}. {item.content}</p>
+          </div>
+        ))}
       </div>
       <div>
         <Pagination/>

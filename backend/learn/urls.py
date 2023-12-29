@@ -13,5 +13,6 @@ from .views import *
 app_name = "learn"
 
 urlpatterns = [
-    path('communication/study/', chatbot_response, name='communication_study'),
+    path('wronglist/', wrong_question_list, name='wrong_question_list'),
+    path('getQuestion/', give_question, name='give_question'),
 ]

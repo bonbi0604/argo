@@ -3,47 +3,37 @@ import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
 import './learnotherPage.css'; 
 import LearnNavComponent from '../components/LearnNav';
-import LearnDown_1 from "../components/LearnDown_1"
-import LearnUpLeft from "../components/LearnUpLeft";
-import LearnDown_2 from "../components/LearnDown_2"
+import SolveQuestion from "../components/solveQuestion";
+import WrongQuestion from "../components/WrongQuestion";
 import React, { useState, useContext, useCallback } from "react";
 
 
 // 필요한 것들
-// LearnNavComponent : cat, avg, score
-// LearnDown_1 : 현재 보여줄 오답 문제(wrongQ) => 가장 최근 오답,
-//               원래 정답(answer), 유저 입력(user_input), 정답률(rate), 
-//               틀린 문제 리스트(wrongQList)
-// 문제풀기 버튼을 누르면
-// LearnDown_2 : 풀 문제()
+// WrongQuestion : 1. cat, avg, score => ScoreBar 데이터
+//                 2. 현재 보여줄 오답 문제(wrongQ)(가장 최근 오답),
+//                    원래 정답(answer), 유저 입력(user_answer), 정답률(rate)(이게 avg인가?) => WrongAnswers 데이터
+//                 3. 틀린 문제 리스트(wrongQList) => QuestionList 데이터
+// SolveQuestion : 4. 풀 문제(question) => LearnDown_2 데이터
+// + 5. 푼 문제 DB에 저장하는 함수
 
-const LearningPage = () => {
+// 한번에 전부 불러오는걸로
+
+const LearnOtherPage = ({cat, wrongList, question}) => {
   const { user } = useContext(AuthContext);
-  const cat = "commonsense";
-  const [learnDownContent, setLearnDownContent] = useState(<LearnDown_1/>);
-  const [learnUpContent, setLearnUpContent] = useState(<LearnUpLeft/>);
-  const [buttonValue, setButtonValue] = useState("문제 풀기")
+  const [buttonValue, setButtonValue] = useState("문제 풀기");
+  const [isstudy, setStudy] = useState(false);
 
   if (!user){
     return (<Navigate to='/login'  />)
   }
 
-  const getNextQuestion = () => {
-    //다음문제 가져오기
-  }
-
   const handleButtonClick = (cat) => {
-    if (buttonValue === "문제 풀기") {
-      // 버튼 클릭 시 learn_body 내부의 내용을 변경
-      // 백에서 문제 데이터 받아오기
-      setLearnDownContent(<LearnDown_2/>);
-      setLearnUpContent(<button id="learnBtn" onClick={getNextQuestion}>다음</button>);
-      setButtonValue('학습 종료');
+    setStudy(!isstudy);
+    if (isstudy) {
+      setButtonValue("문제 풀기")
     } else {
-      // 학습 종료하면 어떤 페이지로?
-      setLearnDownContent(<LearnDown_1/>);
-      setLearnUpContent(<LearnUpLeft/>)
-      setButtonValue('문제 풀기');
+      setButtonValue("학습 종료")
+      // 문제를 여기서 가져오나?
     }
   };
 
@@ -51,21 +41,14 @@ const LearningPage = () => {
   return (
     <section>
       <div id="learn_other">
-        <LearnNavComponent cat={cat} />
+        <LearnNavComponent/>
         <div id="learn_body">
-          <div id="learn_up">
-            <div id="learn_up_left">
-              {learnUpContent}
-            </div>
-            <button onClick={handleButtonClick}>{buttonValue}</button>
-          </div>
-          <div id="learn_down">
-              {learnDownContent}
-          </div>
+          <button id="isstudyBtn" onClick={handleButtonClick}>{buttonValue}</button>
+          {isstudy? <SolveQuestion cat={cat} question={question}/> : <WrongQuestion cat={cat} wrongList={wrongList}/>}
         </div>
       </div>
     </section>
   )
 }
 
-export default LearningPage;
+export default LearnOtherPage;

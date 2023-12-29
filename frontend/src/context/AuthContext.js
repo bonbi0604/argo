@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("authTokens", JSON.stringify(data));
       navigate("/");
     } else {
-      alert("Something went wrong!");
+      alert("아이디 혹은 비밀번호가 일치하지 않습니다.");
     }
   };
   
