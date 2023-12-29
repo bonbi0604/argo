@@ -4,7 +4,7 @@ import AuthContext from "../context/AuthContext";
 import Pagination from './Pagination2';
 import useAxios from "../utils/useAxios";
 
-const CommunicationHistoryList = () => {
+const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
   const { user } = useContext(AuthContext);
   const itemsPerPage = 5;
   const pagesToShow = 5;
@@ -51,11 +51,17 @@ const CommunicationHistoryList = () => {
     console.log(currentPage)
   }, [currentPage]);
 
+  const goToHistory = (history_id) => {
+    setStateN(1);
+    setHistoryId(history_id);
+    console.log("Clicked goToHistory");
+  };
+
 
   return (
     <div className='comm_history_wrapper'>
       {currentItems.map(({ history_id, history_title }) => (
-        <div className='comm_history_element' key={history_id}>{history_title}</div>
+        <div className='comm_history_element' key={history_id}><a onClick={() => {goToHistory(history_id)}}>{history_title}</a></div>
       ))}
       <Pagination
         totalItems={historys.length}

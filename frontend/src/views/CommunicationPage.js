@@ -17,25 +17,26 @@ const CommunicationPage = () => {
   const { user } = useContext(AuthContext); // AuthContext에서 user 정보를 가져옵니다.
   
   
-  const [state, setState] = useState(0); // 0: summary, 1: history, 2: study
+  const [stateN, setStateN] = useState(0); // 0: summary, 1: history, 2: study
   const [stopped, setStopped] = useState(false); //  state == 2 일때 학습중/중단
+  const [historyId, setHistoryId] = useState(null);
 
 
-  console.log(state, stopped);
+  console.log(stateN, stopped);
 
   const handleButtonClick = () => {
     
-    if (state === 0) {
-      setState(2);
+    if (stateN === 0) {
+      setStateN(2);
     }
-    else if (state === 1) {
-      setState(0);
+    else if (stateN === 1) {
+      setStateN(0);
     }
-    else if (state === 2 && stopped === false) {
+    else if (stateN === 2 && stopped === false) {
       setStopped(true);
     }
     else {
-      setState(0);
+      setStateN(0);
       setStopped(false);
     }
   };
@@ -48,11 +49,13 @@ const CommunicationPage = () => {
         <div className='communication_page_top'>
           <div className='communication_page_icon'><div className="inner"><IconStructure cat={"communication"} size={`${100}%`} /></div></div>
           <div className='communication_page_scorebar'><Scorebar cat={"communication"} avg={avg} score={score}/></div>
-          <button className="communication_page_button" onClick={handleButtonClick}>{state!==2? "문제풀기": (stopped===false? "중단하기":"돌아가기")}</button>
+          <button className="communication_page_button" onClick={handleButtonClick}>{stateN===0? "문제풀기": (stateN===1? "돌아가기": (stopped===false? "중단하기":"돌아가기"))}</button>
         </div>
 
         <div className='communication_page_contents'>
-          {state===0? <CommunicationSummary />: (state===1?  <CommunicationHistory />:<CommunicationStudy />)}
+          {stateN===0? <CommunicationSummary stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />: 
+          (stateN===1?  <CommunicationHistory stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />:
+          <CommunicationStudy stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} />)}
         </div>
       
       </div></div>

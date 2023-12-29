@@ -1,9 +1,9 @@
 import "./CommunicationHistory.css"
 
-const CommunicationHistory = () => {
+const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
   return (
     <div>
-        "history"
+        {`${historyId}`}
     </div>
   )
 }

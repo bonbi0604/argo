@@ -1,6 +1,6 @@
 import "./CommunicationSummary.css"
 
-const CommunicationStudy = () => {
+const CommunicationStudy = ({stopped, stateN, setStateN, setStopped}) => {
   return (
     <div>
         "study"
