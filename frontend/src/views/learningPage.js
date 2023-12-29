@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useState, useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import UserInfo from "../components/UserInfo";
 import AuthContext from "../context/AuthContext";
@@ -35,15 +35,22 @@ const viewBox_dict = {"occupation": "0 0 128 128", "communication": "0 0 128 128
 
 const recommendation = (recommend) => {
   return (
-    <div className="learning_page_recommendation">
-      <div className="learning_page_recommendation_ele">
-        <IconStructure   data={icon_dict[recommend]} color={color_dict[recommend]} size="5em" index={0} radius={0} viewBox={viewBox_dict[recommend]} x={0} y={0}/>
-      </div>
-      <div className="learning_page_recommendation_ele">
-        <p>{`오늘은 ${recommend} 공부를 추천합니다.`}</p>
-      </div>
-    </div>
-
+    <>
+      {!recommend? 
+        <div className="learning_page_recommendation_ele">
+          <p>{`푼 문제가 없습니다.`}</p>
+        </div>
+      : 
+        <div className="learning_page_recommendation">
+          <div className="learning_page_recommendation_ele">
+            <IconStructure   data={icon_dict[recommend]} color={color_dict[recommend]} size="5em" index={0} radius={0} viewBox={viewBox_dict[recommend]} x={0} y={0}/>
+          </div>
+          <div className="learning_page_recommendation_ele">
+            <p>{`오늘은 ${recommend} 공부를 추천합니다.`}</p>
+          </div>
+        </div>
+      }
+    </>
   );
 };
 
@@ -52,6 +59,36 @@ const recommendation = (recommend) => {
 
 const LearningPage = () => {
   const { user } = useContext(AuthContext);
+
+  const [recommendationData, setRecommendationData] = useState(null);
+
+  useEffect(() => {
+    const fetchRecommendation = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/learn/recommendation/`, { // 백엔드 서버에 메시지를 POST 요청
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_no: user.user_no }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setRecommendationData(data.result);
+        } else {
+          console.error('Failed to fetch recommendation data');
+        }
+      } catch (error) {
+        console.error('Error fetching recommendation data', error);
+      }
+    };
+
+    if (user) {
+      fetchRecommendation();
+    }
+
+  }, [user]);
 
   if (!user){
     console.log("redirect");
@@ -64,7 +101,7 @@ const LearningPage = () => {
       <DonutCharts data={scores}/>
       <div className="learning_page_right">
         <div className="learning_page_right_ele">
-          {recommendation(recommend)}
+          {recommendation(recommendationData)}
           <div className="score-container">
             {Object.entries(scores).map(([cat, { avg, score }]) => 
               <Scorebar key={cat} cat={cat} avg={avg} score={score} />
