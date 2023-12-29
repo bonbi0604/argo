@@ -49,14 +49,15 @@ function App() {
             <Route path="/findPw" element={<PageWithChatbot><FindPw /></PageWithChatbot>} />
             <Route path="/dashboard" element={<PageWithChatbot><Dashboard /></PageWithChatbot>} />
             <Route path="/writepost" element={<PageWithChatbot><WritePost /></PageWithChatbot>} />
-            <Route path="/learn/communication" element={<PageWithChatbot><CommunicationPage /></PageWithChatbot>} />
-            <Route path="/learn" element={<PageWithChatbot><LearningPage /></PageWithChatbot>} />
-            <Route path="/learn/ethic" element={<PageWithChatbot><LearnEthic /></PageWithChatbot>} />
-            {/* <Route path="/learn/commonsense" element={<><LearnCommonSense /><Chatbot /></>} />
-            <Route path="/learn/occupation" element={<><LearnOccupation /><Chatbot /></>} />
-            <Route path="/learn/tools" element={<><LearnTools /><Chatbot /></>} />
+            <Route path="/learn/communication" element={<CommunicationPage />} />
+            <Route path="/learn" element={<LearningPage />} />
+            <Route path="/learn/ethic" element={<LearnEthic />} />
 
-            <Route path="/profile" element={<><MyPage /><Chatbot /></>} /> */}
+            <Route path="/learn/commonsense" element={<><LearnCommonSense /></>} />
+            <Route path="/learn/occupation" element={<><LearnOccupation /></>} />
+            <Route path="/learn/tools" element={<><LearnTools /></>} />
+
+            <Route path="/profile" element={<><MyPage /></>} />
 
           </Routes>
           <Footer />

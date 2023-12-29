@@ -191,7 +191,7 @@ def score(request):
     classifications = Category.objects.filter(category_no__in=[c['category_no'] for c in categories]).values_list('classification', flat=True)
     classification_counts = Counter(list(classifications))
     total_classification = dict(classification_counts)
-    
+    print(categories.count())
     #모든 사용자가 맞춘 문제 유형별 개수
     question_nos_good = Result.objects.filter(is_correct=1).values_list('question_no', flat=True)
     categories_good = Question.objects.filter(question_no__in=question_nos_good).values('category_no')
@@ -241,7 +241,7 @@ def score(request):
         '커뮤니케이션': 'communication',
     }
     result_eng = {categories[key]: value for key, value in result.items()}
-    print(result_eng)
+
     
     return JsonResponse({"result": result_eng})
 
