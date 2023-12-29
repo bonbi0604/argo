@@ -15,4 +15,5 @@ app_name = "learn"
 urlpatterns = [
     path('communication/study/', chatbot_response, name='communication_study'),
     path('recommendation/', recommendation, name='recommendation'),
+    path('score/', score, name='score'),
 ]
