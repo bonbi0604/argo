@@ -10,16 +10,17 @@ import {
   Legend,
 } from 'chart.js';
 
-ChartJS.register(
-  RadialLinearScale,
-  PointElement,
-  LineElement,
-  Filler,
-  Tooltip,
-  Legend
-);
+
 
 const RadarChart = ({dataUser, dataAvg, name}) => {
+  ChartJS.register(
+    RadialLinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Tooltip,
+    Legend
+  );
   
   const data = {
     labels: ['Clear', 'Concise', 'Concrete', 'Correct', 'Coherent', 'Complete', 'Courteous'],

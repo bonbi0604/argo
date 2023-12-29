@@ -1,0 +1,14 @@
+.comm_history_element {
+    border: 1px solid #000;
+    margin: auto;
+    border-radius: 0.5em;
+}
+
+.comm_history_wrapper {
+    height: 100%;
+}
+
+.history_list {
+  height: 90%;
+  width: 30%;
+}

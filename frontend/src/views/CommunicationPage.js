@@ -25,10 +25,13 @@ const CommunicationPage = () => {
 
   const handleButtonClick = () => {
     
-    if (state !== 2) {
+    if (state === 0) {
       setState(2);
     }
-    else if (stopped === false) {
+    else if (state === 1) {
+      setState(0);
+    }
+    else if (state === 2 && stopped === false) {
       setStopped(true);
     }
     else {
@@ -60,36 +63,3 @@ const CommunicationPage = () => {
 }
 
 export default CommunicationPage;
-
-
-// import React, { useState, useContext } from 'react';
-// import AuthContext from "../context/AuthContext";
-// import UserInfo from "../components/UserInfo";
-// import Chatbot from "../components/CommunicationChatbot";
-
-// const CommunicationPage = () => {
-//   const { user } = useContext(AuthContext);
-
-//   const [showChatbot, setShowChatbot] = useState(false);
-//   const [buttonStr, setbuttonStr] = useState("study");
-
-//   const handleButtonClick = () => {
-//     setShowChatbot(!showChatbot);
-//     setbuttonStr(showChatbot? "study":"stop");
-//   };
-
-//   return (
-//     <div>
-//       {user && <UserInfo user={user} />}
-//       <h1>Your on communication page.</h1>
-//       <button onClick={handleButtonClick}>{buttonStr}</button>
-
-//       <section>
-//         {showChatbot && <Chatbot />}
-//         {/* 다른 섹션 내용들 */}
-//       </section>
-//     </div>
-//   );
-// };
-
-// export default CommunicationPage;
