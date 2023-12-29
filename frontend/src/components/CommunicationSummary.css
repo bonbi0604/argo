@@ -9,4 +9,5 @@
     padding: 5% 0;
     display: flex;
     flex-direction: row;
+    width: 100%;
 }

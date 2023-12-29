@@ -1,9 +1,10 @@
-import "./CommunicationSummary.css"
+import "./CommunicationSummary.css";
+import CommunicationChatbot from "../components/CommunicationChatbot";
 
 const CommunicationStudy = ({stopped, stateN, setStateN, setStopped}) => {
   return (
     <div>
-        "study"
+        <CommunicationChatbot />
     </div>
   )
 }
