@@ -21,6 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['id'] = user.id
         token['user_no'] = user.user_no
         token['phone'] = user.phone
+        token['is_admin'] = user.is_admin
         return token
 
 class RegisterSerializer(serializers.ModelSerializer):

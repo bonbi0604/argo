@@ -22,6 +22,7 @@ import LearningPage from "./views/learningPage"
 import EthicPage from "./views/ethicPage"
 import PostDetail from "./views/PostDetail"
 import UpdatePost from "./views/UpdatePost"
+import NoticeDetail from "./views/NoticeDetail"
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/writepost" element={<WritePost />} />
             <Route path="/PostDetail/:id" element={<PostDetail />} />
+            <Route path="/NoticeDetail/:id" element={<NoticeDetail />} />
             <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />

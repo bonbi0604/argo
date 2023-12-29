@@ -8,6 +8,7 @@ const WritePost = () => {
     const [title, setTitle] = useState(''); // 게시물 제목 상태
     const [content, setContent] = useState(''); // 게시물 내용 상태
     const [files, setFiles] = useState([]); // 파일들을 저장할 상태
+    const [isNotice, setIsNotice] = useState(false); // 관리자가 공지사항 여부를 결정할 수 있는 상태
     const navigate = useNavigate(); // React Router의 네비게이션 함수
     const api = useAxios(); // 커스텀 Axios 훅을 사용하여 API 요청을 수행합니다.
 
@@ -23,8 +24,11 @@ const WritePost = () => {
             formData.append('file_field_name', files[i]); // 각 파일을 FormData에 추가
             formData.append('file_name', files[i].name); // 각 파일 이름을 FormData에 추가
         }
+
+        // 관리자인 경우 공지사항 여부에 따라 엔드포인트 결정
+        const endpoint = user.is_admin && isNotice ? '/notices/' : '/posts/';
         try {
-            const response = await api.post('http://127.0.0.1:8000/noticeboard/posts/', formData, {
+            const response = await api.post(`http://127.0.0.1:8000/noticeboard${endpoint}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
@@ -88,6 +92,17 @@ const WritePost = () => {
                                 onChange={(e) => setContent(e.target.value)}
                                 />
                         </div>
+                        {/* 관리자만 볼 수 있는 공지사항 체크박스 */}
+                        {user.is_admin && (
+                            <label>
+                                <input
+                                    type="checkbox"
+                                    checked={isNotice}
+                                    onChange={(e) => setIsNotice(e.target.checked)}
+                                />
+                                공지사항 작성
+                            </label>
+                        )}
                         <div className="write-post-submit-group">
                             <button
                                 type="submit"
