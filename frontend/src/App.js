@@ -19,8 +19,11 @@ import Chatbot from "./components/Chatbot";
 import Chat from "./views/chat";
 import CommunicationPage from "./views/CommunicationPage";
 import LearningPage from "./views/learningPage";
-import LearnOtherPage from "./views/learnotherPage"
-import EthicPage from "./views/ethicPage";
+import LearnCommonSense from "./views/learn_other/learnCommonSense";
+import LearnEthic from "./views/learn_other/learnEthic";
+import LearnOccupation from "./views/learn_other/learnOccupation";
+import LearnTools from "./views/learn_other/learnTools";
+import MyPage from "./views/myPage";
 
 function App() {
   return (
@@ -42,8 +45,12 @@ function App() {
             <Route path="/writepost" element={<><WritePost /><Chatbot /></>} />
             <Route path="/learn/communication" element={<><CommunicationPage /><Chatbot /></>} />
             <Route path="/learn" element={<><LearningPage /><Chatbot /></>} />
-            <Route path="/learn/ethic" element={<><EthicPage /><Chatbot /></>} />
-            <Route path="/learn/common-sense" element={<><LearnOtherPage /><Chatbot /></>} />
+            <Route path="/learn/ethic" element={<><LearnEthic /><Chatbot /></>} />
+            <Route path="/learn/commonsense" element={<><LearnCommonSense /><Chatbot /></>} />
+            <Route path="/learn/occupation" element={<><LearnOccupation /><Chatbot /></>} />
+            <Route path="/learn/tools" element={<><LearnTools /><Chatbot /></>} />
+
+            <Route path="/profile" element={<><MyPage /><Chatbot /></>} />
             {/* <Route path="/PostDetail/:id" element={<><PostDetail /><Chatbot /></>} />
             <Route path="/UpdatePost/:id/" element={<><UpdatePost /><Chatbot /></>} /> */}
           </Routes>

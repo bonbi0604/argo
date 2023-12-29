@@ -14,7 +14,7 @@ const LearningPage = () => {
             <NavLink to="/learn/communication">커뮤니케이션</NavLink>
           </div>
           <div className="learn_button">
-            <NavLink to="/learn/common-sense">시사/상식</NavLink>
+            <NavLink to="/learn/commonsense">시사/상식</NavLink>
           </div>
           <div className="learn_button">
             <NavLink to="/learn/tools">도구</NavLink>

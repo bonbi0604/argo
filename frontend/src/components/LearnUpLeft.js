@@ -1,15 +1,17 @@
 import "./LearnUpLeft.css"
-import IconSense from '../components/IconSense'
+import IconSense from '../icon/IconSense'
 import Scorebar from "../components/Scorebar";
 import React, { useState, useContext, useCallback } from "react";
 
-const LearnUpLeft = () => {
-  const cat = "commonsense";
+const LearnUpLeft = ({cat}) => {
+  const avg = 80
+  const score = 70
 
   return (
-    <div id="comLearnDown">
-        <IconSense cat={cat} />
-        <Scorebar cat={cat}/>
+    <div id="comLearnUpLeft">
+        {/* if문으로 아이콘 다르게 불러오기 */}
+        <IconSense />
+        <Scorebar cat={cat} avg={avg} score={score}/>
     </div>
   )
 }

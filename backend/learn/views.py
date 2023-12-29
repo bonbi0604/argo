@@ -15,6 +15,15 @@ from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 from operator import itemgetter
 
 from django.conf import settings
+from collections import Counter
+import random, json
+from django.http import JsonResponse, HttpResponse
+from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
+from django.core.serializers import serialize
+from account.models import User
+
+### learn-communication
 
 # 쿼리 날려서 DB에서 가져오기
 dialog_subject = "전언에 대한 전화 협의 일정 조정"
@@ -83,28 +92,17 @@ def chatbot_response(request):
         data = json.loads(request.body)
         user_message = data['message']
         
-        # 현재 세션에 저장된 대화 내역을 가져오기
-        session_history = request.session.get('chat_history', [])
 
-        # 현재 사용자의 메시지를 대화 내역에 추가
-        session_history.append({"speaker": "user", "message": user_message})
+        chatbot_response = generate_response(user_message, data['history'])
+        
 
-        chatbot_response = generate_response(user_message, session_history)
-        
-        
-        # chatbot 응답 메시지를 대화 내역에 추가
-        session_history.append({"speaker": "chat", "message": chatbot_response})
-        
-        # 대화 내역을 세션에 저장
-        request.session['chat_history'] = session_history
-        # request.session.save()
-        print(user_message, session_history)
+        print(data['history'], user_message)
         
         return JsonResponse({'reply': chatbot_response, 'title':dialog_subject})
 
-def generate_response(message, session_history):
-    # return chain.invoke({"example":dialog_example, "history":session_history, "message":message, "subject":dialog_subject})
-    return "hello"
+def generate_response(message, history):
+    return chain.invoke({"example":dialog_example, "history":history, "message":message, "subject":dialog_subject})
+    # return "hello"
 
 # fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
 def wrong_list():
@@ -112,7 +110,230 @@ def wrong_list():
     wrong = [{i+1 : result.question_no.content} for i,result in enumerate(wrong)]
     return wrong
 
-# def search_list(str):
-#     search = Result.objects.filter(is_correct = 0)
-#     search = [{i+1 : result.question_no.content} for i, result in enumerate(search)]
-#     return search
+@csrf_exempt
+def recommendation(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no', 0)
+    result = Result.objects.filter(user_no=user_no, is_correct=0).order_by('timestamp').first()
+    if result:
+        question = result.question_no
+        category_no = question.category_no
+        class_name = category_no.classification
+        if class_name == '시사/상식':
+            class_name_eng = 'commonsense'
+        elif class_name == '직무이해':
+            class_name_eng = 'occupation'
+        elif class_name == '도구':
+            class_name_eng = 'tools'
+        elif class_name == '윤리':
+            class_name_eng = 'ethic'
+        return JsonResponse({'result': class_name_eng})
+    else:
+        return JsonResponse({'error': 'No incorrect problems found'}, status=404)
+    
+from django.views.decorators.http import require_http_methods
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def score(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no', 0)
+    accuracy_rates = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 유형별 문제 정답률
+    accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
+    
+    #커뮤니케이션 추가해야함
+    
+    #모든 사용자가 푼 문제 유형별 개수
+    question_nos = Result.objects.all().values_list('question_no', flat=True)
+    categories = Question.objects.filter(question_no__in=question_nos).values('category_no')
+    classifications = Category.objects.filter(category_no__in=[c['category_no'] for c in categories]).values_list('classification', flat=True)
+    classification_counts = Counter(list(classifications))
+    total_classification = dict(classification_counts)
+    
+    #모든 사용자가 맞춘 문제 유형별 개수
+    question_nos_good = Result.objects.filter(is_correct=1).values_list('question_no', flat=True)
+    categories_good = Question.objects.filter(question_no__in=question_nos_good).values('category_no')
+    classifications_good = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_good]).values_list('classification', flat=True)
+    classification_counts_good = Counter(list(classifications_good))
+    total_classification_good = dict(classification_counts_good)
+    
+    #모든 사용자 유형별 문제 정답률
+    for classification, total_attempts in total_classification.items():
+        correct_attempts = total_classification_good.get(classification, 0)
+        accuracy_rate = (correct_attempts / total_attempts * 100) if total_attempts else 0
+        accuracy_rates[classification] = round(accuracy_rate, 2)
+    
+    #유저가 푼 문제 유형별 개수
+    question_nos_user = Result.objects.filter(user_no=user_no).values_list('question_no', flat=True)
+    categories_user = Question.objects.filter(question_no__in=question_nos_user).values('category_no')
+    classifications_user = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_user]).values_list('classification', flat=True)
+    classification_counts_user = Counter(list(classifications_user))
+    user_classification = dict(classification_counts_user)
+    
+    #유저가 맞춘 문제 유형별 개수
+    question_nos_user_good = Result.objects.filter(user_no=user_no,is_correct=1).values_list('question_no', flat=True)
+    categories_user_good = Question.objects.filter(question_no__in=question_nos_user_good).values('category_no')
+    classifications_user_good = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_user_good]).values_list('classification', flat=True)
+    classification_counts_user_good = Counter(list(classifications_user_good))
+    user_classification_good = dict(classification_counts_user_good)
+    
+    #유저가 맞춘 유형별 문제 정답률
+    for classification_user, total_attempts_user in user_classification.items():
+        correct_attempts_user = user_classification_good.get(classification_user, 0)
+        accuracy_rate_user = (correct_attempts_user/ total_attempts_user * 100) if total_attempts_user else 0
+        accuracy_rates_user[classification_user] = round(accuracy_rate_user, 2)
+    
+    #json 형태로 변환
+    result = {
+        '직무이해': {'avg': accuracy_rates['직무이해'], 'score': accuracy_rates_user['직무이해']},
+        '시사/상식': {'avg': accuracy_rates['시사/상식'], 'score': accuracy_rates_user['시사/상식']},
+        '도구': {'avg': accuracy_rates['도구'], 'score': accuracy_rates_user['도구']},
+        '윤리': {'avg': accuracy_rates['윤리'], 'score': accuracy_rates_user['윤리']},
+        '커뮤니케이션': {'avg': 0, 'score': 0}
+    }
+    categories = {
+        '직무이해': 'occupation',
+        '시사/상식': 'commonsense',
+        '도구': 'tools',
+        '윤리': 'ethic',
+        '커뮤니케이션': 'communication',
+    }
+    result_eng = {categories[key]: value for key, value in result.items()}
+    print(result_eng)
+    
+    return JsonResponse({"result": result_eng})
+
+
+
+### learn-others
+
+# 틀린문제 뽑기. question에 있는 모든 내용 가져오기
+def get_wrong_question_list(filter_no, count, user_no=None):
+    specific_user = Result.objects.filter(user_no = user_no)
+    value = specific_user.filter(is_correct=0)
+    value = value.order_by('-timestamp')
+    content_list = list(value.filter(question_no__category_no=filter_no))[:min(count, len(value.filter(question_no__category_no=filter_no)))]
+    question = []
+    for content in content_list:
+        dic = {
+                'question_no' : content.question_no.question_no,
+                'category_no' : content.question_no.category_no_id,
+                'content' : content.question_no.content[:13],
+                'result_no' : content.result_no,
+                'timestamp' : content.timestamp,
+                }
+        question.append(dic)
+    return question
+
+@csrf_exempt
+def wrong_question_list(request):
+    data = json.loads(request.body)
+    cat = data.get('cat')
+    user_no = data.get('user_no')
+    if cat == 'occupation':
+        question = get_wrong_question_list(4, 20, user_no)
+    elif cat=='commonsense':
+        english = get_wrong_question_list(1, 7, user_no)
+        korean  = get_wrong_question_list(2, 6, user_no)
+        sisa = get_wrong_question_list(3,6, user_no)
+        
+        question = english + korean + sisa 
+    elif cat =='tools':
+        question = get_wrong_question_list(5, 20, user_no)
+    elif cat =='ethic':
+        pass
+    return JsonResponse({'wrong_question_list' : question })
+    
+          
+@csrf_exempt
+def search_list(request):
+    data = json.loads(request.body)
+    keyword = data.get('search')
+    if keyword:
+        value = Result.objects.filter(is_correct=0)
+        content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content')
+        content_list = [{'content': item['question_no__content']} for item in content_list]
+    else:
+        pass
+    return Response(content_list)    
+
+@csrf_exempt
+def give_question(request):
+    # 랜덤으로 한문제씩 출제
+    data = json.loads(request.body)
+    cat = data.get('cat')
+    if cat == 'occupation':
+        number = 4
+    elif cat=='commonsense':
+        number = random.randint(1,3)
+    elif cat =='tools':
+        number = 5
+    elif cat =='ethic':
+        pass
+    
+    question = Question.objects.filter(category_no = number).order_by('?').first()
+    choice = Answer.objects.filter(question_no = question.question_no)
+    choice_list = []
+    
+    answer = None
+    # 주관식이면 0 
+    # 객관식이면 1
+    is_many_choice = None
+    for item in choice:
+        tmp_dic = {
+            'answer_content' : item.content,
+            'answer_no': item.answer_no
+        }
+        choice_list.append(tmp_dic)
+        
+        if item.is_correct ==1:
+            answer = item.content
+    if len(choice_list) ==1:
+        is_many_choice = 0
+    else:
+        is_many_choice = 1
+
+    
+    data = {
+        'question_no': question.question_no,
+        'question_content': question.content,
+        'choices': choice_list,
+        'correct_answer': answer,
+        'is_many_choice' : is_many_choice
+    }
+    return JsonResponse({'wrong_question' : data })        
+
+# def result_save(request):
+
+@csrf_exempt
+def insertResult(request):
+    data = json.loads(request.body)
+    user = data.get('user_no')
+    answer = data.get('answer_no')
+    question = data.get('question_no')
+    content = data.get('user_content')
+    is_correct = None
+   
+    value = Answer.objects.get(answer_no=answer)
+    # 객관식 일때
+    if content == '':
+        if value.is_correct == 1:
+            is_correct =1
+        else:
+            is_correct= 0
+    # 주관식 일때
+    else:
+        if content != value.content:
+            is_correct = 0
+        else:
+            is_correct = 1  
+    save = {
+            'user_no' : User.objects.get(user_no = user),
+            'answer_no' : Answer.objects.get(answer_no = answer),
+            'question_no' : Question.objects.get(question_no = question),
+            'is_correct' : is_correct,
+            'content' : content
+    }
+    new_user = Result.objects.create(**save)
+    return JsonResponse({'response' : True })

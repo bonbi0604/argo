@@ -30,7 +30,7 @@ const CommunicationChatbot = () => {
                 headers: {
                   'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ message: input }),
+                body: JSON.stringify({ message: input, history: messages }),
               });
 
             const data = await response.json(); // 백엔드로부터의 응답 받기
@@ -57,7 +57,7 @@ const CommunicationChatbot = () => {
                     headers: {
                       'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ message: '<START>' }), // 초기 메시지 내용
+                    body: JSON.stringify({ message: '<START>', history: messages }), // 초기 메시지 내용
                   });
 
                 const data = await response.json(); 
@@ -79,7 +79,7 @@ const CommunicationChatbot = () => {
     
 
     return (
-      <div className="chatbot-container">
+      <div className="communicaiton_chatbot_container">
         <div className="comm-chatbot-title">
             <h1>{subject}</h1>
         </div>
