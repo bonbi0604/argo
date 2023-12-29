@@ -27,6 +27,9 @@ const DonutChart = ({cat, color, score, size}) => {
     legend: {
       display: false,
     },
+    tooltips: {
+      enabled: false
+    },
   };
 
   return (

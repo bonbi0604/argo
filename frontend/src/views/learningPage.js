@@ -61,6 +61,7 @@ const LearningPage = () => {
   const { user } = useContext(AuthContext);
 
   const [recommendationData, setRecommendationData] = useState(null);
+  const [scoreData, setScoreData] = useState({});
 
   useEffect(() => {
     const fetchRecommendation = async () => {
@@ -90,6 +91,37 @@ const LearningPage = () => {
 
   }, [user]);
 
+  useEffect(() => {
+    const fetchScore = async () => {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/learn/score/`, { // 백엔드 서버에 메시지를 POST 요청
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_no: user.user_no }),
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setScoreData(data.result);
+          console.log(data.result);
+        } else {
+          console.error('Failed to fetch score data');
+        }
+      } catch (error) {
+        console.error('Error fetching score data', error);
+      }
+    };
+
+    if (user) {
+      fetchScore();
+    }
+
+    
+
+  }, [user]);
+
   if (!user){
     console.log("redirect");
     return (<Navigate to='/login'  />)
@@ -98,12 +130,12 @@ const LearningPage = () => {
   return (
     <section className="learning-page">
       <LearnNav />
-      <DonutCharts data={scores}/>
+      <DonutCharts data={scoreData}/>
       <div className="learning_page_right">
         <div className="learning_page_right_ele">
           {recommendation(recommendationData)}
           <div className="score-container">
-            {Object.entries(scores).map(([cat, { avg, score }]) => 
+            {Object.entries(scoreData).map(([cat, { avg, score }]) => 
               <Scorebar key={cat} cat={cat} avg={avg} score={score} />
             )}
           </div>

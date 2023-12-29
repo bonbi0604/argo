@@ -180,18 +180,20 @@ def score(request):
         '직무이해': {'avg': accuracy_rates['직무이해'], 'score': accuracy_rates_user['직무이해']},
         '시사/상식': {'avg': accuracy_rates['시사/상식'], 'score': accuracy_rates_user['시사/상식']},
         '도구': {'avg': accuracy_rates['도구'], 'score': accuracy_rates_user['도구']},
-        '윤리': {'avg': accuracy_rates['윤리'], 'score': accuracy_rates_user['윤리']}
+        '윤리': {'avg': accuracy_rates['윤리'], 'score': accuracy_rates_user['윤리']},
+        '커뮤니케이션': {'avg': 0, 'score': 0}
     }
     categories = {
         '직무이해': 'occupation',
         '시사/상식': 'commonsense',
         '도구': 'tools',
-        '윤리': 'ethic'
+        '윤리': 'ethic',
+        '커뮤니케이션': 'communication',
     }
     result_eng = {categories[key]: value for key, value in result.items()}
     print(result_eng)
     
-    return JsonResponse(result_eng)
+    return JsonResponse({"result": result_eng})
 
 # def search_list(str):
 #     search = Result.objects.filter(is_correct = 0)
