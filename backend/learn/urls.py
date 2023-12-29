@@ -11,7 +11,9 @@ from .views import *
 
 
 app_name = "learn"
+from .views import wrong_list
 
+app_name = 'learn'
 urlpatterns = [
     path('communication/study/', chatbot_response, name='communication_study'),
     path('recommendation/', recommendation, name='recommendation'),
