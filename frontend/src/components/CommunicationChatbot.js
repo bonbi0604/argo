@@ -79,7 +79,7 @@ const CommunicationChatbot = () => {
     
 
     return (
-      <div className="chatbot-container">
+      <div className="communicaiton_chatbot_container">
         <div className="comm-chatbot-title">
             <h1>{subject}</h1>
         </div>
