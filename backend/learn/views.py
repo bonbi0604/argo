@@ -132,6 +132,7 @@ def score(request):
     user_no = data.get('user_no', 0)
     accuracy_rates = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 유형별 문제 정답률
     accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
+    
     #커뮤니케이션 추가해야함
     
     #모든 사용자가 푼 문제 유형별 개수
@@ -173,10 +174,24 @@ def score(request):
         correct_attempts_user = user_classification_good.get(classification_user, 0)
         accuracy_rate_user = (correct_attempts_user/ total_attempts_user * 100) if total_attempts_user else 0
         accuracy_rates_user[classification_user] = round(accuracy_rate_user, 2)
-        
-    print(accuracy_rates_user)
     
-    return JsonResponse({'result': '안녕 수리중이야~~'})
+    #json 형태로 변환
+    result = {
+        '직무이해': {'avg': accuracy_rates['직무이해'], 'score': accuracy_rates_user['직무이해']},
+        '시사/상식': {'avg': accuracy_rates['시사/상식'], 'score': accuracy_rates_user['시사/상식']},
+        '도구': {'avg': accuracy_rates['도구'], 'score': accuracy_rates_user['도구']},
+        '윤리': {'avg': accuracy_rates['윤리'], 'score': accuracy_rates_user['윤리']}
+    }
+    categories = {
+        '직무이해': 'occupation',
+        '시사/상식': 'commonsense',
+        '도구': 'tools',
+        '윤리': 'ethic'
+    }
+    result_eng = {categories[key]: value for key, value in result.items()}
+    print(result_eng)
+    
+    return JsonResponse(result_eng)
 
 # def search_list(str):
 #     search = Result.objects.filter(is_correct = 0)
