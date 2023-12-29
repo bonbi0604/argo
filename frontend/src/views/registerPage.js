@@ -1,6 +1,9 @@
+// 중복검사 공백도 들어감
+// 아이디 특수문자 사용가능?
+
 import React, { useState, useContext, useCallback } from "react"; // 리액트 및 필요한 모듈 가져오기
 import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져오기
-import styles from "./registerPage.css";
+import "./registerPage.css";
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
@@ -8,7 +11,7 @@ function Register() {
   const [password, setPassword] = useState(""); // 비밀번호 상태
   const [password2, setPassword2] = useState(""); // 비밀번호 확인 상태
   const [email, setEmail] = useState(""); // 이메일 상태
-  const [dept, setDept] = useState("1"); // 부서 선택 상태 (기본값: 부서1)
+  const [dept, setDept] = useState(""); // 부서 선택 상태
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("")
   const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
@@ -27,6 +30,11 @@ function Register() {
   const [idMsgColor, setIdMsgColor] = useState("red"); // 초기값을 빨강으로 설정
   const [emailMsgColor, setEmailMsgColor] = useState("red");
 
+  // 이메일 인증 관련
+  const [backCode, setBackCode] = useState('');
+  const [code, setCode] = useState('');
+  const [codeDisplay, setCodeDisplay] = useState('none');
+  
 
   //비밀번호 확인
   const onChangeConfirmPwd = useCallback((e) => {
@@ -91,6 +99,13 @@ function Register() {
   // 아이디 중복체크
   const checkDuplicateId = useCallback(async () => {
     try {
+      // 아이디 값이 비어있으면 중복 확인하지 않음
+      if (!id) {
+        setIdMsg("아이디를 입력해주세요.");
+        setIdMsgColor("red");
+        return;
+      }
+
       // 백엔드 API 호출하여 아이디 중복 여부 확인
       const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
         method: "POST",
@@ -101,6 +116,7 @@ function Register() {
           id
         })
       });
+      console.log(id)
       const data = await response.json();
 
       if (response.ok) {
@@ -123,6 +139,13 @@ function Register() {
   // 이메일 중복체크
   const checkDuplicateEmail = useCallback(async () => {
     try {
+      // 이메일 값이 비어있으면 중복 확인하지 않음
+      if (!email) {
+        setEmailMsg("이메일을 입력해주세요.");
+        setEmailMsgColor("red");
+        return;
+      }
+
       // 백엔드 API 호출하여 이메일 중복 여부 확인
       const response = await fetch(`http://127.0.0.1:8000/api/checkEmail/`, {
         method: "POST",
@@ -143,6 +166,7 @@ function Register() {
           setEmailMsg("사용 가능한 이메일입니다.");
           setEmailIsDuplicate(true);
           setEmailMsgColor("green");
+          setCodeDisplay("");
         }
       } else {
         console.error("Failed to check duplicate id.");
@@ -152,15 +176,56 @@ function Register() {
     }
   }, [email]);
 
+  const mailSend = useCallback(async () => {
+    const response = await fetch(`http://127.0.0.1:8000/api/mailSend/`, {
+      method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email
+        })
+      });
+      const data = await response.json();
+      console.log(data)
+      setBackCode(data.code)
+  }, [email]);
+
+  const validateCode = () => {
+    return code === backCode
+  };
+
+  // 인증번호 검사
+  const checkCode = () => {
+    if(validateCode) {
+      
+      setEmailMsg('인증되었습니다.')
+      setEmailMsgColor('green')
+      setCodeDisplay("none");
+    } else {
+      setEmailMsg('잘못된 인증번호입니다.')
+      setEmailMsgColor('red')
+    }
+  };
+
+  // 부서 선택했는지
+  const validateDept = (dept) => {
+    return dept === ''
+  }
+
+
+
   // 검사 함수로 정리
   const isEmailValid = validateEmail(email);
   const isPwdValid = validatePwd(password);
+  const isCodeValid = validateCode();
   const isConfirmPwd = password === password2;
+  const isDeptValid = validateDept(dept);
   // const isDuId = checkDuplicateId(id);
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd;
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
@@ -171,81 +236,86 @@ function Register() {
 
 
   return (
-    <section>
-      <form onSubmit={handleSubmit}>
-        <h1>Register</h1>
-        <hr />
-        <div>
-          <label htmlFor="name">이름</label>
+    <section className="registSection">
+      <form onSubmit={handleSubmit} id="registForm">
+        <div id="regTitle">회원가입</div>
+        <div className="regContent">
           <input
             type="text"
             id="name"
             onChange={(e) => setName(e.target.value)}
-            placeholder="Name"
+            placeholder="이름"
             required
           />
         </div>
-        <div>
-          <label htmlFor="id">아이디</label>
+        <div className="regContent">
           <input
             type="text"
             id="id"
             onChange={(e) => setId(e.target.value)}
-            placeholder="Id"
+            placeholder="아이디"
             required
             disabled={idIsCuplicate}
           />
           <button type="button" onClick={checkDuplicateId}>중복 확인</button>
           <p style={{ color: idMsgColor }}>{idMsg}</p>
         </div>
-        <div>
-          <label htmlFor="password">Password</label>
+        <div className="regContent">
           <input
             type="password"
             id="password"
             onChange={onChangePwd}
-            placeholder="Password"
+            placeholder="비밀번호"
             required
           />
           <p style={{ color: validatePwd(password) ? 'green' : 'red' }}>{pwdMsg}</p> {/* 비밀번호 유효성 메시지 */}
         </div>
-        <div>
-          <label htmlFor="confirm-password">Confirm Password</label>
+        <div className="regContent">
           <input
             type="password"
             id="confirm-password"
             onChange={onChangeConfirmPwd}
-            placeholder="Confirm Password"
+            placeholder="비밀번호 확인"
             required
           />
           <p style={{ color: password2 === password ? 'green' : 'red' }}>{confirmPwdMsg}</p> {/* 비밀번호 일치 여부 메시지 */}
         </div>
-        <div>
-          <label htmlFor="email">Email</label>
+        <div className="regContent">
           <input
             type="text"
             id="email"
             onChange={onChangeEmail}
-            placeholder="Email"
+            placeholder="이메일"
             disabled={emailIsDuplicate}
             required
           />
           <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
           <p style={{ color: emailMsgColor }}>{emailMsg}</p>
+
+          <div style={{ display: codeDisplay }}>
+            <button onClick={mailSend} type="button">인증번호 보내기</button>
+            <input
+              type="text"
+              id="code"
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="Code"
+              required
+            />
+            <button onClick={checkCode} type="button">확인</button>
+          </div>
         </div>
-        <div>
-          <label htmlFor="phone">폰 번호</label>
+        <div className="regContent">
           <input
             type="text"
             id="phone"
             onChange={(e) => setPhone(e.target.value)}
-            placeholder="Phone"
+            placeholder="폰 번호"
             required
           />
         </div>
-        <div>
-          <label htmlFor="dept">Dept</label>
+        <div className="regContent">
           <select name="dept" id="dept" onChange={(e) => setDept(e.target.value)} value={dept}>
+            <option value="">부서 선택</option>
             <option value="1">부서1</option>
             <option value="2">부서2</option>
             <option value="3">부서3</option>

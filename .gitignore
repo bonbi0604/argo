@@ -60,6 +60,11 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+<<<<<<< HEAD
+chroma.sqlite3
+=======
+*.sqlite3
+>>>>>>> f01db2a40f898e33809da5d82ec3adc9025e86c9
 
 # Flask stuff:
 instance/

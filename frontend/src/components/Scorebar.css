@@ -4,24 +4,54 @@
 } */
 
 .score-item {
-    margin: 5px; /* 각 점수 항목 사이의 여백을 조정합니다. */
-    border: solid;
+    /* border: solid; */
+    height: 5em;
+    min-width: 20em;
 }
 
 .score-box {
-    width: 400px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
 }
   
 .score-item label {
     display: block;
-    margin: 5px;
+    margin: 0.1em;
+}
+
+.score-label{
+    width: 8em;
+    text-align:right;
+    margin: auto 1em;
+}
+
+.score-bars {
+    width: calc(100% - 8em);
+    margin: auto 1em;
+    height: 2em;
+    padding-top: 0.5em;
+}
+
+.score-label{
+    width: 8em;
+    text-align:right;
+    margin: auto 1em;
+}
+
+.score-bars {
+    width: calc(100% - 8em);
+    margin: auto 1em;
+    height: 3em;
+    padding-top: 0.5em;
 }
   
 .score-bar {
     background: #ccc; /* 평균 점수 막대의 기본 색상 */
-    height: 20px;
-    margin-bottom: 5px; /* 막대 사이의 여백 */
-    border-radius: 10px;
+    height: 1em;
+    margin-bottom: 0.5em; /* 막대 사이의 여백 */
+    border-radius: 0.5em;
 }
 
   /* 각 항목에 해당하는 클래스와 색상 값을 추가합니다. */

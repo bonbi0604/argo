@@ -1,0 +1,42 @@
+#learn_nav {
+    width: 14%;
+    min-width: 12em;
+    /* max-width: 12em; */
+    min-height: 32em;
+    height: 60%;
+    background-color: #D3E3F7;
+    border-radius: 0.5em;
+    box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.1);
+    position: relative;
+    margin: auto 5%;
+}
+ 
+.learn_button_group {
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+ 
+ 
+.learn_button_group .learn_button {
+    font-size: 1.2rem;
+    width: 70%;
+    padding: 15%;
+    cursor: pointer;
+    color: #4378b5;
+    font-weight: bold;
+    text-decoration: none;
+    text-align: left;
+}
+ 
+.learn_button_group .learn_button:hover {
+    background-color: #c4dcfa;
+}
+ 
+ 
+.learn_button_group .learn_button a {
+    text-decoration: none;
+    color: #315279;
+}

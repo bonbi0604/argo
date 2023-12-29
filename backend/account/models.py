@@ -33,18 +33,25 @@ class UserManager(BaseUserManager):
 # AbstractBaseUser: 내가 쓴것만
 # AbstractUser: 원래 있던 필드도
 class User(AbstractBaseUser):
+    class Meta:
+        managed = False
+        db_table = 'User'
+        
     user_no = models.AutoField(primary_key=True)
     id = models.CharField(max_length=128, unique=True)
     password = models.CharField(max_length=128)
     is_admin = models.BooleanField(default=False)
+    image = models.TextField(blank=True, null=True)
     email = models.EmailField(
         verbose_name='email',
         max_length=255,
         unique=True,
     )
+    
     dept = models.IntegerField()
     name = models.CharField(max_length=255)
     phone = models.IntegerField()
+    image = models.TextField(blank=True, null=True)
 
     objects = UserManager()
 
@@ -69,3 +76,4 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    

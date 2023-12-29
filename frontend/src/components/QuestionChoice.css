@@ -1,0 +1,18 @@
+#qchoices {
+    height: 100%;
+    padding: 0 7%;
+}
+
+.qchoice {
+    font-size: 1.2em;
+    margin-bottom: 1%;
+    padding: 1%;
+}
+
+.qchoice > button {
+    font-size: 1em;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
