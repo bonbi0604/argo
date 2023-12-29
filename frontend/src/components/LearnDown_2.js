@@ -3,9 +3,9 @@ import React, { useState, useContext, useCallback } from "react";
 import QuestionChoice from "./QuestionChoice";
 import QuestionInput from "./QuestionInput";
 
-const LearnDown2 = ({question}) => {
+const LearnDown2 = ({chooseAnswer, question}) => {
 
-  return (
+    return (
     <div id="comLearnDown2">
         <p>{question.question_no}</p>
         <div id="learn_content">
@@ -16,13 +16,13 @@ const LearnDown2 = ({question}) => {
                 {/* 여기에 보기 추가 */}
                 <div id="q_choice">
                     {/* question.is_many_choice */}
-                    {question.is_many_choice ? <QuestionChoice question={question}/> : <p></p>}
+                    {question.is_many_choice ? <QuestionChoice chooseAnswer={chooseAnswer} question={question}/> : <p></p>}
                 </div>
             </div>
-            {question.is_many_choice ? <p></p> : <QuestionInput question={question}/>}
+            {question.is_many_choice ? <p></p> : <QuestionInput chooseAnswer={chooseAnswer} question={question}/>}
         </div>
     </div>
-  )
+    )
 }
 
 export default LearnDown2;

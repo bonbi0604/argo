@@ -10,7 +10,7 @@
     position: relative;
     margin: auto 5%;
 }
-
+ 
 .learn_button_group {
     width: 100%;
     position: absolute;
@@ -18,23 +18,24 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
-
-
+ 
+ 
 .learn_button_group .learn_button {
-    font-size: 1.5em;
-    padding: 1em 2em;
-    /* cursor: pointer; */
+    font-size: 1.2rem;
+    width: 70%;
+    padding: 15%;
+    cursor: pointer;
     color: #4378b5;
     font-weight: bold;
     text-decoration: none;
     text-align: left;
 }
-
+ 
 .learn_button_group .learn_button:hover {
     background-color: #c4dcfa;
 }
-
-
+ 
+ 
 .learn_button_group .learn_button a {
     text-decoration: none;
     color: #315279;

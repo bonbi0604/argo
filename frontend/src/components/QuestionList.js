@@ -8,7 +8,7 @@ const QuestionList = ({wrongList}) => {
   }
 
   const searchWrongQuestion = () => {
-
+    
   }
 
   return (

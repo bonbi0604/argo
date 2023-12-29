@@ -15,4 +15,5 @@ app_name = "learn"
 urlpatterns = [
     path('wronglist/', wrong_question_list, name='wrong_question_list'),
     path('getQuestion/', give_question, name='give_question'),
+    path('insertResult/', insertResult, name='insertResult'),
 ]

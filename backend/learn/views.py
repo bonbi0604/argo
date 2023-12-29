@@ -8,16 +8,23 @@ from django.http import JsonResponse, HttpResponse
 from rest_framework.response import Response
 from django.views.decorators.csrf import csrf_protect
 from django.core.serializers import serialize
+from account.models import *
  
 # 틀린문제 뽑기.
-def get_wrong_question_list(filter_no, count):
-    value = Result.objects.filter(is_correct=0)
-    content_list = random.sample(list(value.filter(question_no__category_no=filter_no)), min(count, len(value.filter(question_no__category_no=filter_no))))
+def get_wrong_question_list(filter_no, count, user_no=None):
+    specific_user = Result.objects.filter(user_no = user_no)
+    value = specific_user.filter(is_correct=0)
+    value = value.order_by('-timestamp')
+    content_list = list(value.filter(question_no__category_no=filter_no))[:min(count, len(value.filter(question_no__category_no=filter_no)))]
     question = []
     for content in content_list:
-        dic = {'question_no' : content.question_no.question_no,
+        dic = {
+                'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
-                'content' : content.question_no.content}
+                'content' : content.question_no.content,
+                'result_no' : content.result_no,
+                'timestamp' : content.timestamp,
+                }
         question.append(dic)
     return question
 
@@ -100,4 +107,40 @@ def give_question(request):
         'correct_answer': answer,
         'is_many_choice' : is_many_choice
     }
-    return JsonResponse({'wrong_question' : data })    
+    return JsonResponse({'wrong_question' : data })
+
+@csrf_exempt
+def insertResult(request):
+    data = json.loads(request.body)
+    user = data.get('user_no')
+    # user = User.objects.get(user_no = user)
+    answer = data.get('answer_no')
+    # answer = Answer.objects.get(answer_no = answer)
+    question = data.get('question_no')
+    # question = Question.objects.get(question_no = question)
+    content = data.get('user_content')
+    is_correct = None
+   
+    value = Answer.objects.get(answer_no=answer)
+    # 객관식 일때
+    if content == '':
+        if value.is_correct == 1:
+            is_correct =1
+        else:
+            is_correct= 0
+    # 주관식 일때
+    else:
+        if content != value.answer_no.content:
+            is_correct = 0
+        else:
+            is_correct = 1
+           
+    save = {
+            'user_no' : user,
+            'answer_no' : answer,
+            'question_no' : question,
+            'is_correct' : is_correct,
+            'content' : content
+    }
+    new_user = Result.objects.create(**save)
+    new_user.save()
