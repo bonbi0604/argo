@@ -181,14 +181,22 @@ def score(request):
     accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
     
     #커뮤니케이션 추가해야함
-    
+    from django.db.models import Count
     #모든 사용자가 푼 문제 유형별 개수
     question_nos = Result.objects.all().values_list('question_no', flat=True)
+    result_counts = (Result.objects.filter(is_correct=1)
+                 .values('question_no__category_no__classification')  # Note the double underscore for JOIN
+                 .annotate(total=Count('question_no__category_no__classification'))
+                 .order_by())
+    
     categories = Question.objects.filter(question_no__in=question_nos).values('category_no')
+    
+    print(result_counts)
+    
     classifications = Category.objects.filter(category_no__in=[c['category_no'] for c in categories]).values_list('classification', flat=True)
     classification_counts = Counter(list(classifications))
     total_classification = dict(classification_counts)
-    print(categories.count())
+
     #모든 사용자가 맞춘 문제 유형별 개수
     question_nos_good = Result.objects.filter(is_correct=1).values_list('question_no', flat=True)
     categories_good = Question.objects.filter(question_no__in=question_nos_good).values('category_no')
