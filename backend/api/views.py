@@ -61,11 +61,12 @@ def testEndPoint(request):
     return Response({}, status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
+# @permission_classes([IsAuthenticated]) # 이거뭐야 누구야
 # @csrf_exempt
 
 @csrf_exempt
 def checkId(request):
+    print("오긴했다")
     try:
         # 아이디 가져오기
         data = json.loads(request.body)
