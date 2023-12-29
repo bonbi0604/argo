@@ -13,7 +13,7 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 from operator import itemgetter
-
+from collections import Counter
 from django.conf import settings
 
 # 쿼리 날려서 DB에서 가져오기
@@ -101,12 +101,7 @@ def wrong_list():
     wrong = [{i+1 : result.question_no.content} for i,result in enumerate(wrong)]
     return wrong
 
-
-
-from django.views.decorators.http import require_http_methods
-
 @csrf_exempt
-@require_http_methods(["POST"])
 def recommendation(request):
     data = json.loads(request.body)
     user_no = data.get('user_no', 0)
@@ -115,10 +110,73 @@ def recommendation(request):
         question = result.question_no
         category_no = question.category_no
         class_name = category_no.classification
-        return JsonResponse({'result': class_name})
+        if class_name == '시사/상식':
+            class_name_eng = 'commonsense'
+        elif class_name == '직무이해':
+            class_name_eng = 'occupation'
+        elif class_name == '도구':
+            class_name_eng = 'tools'
+        elif class_name == '윤리':
+            class_name_eng = 'ethic'
+        return JsonResponse({'result': class_name_eng})
     else:
         return JsonResponse({'error': 'No incorrect problems found'}, status=404)
+    
+from django.views.decorators.http import require_http_methods
 
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def score(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no', 0)
+    accuracy_rates = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 유형별 문제 정답률
+    accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
+    #커뮤니케이션 추가해야함
+    
+    #모든 사용자가 푼 문제 유형별 개수
+    question_nos = Result.objects.all().values_list('question_no', flat=True)
+    categories = Question.objects.filter(question_no__in=question_nos).values('category_no')
+    classifications = Category.objects.filter(category_no__in=[c['category_no'] for c in categories]).values_list('classification', flat=True)
+    classification_counts = Counter(list(classifications))
+    total_classification = dict(classification_counts)
+    
+    #모든 사용자가 맞춘 문제 유형별 개수
+    question_nos_good = Result.objects.filter(is_correct=1).values_list('question_no', flat=True)
+    categories_good = Question.objects.filter(question_no__in=question_nos_good).values('category_no')
+    classifications_good = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_good]).values_list('classification', flat=True)
+    classification_counts_good = Counter(list(classifications_good))
+    total_classification_good = dict(classification_counts_good)
+    
+    #모든 사용자 유형별 문제 정답률
+    for classification, total_attempts in total_classification.items():
+        correct_attempts = total_classification_good.get(classification, 0)
+        accuracy_rate = (correct_attempts / total_attempts * 100) if total_attempts else 0
+        accuracy_rates[classification] = round(accuracy_rate, 2)
+    
+    #유저가 푼 문제 유형별 개수
+    question_nos_user = Result.objects.filter(user_no=user_no).values_list('question_no', flat=True)
+    categories_user = Question.objects.filter(question_no__in=question_nos_user).values('category_no')
+    classifications_user = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_user]).values_list('classification', flat=True)
+    classification_counts_user = Counter(list(classifications_user))
+    user_classification = dict(classification_counts_user)
+    
+    #유저가 맞춘 문제 유형별 개수
+    question_nos_user_good = Result.objects.filter(user_no=user_no,is_correct=1).values_list('question_no', flat=True)
+    categories_user_good = Question.objects.filter(question_no__in=question_nos_user_good).values('category_no')
+    classifications_user_good = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_user_good]).values_list('classification', flat=True)
+    classification_counts_user_good = Counter(list(classifications_user_good))
+    user_classification_good = dict(classification_counts_user_good)
+    
+    #유저가 맞춘 유형별 문제 정답률
+    for classification_user, total_attempts_user in user_classification.items():
+        correct_attempts_user = user_classification_good.get(classification_user, 0)
+        accuracy_rate_user = (correct_attempts_user/ total_attempts_user * 100) if total_attempts_user else 0
+        accuracy_rates_user[classification_user] = round(accuracy_rate_user, 2)
+        
+    print(accuracy_rates_user)
+    
+    return JsonResponse({'result': '안녕 수리중이야~~'})
 
 # def search_list(str):
 #     search = Result.objects.filter(is_correct = 0)
