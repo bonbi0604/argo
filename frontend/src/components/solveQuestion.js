@@ -15,17 +15,17 @@ const SolveQuestion = ({cat, question}) => {
 
   const chooseAnswer = async (choose, user_content) => {
     try {
-      setAnswerNo(choose)
+      // setAnswerNo(choose);
 
       //Result 저장
-      const response1 = await fetch(`http://127.0.0.1:8000/learn/insertResult/`, {
+      await fetch(`http://127.0.0.1:8000/learn/insertResult/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           user_no,
-          answer_no,
+          answer_no: choose,
           question_no,
           user_content
         })

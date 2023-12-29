@@ -9,7 +9,7 @@ const QuestionChoice = ({question, chooseAnswer}) => {
         <ol>
             {Array.isArray(question.choices) && question.choices.map((item) => (
             <li className="qchoice">
-                <button key={item.answer_no} value={item.answer_no} onClick={(e) => chooseAnswer(e.target.value)}>
+                <button key={item.answer_no} value={item.answer_no} onClick={(e) => chooseAnswer(e.target.value, user_content)}>
                     {item.answer_content}
                 </button>
             </li>
