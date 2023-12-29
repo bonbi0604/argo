@@ -21,7 +21,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
-                'content' : content.question_no.content,
+                'content' : content.question_no.content[:13],
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
                 }
@@ -45,7 +45,7 @@ def wrong_question_list(request):
         question = get_wrong_question_list(5, 20, user_no)
     elif cat =='ethic':
         pass
-    return JsonResponse({'wrong_question' : question })
+    return JsonResponse({'wrong_question_list' : question })
     
           
 @csrf_exempt
