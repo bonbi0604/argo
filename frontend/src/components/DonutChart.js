@@ -24,6 +24,12 @@ const DonutChart = ({cat, color, score, size}) => {
   const options = {
     cutout : temp.toString() + "%",
     maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    tooltips: {
+      enabled: false
+    },
   };
 
   return (
