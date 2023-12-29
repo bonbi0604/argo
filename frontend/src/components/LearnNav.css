@@ -1,7 +1,7 @@
 #learn_nav {
-    width: 20%;
-    min-width: 16em;
-    max-width: 12em;
+    width: 14%;
+    min-width: 12em;
+    /* max-width: 12em; */
     min-height: 32em;
     height: 60%;
     background-color: #D3E3F7;
@@ -12,7 +12,7 @@
 }
 
 .learn_button_group {
-    min-width: 16em;
+    width: 100%;
     position: absolute;
     top: 50%;
     left: 50%;

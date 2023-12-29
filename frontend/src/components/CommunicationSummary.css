@@ -1,0 +1,12 @@
+.radar_chart {
+    height: 90%;
+    aspect-ratio: 1;
+    
+}
+
+.radar_chart_wrapper {
+    height: 100%;
+    padding: 5%;
+    display: flex;
+    flex-direction: row;
+}

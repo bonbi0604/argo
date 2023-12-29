@@ -2,9 +2,11 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {Chart, ArcElement} from 'chart.js';
 
-Chart.register(ArcElement);
+
 
 const DonutChart = ({cat, color, score, size}) => {
+  Chart.register(ArcElement);
+  
   const data = {
     labels: [cat, "none"],
     datasets: [
