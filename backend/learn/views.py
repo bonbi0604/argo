@@ -76,8 +76,6 @@ def give_question(request):
     choice_list = []
     
     answer = None
-    # 주관식이면 0 
-    # 객관식이면 1
     is_many_choice = None
     for item in choice:
         tmp_dic = {
@@ -109,11 +107,8 @@ def give_question(request):
 def insertResult(request):
     data = json.loads(request.body)
     user = data.get('user_no')
-    user = User.objects.get(user_no = user)
     answer = data.get('answer_no')
-    answer = Answer.objects.get(answer_no = answer)
     question = data.get('question_no')
-    question = Question.objects.get(question_no = question)
     content = data.get('user_content')
     is_correct = None
     
@@ -126,17 +121,16 @@ def insertResult(request):
             is_correct= 0
     # 주관식 일때
     else:
-        if content != value.answer_no.content:
+        if content != value.content:
             is_correct = 0
         else:
             is_correct = 1   
     save = {
-            'user_no' : user,
-            'answer_no' : answer,
-            'question_no' : question,
+            'user_no' : User.objects.get(user_no = user),
+            'answer_no' : Answer.objects.get(answer_no = answer),
+            'question_no' : Question.objects.get(question_no = question),
             'is_correct' : is_correct,
             'content' : content
     }
     new_user = Result.objects.create(**save)
-    new_user.save()
 # objects.create()를 사용하여 새로운 User 레코드 생성 및 저장
