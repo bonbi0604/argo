@@ -210,8 +210,6 @@ def labeling_7cs(request):
 ########################################################################
 #                      learn/communication/save/                       #
 ########################################################################
-from django.views.decorators.http import require_http_methods
-@require_http_methods(["POST"])
 @csrf_exempt
 def comm_save(request):
     if request.method == 'POST':
@@ -269,8 +267,6 @@ def comm_save(request):
 ########################################################################
 #                     learn/communication/history/                     #
 ########################################################################
-from django.views.decorators.http import require_http_methods
-@require_http_methods(["POST"])
 @csrf_exempt
 def comm_view_history(request):
     if request.method == 'POST':
