@@ -273,22 +273,49 @@ from django.views.decorators.http import require_http_methods
 @csrf_exempt
 def comm_view_history(request):
     if request.method == 'POST':
-        data = json.loads()
+        try:
+            data = json.loads(request.body)
+            user_no = data.get("user_no")
+            
+            # user_no에 해당하는 모든 Comm_History 레코드를 가져옵니다.
+            histories = Comm_History.objects.filter(user_no=user_no)
+            
+            # 결과를 JSON 형식으로 구성합니다.
+            result = []
+            for history in histories:
+                result.append({
+                    "history_id": history.history_no,
+                    "title": history.title,
+                    "code": history.code,
+                })
+            
+            return JsonResponse(result, safe=False)
+        
+        except Exception as e:
+            # 예외 처리
+            return JsonResponse({"error": str(e)}, status=400)
+    
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
-    return JsonResponse({})
 
 
-
-# front->back:
+# # front->back:
 # {
-# 	user_no:2
+#     "user_no": 2
 # }
-# back->front:
-# [{
-# 	'history_id':4,
-# 	'title':'',
-# 	'code': '',
-# }, ...]
+# # back->front:
+# [
+#     {
+# 	"history_id": 4,
+# 	"title":"title_example1",
+# 	"code": 2,
+#     },
+#     {
+# 	"history_id": 5,
+# 	"title":"title_example2",
+# 	"code": 0,
+#     }
+# ]
 
 
 
