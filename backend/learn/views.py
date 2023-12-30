@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
 from django.utils import timezone
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 from django.db.models import Max
 import random
 import json
@@ -302,40 +303,55 @@ def comm_view_history(request):
 from django.views.decorators.http import require_http_methods
 @require_http_methods(["POST"])
 @csrf_exempt
-def comm_history_detail(request):
+def comm_history_detail(request, no):
     if request.method == 'POST':
-        data = json.loads()
+        # 요청에서 JSON 데이터를 파싱합니다.
+        data = json.loads(request.body)
 
-    return JsonResponse({})
+        # 요청 데이터에서 user_id를 추출합니다.
+        user_no = data.get("user_no")
 
+        # URL에서 history_id를 추출합니다.
+        history_id = no
 
+        # 데이터베이스에서 지정된 history_id에 대한 대화 내역을 조회합니다.
+        history = get_object_or_404(Comm_History, history_no=history_id, user_no=user_no)
 
+        # 이 history에 관련된 문장들을 조회합니다.
+        sentences = Comm_History_Sentence.objects.filter(history_no=history)
 
-# front->back:
-# {
-# 	user_no:2
-# }
- 
-# back->front:
-# {
-# 	'history_id': 333,
-# 	'code': 3,
-# 	'title:'',
-# 	'history': [
-#     {
-#         'speaker' : "user",
-#         "sentence" : "말말말",
-#         "labels" : {"Clear": 1, ...}
-#     },
-#     {
-#         'speaker' : "chatbot",
-#         "sentence" : "말말말",
-#         "labels" : {"Clear": 0}
-#     }, ...]
-# }
+        # 문장 데이터를 저장할 리스트를 생성합니다.
+        history_data = []
 
+        # 문장을 순회하면서 각 문장에 대한 딕셔너리를 만듭니다.
+        for sentence in sentences:
+            sentence_dict = {
+                "speaker": sentence.speaker,
+                "sentence": sentence.sentence,
+                "labels": {
+                    "Clear": sentence.label_clear,
+                    "Concise": sentence.label_concise,
+                    "Concrete": sentence.label_concrete,
+                    "Correct": sentence.label_correct,
+                    "Coherent": sentence.label_coherent,
+                    "Complete": sentence.label_complete,
+                    "Courteous": sentence.label_courteous,
+                }
+            }
+            history_data.append(sentence_dict)
 
+        # 최종 응답 JSON을 생성합니다.
+        response_data = {
+            "history_id": history_id,
+            "code": history.code,
+            "title": history.title,
+            "history": history_data
+        }
 
+        # JSON 응답을 반환합니다.
+        return JsonResponse(response_data)
+
+    return JsonResponse({"error": "Invalid request method"}, status=405)
 
 
 
