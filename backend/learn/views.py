@@ -265,6 +265,7 @@ def comm_save(request):
     return JsonResponse({"error": "Method not allowed"}, status=405)
 
 
+
 ########################################################################
 #                     learn/communication/history/                     #
 ########################################################################
@@ -296,29 +297,6 @@ def comm_view_history(request):
             return JsonResponse({"error": str(e)}, status=400)
     
     return JsonResponse({"error": "Invalid request method"}, status=405)
-
-
-
-# # front->back:
-# {
-#     "user_no": 2
-# }
-# # back->front:
-# [
-#     {
-# 	"history_id": 4,
-# 	"title":"title_example1",
-# 	"code": 2,
-#     },
-#     {
-# 	"history_id": 5,
-# 	"title":"title_example2",
-# 	"code": 0,
-#     }
-# ]
-
-
-
 
 
 
