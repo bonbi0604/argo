@@ -105,15 +105,35 @@ chain = (
     | output_parser
 )
 
-def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
-    return chain.invoke({
-        "user_name": user_name,
-        "subject": dialog_subject,
-        "example": dialog_example, 
-        "history": session_history, 
-        "message": message,
-    })
+# def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
+    # return chain.invoke({
+    #     "user_name": user_name,
+    #     "subject": dialog_subject,
+    #     "example": dialog_example, 
+    #     "history": session_history, 
+    #     "message": message,
+    # })
 
+# test 용
+import random
+def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
+    # return random.choices(['랜덤1', '랜덤2', '랜덤3'])
+    # return random.choices(['랜덤1', '랜덤2', '랜덤3', '<END>'])
+    return random.choices(['랜덤1', '랜덤2', '랜덤3', '<errEND>'])
+
+def chatbot_code(chatbot_response):
+    if chatbot_response[0] == '<END>':
+        return int(3)
+    elif chatbot_response[0] == '<errEND>':
+        return int(1)
+    else:
+        return int(0)
+    
+def user_code(user_message):
+    if user_message == '<END>':
+        return int(2)
+    else:
+        return int(0)
 
 from django.views.decorators.http import require_http_methods
 
@@ -123,26 +143,36 @@ def chatbot_response(request):
     if request.method == 'POST':     
         # user 응답 message 가져오기
         data = json.loads(request.body)
-        user_message = data['message']
-        
+
         # 현재 세션에 저장된 대화 내역을 가져오기
         session_history = request.session.get('chat_history', [])
 
         # 현재 사용자의 메시지를 대화 내역에 추가
-        session_history.append({"speaker": "user", "message": user_message})
+        user_message = data['message']
+        code_user = user_code(user_message)
+        if code_user == 0:
+            session_history.append({"speaker": "user", "message": user_message})
 
-        chatbot_response = generate_response(user_message, session_history, dialog_example, dialog_subject, user_name)
+            # chatbot 응답 메시지를 대화 내역에 추가
+            chatbot_response = generate_response(user_message, session_history, dialog_example, dialog_subject, user_name)
+            code_chatbot = chatbot_code(chatbot_response)
 
+            if code_chatbot == 0:
+                session_history.append({"speaker": "chatbot", "message": chatbot_response})
+                code = code_chatbot
+
+            else:
+                code = code_chatbot
+            
+            # 대화 내역을 세션에 저장
+            request.session['chat_history'] = session_history
+        else:
+            chatbot_response = [""]
+            code = code_user
         
-        # chatbot 응답 메시지를 대화 내역에 추가
-        session_history.append({"speaker": "chat", "message": chatbot_response})
-        
-        # 대화 내역을 세션에 저장
-        request.session['chat_history'] = session_history
-        # request.session.save()
         print(user_message, session_history)
         
-        return JsonResponse({'reply': chatbot_response, 'title':dialog_subject})
+        return JsonResponse({'title':dialog_subject, 'reply': chatbot_response, 'code': code})
 
 
 # fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
