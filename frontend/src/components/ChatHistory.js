@@ -1,55 +1,77 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import './ChatHistory.css';
+import AuthContext from "../context/AuthContext";
 
 const ChatHistory = ({ onSessionSelect }) => {
   const [sessions, setSessions] = useState([]);
+  const { user } = useContext(AuthContext);
+
+  const fetchSessions = async () => {
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/?user_no=${user.user_no}`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch sessions');
+      }
+      const data = await response.json();
+      setSessions(data);
+    } catch (error) {
+      console.error('Error fetching sessions:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (user && user.user_no) {
+      fetchSessions();
+    }
+  }, [user]);
 
   const handleSessionClick = async (id) => {
     try {
-      console.log('Clicked ID:', id);
       const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${id}/`);
       if (!response.ok) {
         throw new Error('Failed to fetch session data');
       }
       const data = await response.json();
-      console.log('Session data:', data);
 
-      // onSessionSelect 콜백을 호출하여 채팅 세션 데이터 전달
       if (onSessionSelect) {
-        onSessionSelect(data.id, data.chat_content); // 세션 ID와 채팅 내용 전달
+        onSessionSelect(data.id, data.chat_content,data.session_title);
       }
     } catch (error) {
       console.error('Error fetching session data:', error);
     }
   };
-
-  useEffect(() => {
-    const fetchSessions = async () => {
+  const handleDeleteSession = async (sessionId) => {
+    if (window.confirm("Are you sure you want to delete this session?")) {
       try {
-        const response = await fetch('http://127.0.0.1:8000/chatbot/api/chat-sessions/');
+        const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionId}/`, {
+          method: 'DELETE',
+        });
         if (!response.ok) {
-          throw new Error('Failed to fetch sessions');
+          throw new Error('Failed to delete session');
         }
-        const data = await response.json();
-        const validSessions = data.filter(session => session.id != null); // id가 존재하는 세션만 필터링
-        console.log('Fetched sessions:', validSessions);
-        setSessions(validSessions);
+        fetchSessions();
       } catch (error) {
-        console.error('Error fetching sessions:', error);
+        console.error('Error deleting session:', error);
       }
-    };
-
-    fetchSessions();
-  }, []);
+    }
+  };
+  
 
   return (
     <div className="session-list">
       {sessions.map(session => (
-        <button key={session.id} onClick={() => handleSessionClick(session.id)}>
-          {session.session_title}
-        </button>
+        <div key={session.id} className="session-item">
+          <button key={session.id} onClick={() => handleSessionClick(session.id)} className="session-button">
+            {session.session_title}
+          </button>
+          <button onClick={() => handleDeleteSession(session.id)} className="delete-session">
+            Delete
+          </button>
+          
+        </div>
       ))}
     </div>
+    
   );
 };
 

@@ -11,6 +11,7 @@ from .views import *
 
 
 app_name = "learn"
+from .views import wrong_list
 
 app_name = 'learn'
 urlpatterns = [

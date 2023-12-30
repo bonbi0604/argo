@@ -1,17 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Comment
-from .serializer import CommentSerializer
+from .models import Post, Comment, FileModel, Notice, NoticeFile
+from .serializer import PostSerializer, CommentSerializer, NoticeSerializer
 from django.http import JsonResponse
 from account.models import User
-from django.shortcuts import get_object_or_404
-from .models import Post  # Post 모델을 임포트합니다.
-from noticeboard.serializer import PostSerializer
-from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth import get_user_model
-
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -20,41 +14,69 @@ def getRoutes(request):
     ]
     return Response(routes)
 
+# 공지사항 목록 조회 및 생성을 위한 뷰 함수
 @api_view(['GET', 'POST'])
-# @csrf_exempt
+def notice_list_create(request):
+    if request.method == 'POST' and (not request.user.is_authenticated or not request.user.is_admin):
+        return Response({'detail': '관리자 권한이 필요합니다.'}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == 'GET':
+        notices = Notice.objects.all()
+        serializer = NoticeSerializer(notices, many=True)
+        return Response(serializer.data)
+    elif request.method == 'POST':
+        serializer = NoticeSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            # 'author' 필드에 현재 사용자 할당
+            notice = serializer.save(author=request.user)
+            files = request.FILES.getlist('file_field_name')
+            file_names = request.data.getlist('file_name')
+            for uploaded_file, file_name in zip(files, file_names):
+                NoticeFile.objects.create(notice=notice, file=uploaded_file, name=file_name)
+
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST'])
 def post_list_create(request):
     if request.method == 'GET':
         posts = Post.objects.all()
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
-        serializer = PostSerializer(data=request.data)
+        serializer = PostSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            serializer.save(author=request.user)
+            post = serializer.save(author=request.user)
+            files_data = request.FILES.getlist('file_field_name')
+            files_names = request.data.getlist('file_name')
+            # for file_data, file_name in zip(files_data, files_names):
+            #     FileModel.objects.create(board_no=post, src=file_data, name=file_name)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
     
     
-@api_view(['GET', 'PUT'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def post_detail(request, id):
     post = get_object_or_404(Post, pk=id)
-
     if request.method == 'GET':
-        post_data = {
-            "id": post.id,
-            "title": post.title,
-            "content": post.content,
-            "author_id": post.author.id,
-            "timestamp": post.timestamp.strftime("%Y-%m-%d %H:%M:%S")
-        }
-        return JsonResponse(post_data)    
+        serializer = PostSerializer(post)
+        return Response(serializer.data)
     elif request.method == 'PUT':
-        serializer = PostSerializer(post, data=request.data)
+        # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)
+        # 여기에 로직 추가
+        serializer = PostSerializer(post, data=request.data, partial=True)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    elif request.method == 'DELETE':
+        post.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
     
 @api_view(['DELETE'])
 def delete_post(request, id):
@@ -89,6 +111,29 @@ def comments_list_create(request, id):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
+@api_view(['GET', 'POST'])
+def notice_comments_list_create(request, id):
+    post = get_object_or_404(Post, pk=id)
+
+    if request.method == 'GET':
+        comments = Comment.objects.filter(board_no=post)
+        serializer = CommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'detail': '로그인이 필요합니다.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        serializer = CommentSerializer(data=request.data)
+        print(request.data)
+        if serializer.is_valid():
+            # save() 호출 시 user_no에 request.user를 전달합니다.
+            serializer.save(board_no=post, user_no=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
+        
+        
 @api_view(['GET'])
 def user_detail(request):
     # 인증된 사용자의 정보를 반환합니다.
@@ -116,8 +161,35 @@ def delete_comment(request, id):
 @api_view(['PUT'])
 def update_comment(request, id):
     comment = get_object_or_404(Comment, pk=id)
-    serializer = CommentSerializer(comment, data=request.data)
+    serializer = CommentSerializer(comment, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+@api_view(['GET', 'PUT', 'DELETE'])
+def notice_detail(request, id):
+    # ID에 해당하는 공지사항을 데이터베이스에서 찾습니다.
+    notice = get_object_or_404(Notice, pk=id)
+
+    if request.method == 'GET':
+        # GET 요청인 경우, 공지사항의 상세 정보를 반환합니다.
+        serializer = NoticeSerializer(notice)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        # PUT 요청인 경우, 공지사항을 수정합니다.
+        # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)
+        # 여기에 로직 추가
+        serializer = NoticeSerializer(notice, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    elif request.method == 'DELETE':
+        # DELETE 요청인 경우, 공지사항을 삭제합니다.
+        notice.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)    
