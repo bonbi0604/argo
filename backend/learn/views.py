@@ -105,6 +105,7 @@ chain = (
     | output_parser
 )
 
+# 실제
 # def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
     # return chain.invoke({
     #     "user_name": user_name,
@@ -114,12 +115,12 @@ chain = (
     #     "message": message,
     # })
 
-# test 용
+# test
 import random
 def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
-    # return random.choices(['랜덤1', '랜덤2', '랜덤3'])
+    return random.choices(['랜덤1', '랜덤2', '랜덤3'])
     # return random.choices(['랜덤1', '랜덤2', '랜덤3', '<END>'])
-    return random.choices(['랜덤1', '랜덤2', '랜덤3', '<errEND>'])
+    # return random.choices(['랜덤1', '랜덤2', '랜덤3', '<errEND>'])
 
 def chatbot_code(chatbot_response):
     if chatbot_response[0] == '<END>':
@@ -134,11 +135,10 @@ def user_code(user_message):
         return int(2)
     else:
         return int(0)
+    
 
-from django.views.decorators.http import require_http_methods
-
+# leran/communication/study
 @csrf_exempt
-@require_http_methods(["POST"])
 def chatbot_response(request):
     if request.method == 'POST':     
         # user 응답 message 가져오기
