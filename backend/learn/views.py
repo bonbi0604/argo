@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from .models import Question, Answer, Category, Result
+from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
+from django.utils import timezone
+from django.contrib.auth.models import User
 from django.db.models import Max
 import random
 import json
@@ -25,6 +27,12 @@ from account.models import User
 ### learn-communication
 from rest_framework.response import Response
 from django.db.models import Count
+
+
+
+########################################################################
+#                      learn/communication/study                       #
+########################################################################
 # 쿼리 날려서 DB에서 가져오기
 user_name = "wendy"
 dialog_subject = "전언에 대한 전화 협의 일정 조정"
@@ -45,7 +53,6 @@ A: 괜찮아요 가깝고요. 그럼 내일 10시 반쯤 찾아뵐게요.
 B: 예 알겠습니다。 감사합니다。 그럼 내일 기다리고 있겠습니다. 잘 부탁드립니다.
 A: 잘 부탁드립니다
 """
-
 template = """
 User_name: {user_name}
 Subject: {subject}
@@ -81,11 +88,9 @@ IMPORTANT RULE:
 1. The conversation subject must be "BUSINESS".
 2. ONLY USER KOREAN.
 """
-
 os.environ["OPENAI_API_KEY"] = "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"
 persist_directory = settings.BASE_DIR
 embedding = OpenAIEmbeddings()
-
 
 prompt = ChatPromptTemplate.from_template(template)
 model = ChatOpenAI(temperature=0.1,
@@ -105,8 +110,7 @@ chain = (
     | output_parser
 )
 
-# 실제
-# def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
+def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
     # return chain.invoke({
     #     "user_name": user_name,
     #     "subject": dialog_subject,
@@ -114,18 +118,13 @@ chain = (
     #     "history": session_history, 
     #     "message": message,
     # })
-
-# test
-import random
-def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
-    return random.choices(['랜덤1', '랜덤2', '랜덤3'])
-    # return random.choices(['랜덤1', '랜덤2', '랜덤3', '<END>'])
-    # return random.choices(['랜덤1', '랜덤2', '랜덤3', '<errEND>'])
+    # 모델 써야함 밑은 예시
+    return random.choices(['랜덤1', '랜덤2', '랜덤3', '<END>', '<errEND>'])[0]
 
 def chatbot_code(chatbot_response):
-    if chatbot_response[0] == '<END>':
+    if chatbot_response == '<END>':
         return int(3)
-    elif chatbot_response[0] == '<errEND>':
+    elif chatbot_response == '<errEND>':
         return int(1)
     else:
         return int(0)
@@ -136,8 +135,6 @@ def user_code(user_message):
     else:
         return int(0)
     
-
-# leran/communication/study
 @csrf_exempt
 def chatbot_response(request):
     if request.method == 'POST':     
@@ -175,7 +172,10 @@ def chatbot_response(request):
         return JsonResponse({'title':dialog_subject, 'reply': chatbot_response, 'code': code})
     
 
-import random
+
+########################################################################
+#                      learn/communication/label                       #
+########################################################################
 def scoring_7cs(message):
     # 모델 써야함 밑은 예시
     score_clear = random.choices([0, 1, 2, 3])[0]
@@ -187,7 +187,6 @@ def scoring_7cs(message):
     score_courteous = random.choices([0, 1, 2, 3])[0]
     return score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous
 
-# learn/communication/label
 @csrf_exempt
 def labeling_7cs(request):
     if request.method == 'POST':
@@ -207,6 +206,168 @@ def labeling_7cs(request):
     }})
 
 
+
+########################################################################
+#                       learn/communication/save                       #
+########################################################################
+from django.views.decorators.http import require_http_methods
+@require_http_methods(["POST"])
+@csrf_exempt
+def comm_save(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body.decode('utf-8'))
+
+            # 사용자 식별 번호를 이용하여 사용자 인스턴스 가져오기
+            user_no = data.get("user_no")
+            user = User.objects.get(pk=user_no)
+
+            # Comm_History 모델에 데이터 추가
+            comm_history = Comm_History.objects.create(
+                user_no=user,
+                code=data.get("code"),
+                title=data.get("title"),
+                timestamp=data.get("timestamp")
+            )
+
+            history_items = data.get("history", [])
+            comm_history_sentence_list = []
+
+            for item in history_items:
+                labels = item.get("labels")
+                comm_history_sentence_list.append(Comm_History_Sentence(
+                    history_no=comm_history,
+                    speaker=item.get("speaker"),
+                    sentence=item.get("sentence"),
+                    label_clear=labels.get("Clear"),
+                    label_concise=labels.get("Concise"),
+                    label_concrete=labels.get("Concrete"),
+                    label_correct=labels.get("Correct"),
+                    label_coherent=labels.get("Coherent"),
+                    label_complete=labels.get("Complete"),
+                    label_courteous=labels.get("Courteous"),
+                    timestamp=item.get("timestamp")
+                ))
+
+            # Comm_History_Sentence 모델에 데이터 일괄 추가
+            Comm_History_Sentence.objects.bulk_create(comm_history_sentence_list)
+
+            # 성공적으로 데이터를 저장한 경우
+            return JsonResponse({"message": "Data saved successfully"}, status=200)
+        except User.DoesNotExist:
+            # 사용자가 존재하지 않는 경우
+            return JsonResponse({"error": "User not found"}, status=400)
+        except Exception as e:
+            # 데이터 저장 중 오류 발생한 경우
+            return JsonResponse({"error": str(e)}, status=400)
+
+    # POST 요청이 아닌 경우
+    return JsonResponse({"error": "Method not allowed"}, status=405)
+
+
+########################################################################
+#                      learn/communication/history                     #
+########################################################################
+from django.views.decorators.http import require_http_methods
+@require_http_methods(["POST"])
+@csrf_exempt
+def comm_view_history(request):
+    if request.method == 'POST':
+        data = json.loads()
+
+    return JsonResponse({})
+
+
+
+# front->back:
+# {
+# 	user_no:2
+# }
+# back->front:
+# [{
+# 	'history_id':4,
+# 	'title':'',
+# 	'code': '',
+# }, ...]
+
+
+
+
+
+
+########################################################################
+#                  learn/communication/history/<int:no>                #
+########################################################################
+from django.views.decorators.http import require_http_methods
+@require_http_methods(["POST"])
+@csrf_exempt
+def comm_history_detail(request):
+    if request.method == 'POST':
+        data = json.loads()
+
+    return JsonResponse({})
+
+
+
+
+# front->back:
+# {
+# 	user_no:2
+# }
+ 
+# back->front:
+# {
+# 	'history_id': 333,
+# 	'code': 3,
+# 	'title:'',
+# 	'history': [
+#     {
+#         'speaker' : "user",
+#         "sentence" : "말말말",
+#         "labels" : {"Clear": 1, ...}
+#     },
+#     {
+#         'speaker' : "chatbot",
+#         "sentence" : "말말말",
+#         "labels" : {"Clear": 0}
+#     }, ...]
+# }
+
+
+
+
+
+
+########################################################################
+#                       learn/communication/score                      #
+########################################################################
+from django.views.decorators.http import require_http_methods
+@require_http_methods(["POST"])
+@csrf_exempt
+def comm_score(request):
+    if request.method == 'POST':
+        data = json.loads()
+
+    return JsonResponse({})
+
+
+
+# front->back:
+# {
+# 	user_no:2
+# }
+# back->front:
+# {
+#   Clear: { avg: 75, score: 80 }, 
+#   Courteous: { avg: 60, score: 90 }, 
+# ...
+# }
+
+
+
+########################################################################
+#                      ?????????????????????????                       #
+########################################################################
 # fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
 def wrong_list():
     wrong = Result.objects.filter(is_correct = 0)
