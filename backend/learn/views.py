@@ -31,7 +31,7 @@ from django.db.models import Count
 
 
 ########################################################################
-#                      learn/communication/study                       #
+#                      learn/communication/study/                      #
 ########################################################################
 # 쿼리 날려서 DB에서 가져오기
 user_name = "wendy"
@@ -174,7 +174,7 @@ def chatbot_response(request):
 
 
 ########################################################################
-#                      learn/communication/label                       #
+#                      learn/communication/label/                      #
 ########################################################################
 def scoring_7cs(message):
     # 모델 써야함 밑은 예시
@@ -208,7 +208,7 @@ def labeling_7cs(request):
 
 
 ########################################################################
-#                       learn/communication/save                       #
+#                      learn/communication/save/                       #
 ########################################################################
 from django.views.decorators.http import require_http_methods
 @require_http_methods(["POST"])
@@ -266,7 +266,7 @@ def comm_save(request):
 
 
 ########################################################################
-#                      learn/communication/history                     #
+#                     learn/communication/history/                     #
 ########################################################################
 from django.views.decorators.http import require_http_methods
 @require_http_methods(["POST"])
@@ -296,7 +296,7 @@ def comm_view_history(request):
 
 
 ########################################################################
-#                  learn/communication/history/<int:no>                #
+#                  learn/communication/history/<int:no>/               #
 ########################################################################
 from django.views.decorators.http import require_http_methods
 @require_http_methods(["POST"])
