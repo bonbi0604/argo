@@ -47,8 +47,8 @@ const CommunicationPage = () => {
       <div className="communication_page_inner"><div className="communication_page_inner2">
         
         <div className='communication_page_top'>
-          <div className='communication_page_icon'><div className="inner"><IconStructure cat={"communication"} size={`${100}%`} /></div></div>
-          <div className='communication_page_scorebar'><Scorebar cat={"communication"} avg={avg} score={score}/></div>
+          {stateN !== 2? <div className='communication_page_icon'><div className="inner"><IconStructure cat={"communication"} size={`${100}%`} /></div></div>: <></>}
+          {stateN !== 2? <div className='communication_page_scorebar'><Scorebar cat={"communication"} avg={avg} score={score}/></div>: <></>}
           <button className="communication_page_button" onClick={handleButtonClick}>{stateN===0? "문제풀기": (stateN===1? "돌아가기": (stopped===false? "중단하기":"돌아가기"))}</button>
         </div>
 

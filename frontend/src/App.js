@@ -7,7 +7,8 @@ import HeaderMenu from "./components/HeaderMenu";
 import { BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 // import PrivateRoute from "./utils/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext";
-import { ChatbotProvider, ChatbotContext } from './context/ChatbotContext';
+import { ChatbotProvider, ChatbotContext } from "./context/ChatbotContext";
+
 import Home from "./views/homePage";
 import Login from "./views/loginPage";
 import Register from "./views/registerPage";

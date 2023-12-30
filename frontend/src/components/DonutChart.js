@@ -6,6 +6,7 @@ import {Chart, ArcElement} from 'chart.js';
 
 const DonutChart = ({cat, color, score, size}) => {
   Chart.register(ArcElement);
+
   
   const data = {
     labels: [cat, "none"],

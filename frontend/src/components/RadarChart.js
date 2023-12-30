@@ -48,12 +48,25 @@ const RadarChart = ({dataUser, dataAvg, name}) => {
       ],
     };
 
+  const maxScore = Math.ceil(Math.max(...[...dataUser, ...dataAvg]) / 10);
+  const colorList = Array.from({ length: maxScore+1 }, (_, index) => index < maxScore ? '#ccc' : '#ccc');
+
   const options = {
     scales: {
-      r: {
+      r: { // https://www.chartjs.org/docs/latest/axes/radial/
         beginAtZero: true,
-      },
+        angleLines: {
+          color: 'gray'
+        },
+        grid: {
+          color: colorList
+        },
+        pointLabels: { // https://www.chartjs.org/docs/latest/axes/radial/#point-labels
+          color: 'black',
+        },
+      }
     },
+
   };
 
   return <Radar data={data} options={options} />;
