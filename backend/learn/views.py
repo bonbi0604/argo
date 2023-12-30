@@ -5,6 +5,7 @@ from .models import Question, Answer, Category, Result, Comm_History, Comm_Histo
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from django.db import models
 from django.db.models import Max
 import random
 import json
@@ -363,22 +364,45 @@ from django.views.decorators.http import require_http_methods
 @csrf_exempt
 def comm_score(request):
     if request.method == 'POST':
-        data = json.loads()
+        try:
+            data = json.loads(request.body)
+            user_no = data.get("user_no")
 
-    return JsonResponse({})
+            # 각 품질에 대한 점수 계산
+            label_scores = {}
+            labels = ["clear", "concise", "concrete", "correct", "coherent", "complete", "courteous"]
 
+            for label in labels:
+                # 모든 레코드에서 해당 레이블의 점수를 평균 계산
+                avg_score = Comm_History_Sentence.objects.filter(
+                    speaker="user",
+                    **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+                ).aggregate(avg_score=models.Avg(f"label_{label}"))["avg_score"]
 
+                # 특정 사용자의 점수 계산
+                user_score = Comm_History_Sentence.objects.filter(
+                    speaker="user",
+                    history_no__user_no=user_no,
+                    **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+                ).aggregate(user_score=models.Avg(f"label_{label}"))["user_score"]
 
-# front->back:
-# {
-# 	user_no:2
-# }
-# back->front:
-# {
-#   Clear: { avg: 75, score: 80 }, 
-#   Courteous: { avg: 60, score: 90 }, 
-# ...
-# }
+                # null 값이 아닐 경우에만 연산 수행
+                if avg_score is not None:
+                    avg_score = int(avg_score * 100 / 3)
+                if user_score is not None:
+                    user_score = int(user_score * 100 / 3)
+
+                label_scores[label] = {
+                    "avg": avg_score,
+                    "score": user_score
+                }
+
+            return JsonResponse(label_scores)
+
+        except Exception as e:
+            return JsonResponse({"error": str(e)})
+
+    return JsonResponse({"error": "Invalid request method"})
 
 
 
