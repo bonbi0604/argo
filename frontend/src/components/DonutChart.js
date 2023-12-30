@@ -24,14 +24,12 @@ const DonutChart = ({cat, color, score, size}) => {
   const options = {
     cutout : temp.toString() + "%",
     maintainAspectRatio: false,
-    legend: {
-      display: false,
-    },
-    tooltips: {
-      enabled: false
-    },
+    plugins: {
+        legend: {
+            display: false,
+        }
+    }
   };
-
   return (
     <div className="donutchart_element" style={{ width: size, height: size }}>
       <Doughnut data={data} options={options} style={{ width: "100%", height: "100%" }}/>

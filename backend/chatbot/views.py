@@ -58,30 +58,30 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
     
-# os.environ["OPENAI_API_KEY"] = "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"
-# persist_directory = str(settings.BASE_DIR)
+os.environ["OPENAI_API_KEY"] = "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"
+persist_directory = str(settings.BASE_DIR)
 
-# embedding = OpenAIEmbeddings()
-# vectordb = Chroma(
-#     persist_directory=persist_directory,
-#     embedding_function=embedding)
-# retriever = vectordb.as_retriever(search_type="similarity")
-# template = """You are an assitant for new employee. If you don't know, just say you don't know.You must speak in Korean. Answer the question based only on the following context:
-# {context}
+embedding = OpenAIEmbeddings()
+vectordb = Chroma(
+    persist_directory=persist_directory,
+    embedding_function=embedding)
+retriever = vectordb.as_retriever(search_type="similarity")
+template = """You are an assitant for new employee. If you don't know, just say you don't know.You must speak in Korean. Answer the question based only on the following context:
+{context}
 
-# Question: {question}
-# """
-# prompt = ChatPromptTemplate.from_template(template)
-# model = ChatOpenAI(temperature=0.1,
-#                     max_tokens=4000,
-#                     model_name='gpt-3.5-turbo-1106',)
-# output_parser = StrOutputParser()
-# setup_and_retrieval = RunnableParallel(
-#     {"context": retriever,
-#      "question": RunnablePassthrough()
-#      }
-# )
-# chain = setup_and_retrieval | prompt | model | output_parser
+Question: {question}
+"""
+prompt = ChatPromptTemplate.from_template(template)
+model = ChatOpenAI(temperature=0.1,
+                    max_tokens=4000,
+                    model_name='gpt-3.5-turbo-1106',)
+output_parser = StrOutputParser()
+setup_and_retrieval = RunnableParallel(
+    {"context": retriever,
+     "question": RunnablePassthrough()
+     }
+)
+chain = setup_and_retrieval | prompt | model | output_parser
 
 # 챗봇의 답변을 반환하는 뷰
 @csrf_exempt
