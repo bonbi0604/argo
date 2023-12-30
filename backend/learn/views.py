@@ -301,8 +301,6 @@ def comm_view_history(request):
 ########################################################################
 #                  learn/communication/history/<int:no>/               #
 ########################################################################
-from django.views.decorators.http import require_http_methods
-@require_http_methods(["POST"])
 @csrf_exempt
 def comm_history_detail(request, no):
     if request.method == 'POST':
@@ -359,8 +357,6 @@ def comm_history_detail(request, no):
 ########################################################################
 #                       learn/communication/score                      #
 ########################################################################
-from django.views.decorators.http import require_http_methods
-@require_http_methods(["POST"])
 @csrf_exempt
 def comm_score(request):
     if request.method == 'POST':
