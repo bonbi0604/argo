@@ -80,7 +80,7 @@ const CommunicationChatbot = () => {
 
     return (
       <div className="communicaiton_chatbot_container">
-        <div className="comm-chatbot-title">
+        {/* <div className="comm-chatbot-title">
             <h1>{subject}</h1>
         </div>
         <div className="chat-messages">
@@ -102,9 +102,52 @@ const CommunicationChatbot = () => {
           <button className="chat-submit" onClick={handleSubmit}>
             Send
           </button>
+        </div> */}
+        <div className="communicaiton_chatbot_contents">
+          <div className="communicaiton_chatbot_contents_inner">
+            <div className="communicaiton_title">
+                <div className="communicaiton_title_inner">{subject}</div>
+            </div>
+            <hr />
+            <div className="history_chat_messages">
+              {messages.slice(1, -1).map((message, index) => (
+              <div className="history_chat_messages_inner">
+                <div key={index} className={`history_message_${message.speaker} history_message`}>
+                  {message.sentence}
+                </div>
+                <div className="sevenC_wrapper" >
+                  <div className="sevenC_wrapper_inner">
+                    {Object.entries(message.label).map(([key, value]) =>
+                      <div className={`sevenC${value} sevenC_inner`}>{`${key}`}</div>
+                    )}
+                  </div>
+
+                </div>
+                
+              </div>
+
+            ))}
+            </div>
+          </div>
+
+          
+        </div>
+        <div className="chat-input-container">
+          <input
+            type="text"
+            className="chat-input"
+            value={input}
+            onChange={handleInputChange}
+            placeholder="질문을 입력하세요"
+            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+          />
+          <button className="chat-submit" onClick={handleSubmit}>
+            Send
+          </button>
         </div>
       </div>
     );
   };
   
   export default CommunicationChatbot;
+
