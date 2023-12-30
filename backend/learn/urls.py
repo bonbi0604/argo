@@ -16,6 +16,7 @@ from .views import wrong_list
 app_name = 'learn'
 urlpatterns = [
     path('communication/study/', chatbot_response, name='communication_study'),
+    path('communication/label/', labeling_7cs, name='communication_labeling'),
     path('wronglist/', wrong_question_list, name='wrong_question_list'),
     path('getQuestion/', give_question, name='give_question'),
     path('insertResult/', insertResult, name='insertResult'),

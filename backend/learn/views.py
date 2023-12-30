@@ -173,6 +173,38 @@ def chatbot_response(request):
         print(user_message, session_history)
         
         return JsonResponse({'title':dialog_subject, 'reply': chatbot_response, 'code': code})
+    
+
+import random
+def scoring_7cs(message):
+    # 모델 써야함 밑은 예시
+    score_clear = random.choices([0, 1, 2, 3])[0]
+    score_concise = random.choices([0, 1, 2, 3])[0]
+    score_concrete = random.choices([0, 1, 2, 3])[0]
+    score_correct = random.choices([0, 1, 2, 3])[0]
+    score_coherent = random.choices([0, 1, 2, 3])[0]
+    score_complete = random.choices([0, 1, 2, 3])[0]
+    score_courteous = random.choices([0, 1, 2, 3])[0]
+    return score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous
+
+# learn/communication/label
+@csrf_exempt
+def labeling_7cs(request):
+    if request.method == 'POST':
+        data = json.loads(request.body.decode('utf-8'))
+        message = data.get("message", "")    # "message" 필드 추출
+        # history = data.get("history", [])    # "history" 필드 추출
+        score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous = scoring_7cs(message)
+        print("labeling complete")
+    return JsonResponse({'labels': {
+        'Clear': score_clear,
+        'Concise': score_concise,
+        'Concrete': score_concrete,
+        'Correct': score_correct,
+        'Coherent': score_coherent,
+        'Complete': score_complete,
+        'Courteous': score_courteous
+    }})
 
 
 # fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
