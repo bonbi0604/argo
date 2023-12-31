@@ -8,6 +8,11 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
+  display: flex;
+}
+
+.comm_history_element a {
+  margin: auto;
 }
 
 .comm_history_wrapper {
@@ -78,6 +83,12 @@
 .sevenC_inner {
   /* margin: 0 1%; */
   font-size: 0.8em;
+}
+
+.sevenC_avg {
+  font-size: 1em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .history_chat_messages {

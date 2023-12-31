@@ -234,12 +234,12 @@ def comm_save(request):
                 timestamp=datetime.utcfromtimestamp(data.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
             )
             
-
             history_items = data.get("history", [])
             comm_history_sentence_list = []
 
             for item in history_items:
                 labels = item.get("labels")
+                # print(item.get("timestamp"), end = " ")
                 comm_history_sentence_list.append(Comm_History_Sentence(
                     history_no=comm_history,
                     speaker=item.get("speaker"),
@@ -251,7 +251,7 @@ def comm_save(request):
                     label_coherent=labels.get("Coherent", None),
                     label_complete=labels.get("Complete", None),
                     label_courteous=labels.get("Courteous", None),
-                    timestamp=datetime.utcfromtimestamp(data.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
+                    timestamp=datetime.utcfromtimestamp(item.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
                 ))
 
 
@@ -316,11 +316,11 @@ def comm_history_detail(request, no):
         # 요청 데이터에서 user_id를 추출합니다.
         user_no = data.get("user_no")
 
-        # URL에서 history_id를 추출합니다.
-        history_id = no
+        # URL에서 history_no 추출합니다.
+        history_no = no
 
-        # 데이터베이스에서 지정된 history_id에 대한 대화 내역을 조회합니다.
-        history = get_object_or_404(Comm_History, history_no=history_id, user_no=user_no)
+        # 데이터베이스에서 지정된 history_no 대한 대화 내역을 조회합니다.
+        history = get_object_or_404(Comm_History, history_no=history_no, user_no=user_no)
 
         # 이 history에 관련된 문장들을 조회합니다.
         sentences = Comm_History_Sentence.objects.filter(history_no=history)
@@ -341,13 +341,14 @@ def comm_history_detail(request, no):
                     "Coherent": sentence.label_coherent,
                     "Complete": sentence.label_complete,
                     "Courteous": sentence.label_courteous,
-                }
+                },
+                "timestamp": sentence.timestamp
             }
             history_data.append(sentence_dict)
 
         # 최종 응답 JSON을 생성합니다.
         response_data = {
-            "history_id": history_id,
+            "history_no": history_no,
             "code": history.code,
             "title": history.title,
             "history": history_data

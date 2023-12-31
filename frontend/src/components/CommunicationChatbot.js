@@ -70,7 +70,7 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
 
         setMessages((currentMessages) => { // 받은 데이터로 메시지 목록을 업데이트
           const updatedMessages = [...currentMessages, { sentence: data.reply, speaker: 'chatbot', labels: {}, timestamp: new Date().getTime() }];
-          return [...currentMessages, { sentence: data.reply, speaker: 'chatbot', labels: {} }];
+          return [...currentMessages, { sentence: data.reply, speaker: 'chatbot', labels: {}, timestamp: new Date().getTime() }];
         });
 
         // 학습 중일때만 (statecode===0) 버튼 다시 활성화/ statecode 변경

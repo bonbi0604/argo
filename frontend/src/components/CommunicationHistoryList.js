@@ -48,7 +48,7 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
       const sendingData = {'user_no':user.user_no};
       const recieveData = await submit(sendingData, `${BASEURL}learn/communication/history/`);
       setHistoryList(recieveData);
-      console.log("history list", recieveData);
+      // console.log("history list", recieveData);
     };
 
     fetchHistoryList();
