@@ -29,7 +29,7 @@ from account.models import User
 ### learn-communication
 from rest_framework.response import Response
 from django.db.models import Count
-
+from datetime import datetime
 
 
 ########################################################################
@@ -121,7 +121,8 @@ def generate_response(message, session_history, dialog_example, dialog_subject, 
     #     "message": message,
     # })
     # 모델 써야함 밑은 예시
-    return random.choices(['랜덤1', '랜덤2', '랜덤3', '<END>', '<errEND>'])[0]
+    # return random.choices(['랜덤1', '랜덤2', '랜덤3', '<END>', '<errEND>'])[0]
+    return random.choices(['랜덤1', '랜덤2', '랜덤3'])[0]
 
 def chatbot_code(chatbot_response):
     if chatbot_response == '<END>':
@@ -169,7 +170,7 @@ def chatbot_response(request):
             chatbot_response = [""]
             code = code_user
         
-        print(user_message, session_history)
+        print(user_message, session_history, code)
         
         return JsonResponse({'title':dialog_subject, 'reply': chatbot_response, 'code': code})
     
@@ -215,20 +216,24 @@ def labeling_7cs(request):
 @csrf_exempt
 def comm_save(request):
     if request.method == 'POST':
+        
         try:
             data = json.loads(request.body.decode('utf-8'))
 
             # 사용자 식별 번호를 이용하여 사용자 인스턴스 가져오기
             user_no = data.get("user_no")
             user = User.objects.get(pk=user_no)
+            
+            print(datetime.utcfromtimestamp(data.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3])  
 
             # Comm_History 모델에 데이터 추가
             comm_history = Comm_History.objects.create(
                 user_no=user,
                 code=data.get("code"),
                 title=data.get("title"),
-                timestamp=data.get("timestamp")
+                timestamp=datetime.utcfromtimestamp(data.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
             )
+            
 
             history_items = data.get("history", [])
             comm_history_sentence_list = []
@@ -239,15 +244,16 @@ def comm_save(request):
                     history_no=comm_history,
                     speaker=item.get("speaker"),
                     sentence=item.get("sentence"),
-                    label_clear=labels.get("Clear"),
-                    label_concise=labels.get("Concise"),
-                    label_concrete=labels.get("Concrete"),
-                    label_correct=labels.get("Correct"),
-                    label_coherent=labels.get("Coherent"),
-                    label_complete=labels.get("Complete"),
-                    label_courteous=labels.get("Courteous"),
-                    timestamp=item.get("timestamp")
+                    label_clear=labels.get("Clear", None),
+                    label_concise=labels.get("Concise", None),
+                    label_concrete=labels.get("Concrete", None),
+                    label_correct=labels.get("Correct", None),
+                    label_coherent=labels.get("Coherent", None),
+                    label_complete=labels.get("Complete", None),
+                    label_courteous=labels.get("Courteous", None),
+                    timestamp=datetime.utcfromtimestamp(data.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
                 ))
+
 
             # Comm_History_Sentence 모델에 데이터 일괄 추가
             Comm_History_Sentence.objects.bulk_create(comm_history_sentence_list)
