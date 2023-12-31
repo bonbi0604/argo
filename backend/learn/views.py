@@ -30,7 +30,7 @@ from account.models import User
 from rest_framework.response import Response
 from django.db.models import Count
 from datetime import datetime
-
+from django.utils import timezone
 
 ########################################################################
 #                      learn/communication/study/                      #
@@ -289,7 +289,7 @@ def comm_view_history(request):
             result = []
             for history in histories:
                 result.append({
-                    "history_id": history.history_no,
+                    "history_no": history.history_no,
                     "title": history.title,
                     "code": history.code,
                 })

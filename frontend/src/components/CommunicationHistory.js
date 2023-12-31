@@ -1,5 +1,7 @@
+import { useEffect, useState, useContext } from "react";
 import "./CommunicationHistory.css";
 import CommunicationHistoryList from "./CommunicationHistoryList";
+import AuthContext from '../context/AuthContext';
 
 const history = {
   "history_no" : 4,
@@ -60,12 +62,46 @@ const history = {
 }
 
 const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
-
-  // 레이블의 총합을 저장할 객체 초기화
+  const { user } = useContext(AuthContext);
   const labelSums = { Clear: 0, Concise: 0, Concrete: 0, Correct: 0, Coherent: 0, Complete: 0, Courteous: 0, };
-
-  // 레이블의 개수를 저장할 객체 초기화
   const labelCounts = { Clear: 0, Concise: 0, Concrete: 0, Correct: 0, Coherent: 0, Complete: 0, Courteous: 0, };
+  const [historyList, setHistoryList] = useState({});
+  const BASEURL = "http://127.0.0.1:8000/";
+
+  // data 보내는 함수
+  const submit = async (dataSend, url) => { 
+    let data;
+    try {
+      const response = await fetch(url, { // 백엔드 서버에 메시지를 POST 요청
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataSend),
+        });
+
+      data = await response.json(); // 백엔드로부터의 응답 받기
+
+    } catch (error) {
+      data = null;
+      console.error("Error sending message to the chatbot API:", error);
+    } finally {
+      //
+    }
+    return data;
+  }
+
+  const getHistory = async () => {
+    const sendingData = {'user_no':user.user_no};
+    const recieveData = await submit(sendingData, `${BASEURL}learn/communication/history/`);
+    setHistoryList(recieveData);
+    console.log("history list", recieveData);
+  }
+
+  useEffect(() => {
+    getHistory();
+  }, []);
+
 
   // 데이터 순회하며 레이블 값 누적
   history.history.forEach(entry => {
