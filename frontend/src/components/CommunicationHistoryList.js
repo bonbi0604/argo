@@ -4,11 +4,11 @@ import AuthContext from "../context/AuthContext";
 import Pagination from './Pagination2';
 import useAxios from "../utils/useAxios";
 
-const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
+const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId, currentPage, setCurrentPage}) => {
   const { user } = useContext(AuthContext);
   const itemsPerPage = 5;
   const pagesToShow = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [currentPageWindow, setCurrentPageWindow] = useState(1);
   // const [historys, setHistorys] = useState([]);
   const [historyList, setHistoryList] = useState([]);

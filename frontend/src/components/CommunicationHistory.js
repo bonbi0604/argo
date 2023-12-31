@@ -3,7 +3,7 @@ import "./CommunicationHistory.css";
 import CommunicationHistoryList from "./CommunicationHistoryList";
 import AuthContext from '../context/AuthContext';
 
-const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
+const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId, currentPage, setCurrentPage}) => {
   const { user } = useContext(AuthContext);
   const labelSums = { Clear: 0, Concise: 0, Concrete: 0, Correct: 0, Coherent: 0, Complete: 0, Courteous: 0, };
   const labelCounts = { Clear: 0, Concise: 0, Concrete: 0, Correct: 0, Coherent: 0, Complete: 0, Courteous: 0, };
@@ -151,7 +151,7 @@ const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId
           </div>
         </div>
         <div className="history_list">
-          <CommunicationHistoryList stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />
+          <CommunicationHistoryList stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId}  currentPage={currentPage} setCurrentPage={setCurrentPage}/>
         </div>
     </div>
   )

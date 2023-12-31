@@ -6,7 +6,7 @@ import CommunicationHistoryList from './CommunicationHistoryList';
 
 
 
-const CommunicationSummary = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
+const CommunicationSummary = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId, currentPage, setCurrentPage}) => {
   const { user } = useContext(AuthContext);
 
   // todo : get data from "learn/communication/score"
@@ -43,7 +43,7 @@ const CommunicationSummary = ({stopped, stateN, setStateN, setStopped, historyId
         <RadarChart dataUser={dataUser} dataAvg={dataAvg} name={user.name} />
       </div>
       <div className="history_list">
-        <CommunicationHistoryList stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />
+        <CommunicationHistoryList stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId}  currentPage={currentPage} setCurrentPage={setCurrentPage}/>
       </div>
     </div>
   )

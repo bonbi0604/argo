@@ -15,6 +15,7 @@ const score = 90;
 
 const CommunicationPage = () => {
   const { user } = useContext(AuthContext); // AuthContext에서 user 정보를 가져옵니다.
+  const [currentPage, setCurrentPage] = useState(1);
   
   
   const [stateN, setStateN] = useState(0); // 0: summary, 1: history, 2: study
@@ -31,12 +32,14 @@ const CommunicationPage = () => {
     }
     else if (stateN === 1) {
       setStateN(0);
+      setCurrentPage(1);
     }
     else if (stateN === 2 && stopped === false) {
       setStopped(true);
     }
     else {
       setStateN(0);
+      setCurrentPage(1);
       setStopped(false);
     }
   };
@@ -53,8 +56,8 @@ const CommunicationPage = () => {
         </div>
 
         <div className='communication_page_contents'>
-          {stateN===0? <CommunicationSummary stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />: 
-          (stateN===1?  <CommunicationHistory stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />:
+          {stateN===0? <CommunicationSummary stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} currentPage={currentPage} setCurrentPage={setCurrentPage}/>: 
+          (stateN===1?  <CommunicationHistory stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} currentPage={currentPage} setCurrentPage={setCurrentPage}/>:
           <CommunicationStudy stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} />)}
         </div>
       
