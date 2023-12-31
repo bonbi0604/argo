@@ -22,7 +22,7 @@ const CommunicationPage = () => {
   const [historyId, setHistoryId] = useState(null);
 
 
-  console.log(stateN, stopped);
+  // console.log(stateN, stopped);
 
   const handleButtonClick = () => {
     

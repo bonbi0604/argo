@@ -32,8 +32,8 @@
 .history_wrapper {
   display: flex;
   flex-direction: row;
-  height: 94%;
-  padding-top: 3%;
+  height: 100%;
+  /* padding-top: 3%; */
   width: 100%;
   margin: auto;
 }
@@ -119,6 +119,7 @@
 
 .communication_page_inner2 {
   min-width: 40em;
+  min-height: 32em;
 }
 
 .history_message {

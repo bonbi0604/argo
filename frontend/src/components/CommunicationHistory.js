@@ -2,58 +2,59 @@ import "./CommunicationHistory.css";
 import CommunicationHistoryList from "./CommunicationHistoryList";
 
 const history = {
-  "user_id" : 4,
+  "history_no" : 4,
   "title": "전언에 대한 전화 협의 일정 조정",
+  'code': 3,
   "history" : [
     {
       "speaker": "user",
       "sentence": "<START>",
-      "label": { "Clear": 0, "Concise": 0, "Concrete": 0, "Correct": 0, "Coherent": 0, "Complete": 0, "Courteous": 0 }
+      "labels": { "Clear": 0, "Concise": 0, "Concrete": 0, "Correct": 0, "Coherent": 0, "Complete": 0, "Courteous": 0 }
     },
     {
         "speaker": "chatbot",
         "sentence": "네, K사 시스템 개발부입니다.",
-        "label": {}
+        "labels": {}
     },
     {
         "speaker": "user",
         "sentence": "H사의 타카이치라고 합니다. 늘 신세가 많습니다.",
-        "label": { "Clear": 0, "Concise": 1, "Concrete": 1, "Correct": 2, "Coherent": 2, "Complete": 1, "Courteous": 1 }
+        "labels": { "Clear": 0, "Concise": 1, "Concrete": 1, "Correct": 2, "Coherent": 2, "Complete": 1, "Courteous": 1 }
     },
     {
         "speaker": "chatbot",
         "sentence": "저야말로 신세를 지고 있습니다.",
-        "label": {}
+        "labels": {}
     },
     {
         "speaker": "user",
         "sentence": "이나다씨 계십니까? 한 시간 정도 전에 전화주셨다고 하는데요.",
-        "label": { "Clear": 3, "Concise": 1, "Concrete": 1, "Correct": 2, "Coherent": 3, "Complete": 1, "Courteous": 1 }
+        "labels": { "Clear": 3, "Concise": 1, "Concrete": 1, "Correct": 2, "Coherent": 3, "Complete": 1, "Courteous": 1 }
     },
     {
         "speaker": "chatbot",
         "sentence": "네, 바꿔드릴게요. 잠깐만 기다려 주십시오. 이나다(田) 씨, H사의 다카이치(高市) 님으로부터 전화가 왔습니다.",
-        "label": {}
+        "labels": {}
     },
     {
         "speaker": "user",
         "sentence": "여보세요, 이나다입니다.",
-        "label": { "Clear": 3, "Concise": 1, "Concrete": 2, "Correct": 2, "Coherent": 0, "Complete": 1, "Courteous": 1 }
+        "labels": { "Clear": 3, "Concise": 1, "Concrete": 2, "Correct": 2, "Coherent": 0, "Complete": 1, "Courteous": 1 }
     },
     {
         "speaker": "chatbot",
         "sentence": "H사의 다카이치입니다. 신세 많이 졌습니다.",
-        "label": {}
+        "labels": {}
     },
     {
       "speaker": "user",
       "sentence": "신세 많이 졌습니다.",
-      "label": { "Clear": 1, "Concise": 1, "Concrete": 1, "Correct": 2, "Coherent": 3, "Complete": 1, "Courteous": 1 }
+      "labels": { "Clear": 1, "Concise": 1, "Concrete": 1, "Correct": 2, "Coherent": 3, "Complete": 1, "Courteous": 1 }
     },
     {
       "speaker": "chatbot",
       "sentence": "이번주 회의 관련해서 전화 드렸습니다.",
-      "label": {}
+      "labels": {}
     },
   ]
 }
@@ -68,7 +69,7 @@ const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId
 
   // 데이터 순회하며 레이블 값 누적
   history.history.forEach(entry => {
-    const labels = entry.label;
+    const labels = entry.labels;
     Object.keys(labels).forEach(label => {
       if (labels[label] !== 0) {
         labelSums[label] += labels[label];
@@ -90,8 +91,7 @@ const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId
           <div className="history_communicaiton_chatbot_container">
             <div className="history_title">
                 <div className="history_title_inner">{`${historyId}: ${history.title}`}</div>
-            </div>
-            
+            </div> 
             <div className="history_chat_messages">
               {history.history.slice(1, -1).map((message, index) => (
               <div className="history_chat_messages_inner">
@@ -100,15 +100,12 @@ const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId
                 </div>
                 <div className="sevenC_wrapper" >
                   <div className="sevenC_wrapper_inner">
-                    {Object.entries(message.label).map(([key, value]) =>
+                    {Object.entries(message.labels).map(([key, value]) =>
                       <div className={`sevenC${value} sevenC_inner`}>{`${key}`}</div>
                     )}
                   </div>
-
                 </div>
-                
               </div>
-
             ))}
             </div>
 
@@ -119,11 +116,7 @@ const CommunicationHistory = ({stopped, stateN, setStateN, setStopped, historyId
                 <div className={`sevenC${value.toFixed()} sevenC_inner`}>{`${key} : ${value.toFixed(2)}`}</div>
               )}
             </div>
-
-
           </div>
-
-          
         </div>
         <div className="history_list">
           <CommunicationHistoryList stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} historyId={historyId} setHistoryId={setHistoryId} />
