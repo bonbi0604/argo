@@ -11,7 +11,7 @@ from account.models import User
 
 class Question(models.Model):
     content = models.TextField(blank=True, null=True)
-    question_no = models.IntegerField(primary_key=True)
+    question_no = models.AutoField(primary_key=True)
     category_no = models.ForeignKey('Category', models.DO_NOTHING, db_column='category_no', blank=True, null=True)
 
     class Meta:
@@ -22,7 +22,7 @@ class Question(models.Model):
 class Answer(models.Model):
     content = models.TextField(blank=True, null=True)
     question_no = models.ForeignKey(Question, models.DO_NOTHING, db_column='question_no', blank=True, null=True)
-    answer_no = models.IntegerField(primary_key=True)
+    answer_no = models.AutoField(primary_key=True)
     is_correct = models.IntegerField(blank=True, null=True)
 
     class Meta:
@@ -31,7 +31,7 @@ class Answer(models.Model):
 
 
 class Category(models.Model):
-    category_no = models.IntegerField(primary_key=True)
+    category_no = models.AutoField(primary_key=True)
     classification = models.TextField(blank=True, null=True)
     category_name = models.TextField(blank=True, null=True)
 
@@ -39,8 +39,9 @@ class Category(models.Model):
         managed = False
         db_table = 'Category'
 
+
 class Result(models.Model):
-    result_no = models.IntegerField(primary_key=True)
+    result_no = models.AutoField(primary_key=True, db_column='result_no')
     user_no = models.ForeignKey(User, models.DO_NOTHING, db_column='user_no')
     answer_no = models.ForeignKey(Answer, models.DO_NOTHING, db_column='answer_no')
     timestamp = models.DateTimeField()

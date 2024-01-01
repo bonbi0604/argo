@@ -2,9 +2,11 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import {Chart, ArcElement} from 'chart.js';
 
-Chart.register(ArcElement);
+
 
 const DonutChart = ({cat, color, score, size}) => {
+  Chart.register(ArcElement);
+  
   const data = {
     labels: [cat, "none"],
     datasets: [
@@ -22,6 +24,12 @@ const DonutChart = ({cat, color, score, size}) => {
   const options = {
     cutout : temp.toString() + "%",
     maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    tooltips: {
+      enabled: false
+    },
   };
 
   return (

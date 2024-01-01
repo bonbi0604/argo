@@ -1,43 +1,17 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useContext  } from 'react';
 import './Chatbot.css';
-
-let sessionCounter = parseInt(localStorage.getItem('sessionCounter')) || 1;
-
-function generateSessionId() {
-  const sessionId = sessionCounter.toString();
-  sessionCounter++; // 다음 세션을 위해 카운터 증가
-
-  // 다음 세션 카운터를 로컬 스토리지에 저장
-  localStorage.setItem('sessionCounter', sessionCounter.toString());
-
-  return sessionId;
-}
+import AuthContext from "../context/AuthContext";
+import { ChatbotContext } from '../context/ChatbotContext';
 
 const Chatbot = () => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
-  const [sessionId, setSessionId] = useState(null); // 세션 ID 추가
+  const [localSessionTitle, setLocalSessionTitle] = useState('');
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
-
-  const saveChatSession = async () => {
-    const chatContent = messages.map((m) => m.text).join('\n');
-    const response = await fetch('http://127.0.0.1:8000/chatbot/api/chat-sessions/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        // session_id: sessionId, // 세션 ID를 백엔드로 보냄
-        chat_content: chatContent,
-      }),
-    });
-
-    if (!response.ok) {
-      console.error('Error saving chat session');
-    }
-  };
+  const { user } = useContext(AuthContext);
+  const { isChatbotExpanded, setIsChatbotExpanded } = useContext(ChatbotContext);
 
   useEffect(() => {
     chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
@@ -51,7 +25,7 @@ const Chatbot = () => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [messages, sessionId]);
+  }, [messages]);
 
   const handleMouseEnter = () => {
     chatMessagesRef.current.addEventListener('wheel', handleScroll);
@@ -83,15 +57,20 @@ const Chatbot = () => {
   };
 
   const toggleChatbot = () => {
-    setIsExpanded(!isExpanded);
+    setIsChatbotExpanded(!isChatbotExpanded);
   };
 
   const handleSubmit = async () => {
     if (!input.trim() || isSubmitting) return;
-
+    console.log(user.user_no)
     setIsSubmitting(true);
 
     const userMessage = { text: input, sender: 'user' };
+
+    if (!localSessionTitle && messages.length === 0) {
+      setLocalSessionTitle(input);
+    }
+
     setMessages((currentMessages) => {
       return [...currentMessages, userMessage];
     });
@@ -104,7 +83,7 @@ const Chatbot = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input}), // 세션 ID를 포함하여 백엔드로 전송
+        body: JSON.stringify({ message: input}), 
       });
 
       const data = await response.json();
@@ -118,16 +97,34 @@ const Chatbot = () => {
       setIsSubmitting(false);
     }
   };
+  const saveChatSession = async () => {
+    if (!localSessionTitle || messages.length === 0) return;
+    const chatContent = messages.map((m) => m.text).join('\n');
 
-  // 초기 세션 ID 생성
-  useEffect(() => {
-    const newSessionId = generateSessionId(); // 세션 ID를 생성하는 함수 구현 필요
-    setSessionId(newSessionId);
-  }, []);
+    try {
+      const endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
+      const method = 'POST';
+      
+      await fetch(endpoint, { 
+        method: method,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user: user.user_no,  // 사용자 ID
+          session_title: localSessionTitle,  // 세션 제목
+          chat_content: chatContent,  // 채팅 내용
+        }),
+      });
 
+      console.log('Chat session saved successfully');
+    } catch (error) {
+      console.error('Error saving chat session:', error);
+    }
+  };
   return (
     <div>
-      <div className={`chatbot-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
+      <div className={`chatbot-wrapper ${isChatbotExpanded ? 'expanded' : 'collapsed'}`}>
         <button onClick={toggleChatbot} className="toggle-chatbot">
           {isExpanded ? '◀' : '▶'}
         </button>
