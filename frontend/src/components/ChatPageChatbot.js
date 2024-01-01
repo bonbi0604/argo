@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useContext } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
+const ChatPageChatbot = ({ chatContent,id,sessionTitle,onSaveChatSession }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [localSessionTitle, setLocalSessionTitle] = useState('');
@@ -57,6 +57,7 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
         response.json().then(data => console.log(data));
       }
     });
+    onSaveChatSession();
   };
   useEffect(() => {
     const handleBeforeUnload = (e) => {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = ({ onSessionSelect,onCreateNewChat }) => {
+const ChatHistory = ({ onSessionSelect,onCreateNewChat,onSaveChatSession }) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -57,6 +57,7 @@ const ChatHistory = ({ onSessionSelect,onCreateNewChat }) => {
   };
   const handleCreateNewChat = () => {
     onCreateNewChat();
+    onSaveChatSession();
   };
   
 
