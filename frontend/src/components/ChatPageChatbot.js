@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatPageChatbot = ({ chatContent,id,sessionTitle,onSaveChatSession }) => {
+const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [localSessionTitle, setLocalSessionTitle] = useState('');
@@ -57,8 +57,11 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle,onSaveChatSession }) => {
         response.json().then(data => console.log(data));
       }
     });
-    onSaveChatSession();
   };
+  useImperativeHandle(ref, () => ({
+    saveChatSession
+  }));
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -154,6 +157,6 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle,onSaveChatSession }) => {
       </div>
     </div>
   );
-};
+});
  
 export default ChatPageChatbot;
