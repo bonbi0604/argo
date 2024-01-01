@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext,forwardRef  } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = ({ onSessionSelect, onCreateNewChat }, ref) => {
+const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, setSelectedSessionId, setSelectedChatContent, setSelectedSessionTitle }, ref) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
+  const [creatingNewChat, setCreatingNewChat] = useState(false);
 
   const fetchSessions = async () => {
     try {
@@ -26,6 +27,9 @@ const ChatHistory = ({ onSessionSelect, onCreateNewChat }, ref) => {
   }, [user]);
 
   const handleSessionClick = async (id) => {
+    if (ref && ref.current) {
+      await ref.current.saveChatSession();
+    }
     try {
       const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${id}/`);
       if (!response.ok) {
@@ -56,12 +60,20 @@ const ChatHistory = ({ onSessionSelect, onCreateNewChat }, ref) => {
     }
   };
   const handleCreateNewChat = async () => {
-    onCreateNewChat();
-    if (ref && ref.current) {
-        await ref.current.saveChatSession();
-    }
-    setTimeout(fetchSessions, 20);
+  if (creatingNewChat) return;
+  
+  if (ref && ref.current) {
+    await ref.current.saveChatSession();
+  }
+  setCreatingNewChat(true);
+  onCreateNewChat();
+
+  setTimeout(() => {
+    fetchSessions();
+    setCreatingNewChat(false);
+  }, 20);
 };
+
 
   return (
     <div className="session-list">
@@ -82,5 +94,5 @@ const ChatHistory = ({ onSessionSelect, onCreateNewChat }, ref) => {
       </button>
     </div>
   );
-};
-export default React.forwardRef(ChatHistory);
+});
+export default ChatHistory;

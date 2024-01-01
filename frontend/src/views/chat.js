@@ -22,7 +22,7 @@ const Chat = () => {
   };
   return (
     <div className="chat-chat-container">
-      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat} />
+      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat} ref={chatbotRef} />
       <ChatPageChatbot ref={chatbotRef} id={selectedSessionId} chatContent={selectedChatContent} sessionTitle={selectedTitle} />
     </div>
   );
