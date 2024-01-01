@@ -1,7 +1,8 @@
-.chat-container {
+.chat-chat-container {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: calc(100% - (5rem));
   overflow-y: hidden;
+  position: relative;
 }

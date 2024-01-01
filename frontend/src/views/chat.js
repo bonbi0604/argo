@@ -15,7 +15,7 @@ const Chat = () => {
   };
 
   return (
-    <div className="chat-container">
+    <div className="chat-chat-container">
       <ChatHistory onSessionSelect={handleSessionSelect} />
       <ChatPageChatbot id={selectedSessionId} chatContent={selectedChatContent} sessionTitle={selectedTitle}/>
     </div>
