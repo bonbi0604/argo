@@ -1,40 +1,38 @@
-.chatbot-container {
+.chatpage-chatbot-container {
     position: absolute;
     z-index: 1000;
     display: flex;
+    right: 2%;
     flex-direction: column;
-    width: 70%;
-    height: 80%;
-    top: 6%;
+    width: 74%;
+    height: 100%;
     background-color: black;
     border-radius: 10px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     opacity: 0.5;
-    margin-left: 10px;
-    /* font-size: 20px; */
+    margin-top: 2%;
+    margin-bottom: 2%;
   }
     
-  
-  .chat-messages {
+  .chatpage-chatbot-messages {
       flex-grow: 1;
-      padding: 10px;
       overflow-y: auto;
       scroll-behavior: smooth;
-      height: calc(100% - 20px);
+      height: 100%;
       -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
       scrollbar-width: none;
     }
   
-  .chat-input-container {
+ .chatpage-chatbot-input-container {
       display: flex;
       padding: 10px;
     }
   
-  .chat-input::placeholder {
+.chatpage-chatbot-input::placeholder {
     vertical-align: middle;
     }
   
-  .chat-input {
+.chatpage-chatbot-input {
       flex-grow: 1;
       border: 1px solid #ccc;
       border-radius: 5px;
@@ -45,9 +43,7 @@
       resize: none;
     }
     
-  
-    
-  .chat-submit {
+.chatpage-chatbot-submit {
       padding: 10px 0;
       background-color: #007bff;
       border: none;
@@ -57,13 +53,12 @@
       width: 60px;
       text-align: center;
     }
-    
-    
-  .chat-submit:hover {
+
+.chatpage-chatbot-submit:hover {
       background-color: #0056b3;
     }
   
-  .message {
+.chatpage-chatbot-message {
       padding: 0px;
       margin: 5px;
       border-radius: 10px;
@@ -71,31 +66,27 @@
       word-break: break-word;
     }
     
-  .message.user {
+.chatpage-chatbot-message.user {
       background-color: #007bff;
       color: white;
       align-self: flex-end;
     }
   
-  .message.bot {
+.chatpage-chatbot-message.bot {
       background-color: #007bff;
       color: white;
       align-self: flex-start;
     }
-  
-  .chat-submit {
-    width: 60px;
-  }
 
-  .chat-messages::-webkit-scrollbar {
+.chatpage-chatbot-messages::-webkit-scrollbar {
     width: 0;
   }
   
-  .chat-messages::-webkit-scrollbar-thumb {
+.chatpage-chatbot-messages::-webkit-scrollbar-thumb {
     background-color: transparent;
   }
   
-  .chat-messages::-webkit-scrollbar-track {
+.chatpage-chatbot-messages::-webkit-scrollbar-track {
     background-color: transparent;
   }
 

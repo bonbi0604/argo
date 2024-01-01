@@ -65,14 +65,11 @@ const ChatHistory = ({ onSessionSelect }) => {
             {session.session_title}
           </button>
           <button onClick={() => handleDeleteSession(session.id)} className="delete-session">
-            Delete
+            <img src={'/delete_icon.png'} alt="Delete" className="delete-icon"/>
           </button>
-          
         </div>
       ))}
     </div>
-    
   );
 };
-
 export default ChatHistory;
