@@ -57,6 +57,9 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
         response.json().then(data => console.log(data));
       }
     });
+    setInput('');
+    setMessages([]);
+    setLocalSessionTitle('');
   };
   useImperativeHandle(ref, () => ({
     saveChatSession

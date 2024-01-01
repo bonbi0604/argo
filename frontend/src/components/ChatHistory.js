@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = ({ onSessionSelect,onCreateNewChat,saveChatSession }) => {
+const ChatHistory = ({ onSessionSelect, onCreateNewChat }, ref) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -57,7 +57,9 @@ const ChatHistory = ({ onSessionSelect,onCreateNewChat,saveChatSession }) => {
   };
   const handleCreateNewChat = () => {
     onCreateNewChat();
-    saveChatSession();
+    if (ref && ref.current) {
+      ref.current.saveChatSession();
+    }
   };
   
 
@@ -81,4 +83,4 @@ const ChatHistory = ({ onSessionSelect,onCreateNewChat,saveChatSession }) => {
     </div>
   );
 };
-export default ChatHistory;
+export default React.forwardRef(ChatHistory);
