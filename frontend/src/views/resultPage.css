@@ -1,0 +1,57 @@
+/* .result_page {
+    height: 100%;
+} */
+
+.result_page_donut_chart {
+    width: 30%;
+    aspect-ratio: 1;
+    min-width: 30em;
+    min-height: 30em;
+    position: relative;
+}
+
+.pentagon {
+    width: 15em;
+    height: 15em;
+    background-color: #758AF9; /* 배경 색상 */
+    clip-path: polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%);
+    position: absolute;
+    top: 48%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.result_page {
+    background-color: #383737;
+    height: 150%;
+    width: 100%;
+}
+
+.iconStructure {
+    width: 14%;
+    height: 14%;  
+    z-index: 0;
+    transition: all 0.3s ease;
+}
+
+.result_page .iconStructure:hover {
+    width: 15%;
+    height: 15%;
+}
+
+.result_page_line_chart {
+    width: 50%;
+    height: 100%;
+    min-width: 30em;
+    min-height: 20em;
+    margin: auto;
+}
+
+.result_page_chart {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    min-width: 60em;
+    margin: auto;
+    height: 50%;
+}
