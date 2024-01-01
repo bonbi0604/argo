@@ -13,10 +13,14 @@ const Chat = () => {
     setSelectedChatContent(chatContent);
     setSelectedSessionTitle(sessionTitle);
   };
-
+  const handleCreateNewChat = () => {
+    setSelectedSessionId(null);
+    setSelectedChatContent("");
+    setSelectedSessionTitle("");
+  };
   return (
     <div className="chat-chat-container">
-      <ChatHistory onSessionSelect={handleSessionSelect} />
+      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat}/>
       <ChatPageChatbot id={selectedSessionId} chatContent={selectedChatContent} sessionTitle={selectedTitle}/>
     </div>
   );

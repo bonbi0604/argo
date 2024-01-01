@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = ({ onSessionSelect }) => {
+const ChatHistory = ({ onSessionSelect,onCreateNewChat }) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
 
@@ -55,20 +55,28 @@ const ChatHistory = ({ onSessionSelect }) => {
       }
     }
   };
+  const handleCreateNewChat = () => {
+    onCreateNewChat();
+  };
   
 
   return (
     <div className="session-list">
-      {sessions.map(session => (
-        <div key={session.id} className="session-item">
-          <button key={session.id} onClick={() => handleSessionClick(session.id)} className="session-button">
-            {session.session_title}
-          </button>
-          <button onClick={() => handleDeleteSession(session.id)} className="delete-session">
-            <img src={'/delete_icon.png'} alt="Delete" className="delete-icon"/>
-          </button>
-        </div>
-      ))}
+      <div className="session-items-container">
+        {sessions.map(session => (
+          <div key={session.id} className="session-item">
+            <button key={session.id} onClick={() => handleSessionClick(session.id)} className="session-button">
+              {session.session_title}
+            </button>
+            <button onClick={() => handleDeleteSession(session.id)} className="delete-session" >
+              <img src={'/delete_icon.png'} alt="Delete" className="delete-icon"/>
+            </button>
+          </div>
+        ))}
+      </div>
+      <button className="create-new-chat-button" onClick={handleCreateNewChat}>
+        <img src={'/plus_icon.png'} alt="Plus" className="plus-icon"/>
+      </button>
     </div>
   );
 };

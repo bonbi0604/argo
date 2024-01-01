@@ -7,7 +7,14 @@
   margin-top: 3%;
 }
 
-.session-list button {
+.session-button {
+  background-color: skyblue;
+  width: 70%;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  text-align: left;
   padding: 10px;
   border: none;
   border-radius: 5px;
@@ -16,16 +23,6 @@
   transition: background-color 0.3s;
   align-self: center;
   height: 100%;
-}
-
-.session-button {
-  background-color: #4CAF50;
-  width: 70%;
-  border-radius: 5px;
-  color: white;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  text-align: left;
 }
 
 .session-button:hover {
@@ -39,6 +36,14 @@
   justify-content: center; 
   align-items: center;
   border-radius: 5px;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+  height: 100%;
 }
 
 
@@ -49,6 +54,7 @@
 .session-list {
   display: flex;
   flex-direction: column; 
+  justify-content: space-between;
   align-items: center; 
   height: calc(100% - (5rem));
   box-sizing: border-box;
@@ -56,8 +62,9 @@
   background-color: black;
   opacity: 0.7;
   border-radius: 10px;
-  position: absolute;
+  position: relative;
   overflow: hidden;
+  overflow-y: auto;
   left: 2%;
   margin-top: 2%;
   margin-bottom: 2%;
@@ -66,4 +73,35 @@
 .delete-icon {
   width: auto;
   height: 100%;
+}
+
+.create-new-chat-button {
+  margin-top: auto;
+  position: absolute;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; 
+  padding: 10px;
+  height: 8%;
+  bottom: 0;
+}
+
+.plus-icon {
+  width: auto;
+  height: 100%;
+}
+
+.session-items-container {
+  overflow-y: auto;
+  height: 92%;
+  width: 100%;
+  right: 0;
+}
+
+
+.session-items-container::-webkit-scrollbar {
+  display: none;
 }
