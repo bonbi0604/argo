@@ -55,13 +55,13 @@ const ChatHistory = ({ onSessionSelect, onCreateNewChat }, ref) => {
       }
     }
   };
-  const handleCreateNewChat = () => {
+  const handleCreateNewChat = async () => {
     onCreateNewChat();
     if (ref && ref.current) {
-      ref.current.saveChatSession();
+        await ref.current.saveChatSession();
     }
-  };
-  
+    setTimeout(fetchSessions, 20);
+};
 
   return (
     <div className="session-list">
