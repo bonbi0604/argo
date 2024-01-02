@@ -58,7 +58,7 @@ function Register() {
 
     // 입력된 비밀번호의 유효성을 검사하고, 메시지를 설정합니다.
     if (!validatePwd(currPwd)) {
-      setPwdMsg("영문, 숫자, 특수기호 조합으로 8자리 이상 입력해주세요.");
+      setPwdMsg("영문, 숫자, 특수기호( !@#$%^*_+=- ) 조합으로 8자리 이상 입력해주세요.");
     } else {
       setPwdMsg("안전한 비밀번호입니다.");
     }
@@ -236,9 +236,9 @@ function Register() {
 
 
   return (
-    <section className="registSection">
-      <form onSubmit={handleSubmit} id="registForm">
-        <div id="regTitle">회원가입</div>
+    <section className="regloginSection">
+      <form onSubmit={handleSubmit} className="registForm">
+        <div className="regTitle">회원가입</div>
         <div className="regContent">
           <input
             type="text"

@@ -1,6 +1,7 @@
 import { useContext } from "react"; // 리액트에서 useContext 모듈을 가져옵니다.
 import AuthContext from "../context/AuthContext"; // 커스텀 인증 컨텍스트를 가져옵니다.
 import { Link } from "react-router-dom";
+import "./loginPage.css"
 
 const LoginPage = () => {
   const { loginUser } = useContext(AuthContext); // AuthContext에서 loginUser 함수를 가져옵니다.
@@ -17,26 +18,25 @@ const LoginPage = () => {
   };
 
   return (
-    <section>
-      <form onSubmit={handleSubmit}>
-        <h1>Login </h1>
-        <hr />
-        <label htmlFor="id">Id</label>
-        <input type="text" id="id" name="id" placeholder="Enter Id" />
-        <br/>
-        <label htmlFor="password">Password</label>
-        <input type="password" id="password" name="password" placeholder="Enter Password" />
-        <br/>
-        <button type="submit">Login</button> {/* 폼 제출을 위한 로그인 버튼 */}
+    <section className="regloginSection">
+      <form onSubmit={handleSubmit} className="loginForm">
+        <div className="regTitle">로그인</div>
+        <div className="loginContent">
+          <input type="text" id="loginId" name="id" placeholder="아이디" />
+        </div>
+        <div className="loginContent">
+          <input type="password" id="password" name="password" placeholder="비밀번호" />
+        </div>
+        <button type="submit" id="loginBtn">로그인</button> {/* 폼 제출을 위한 로그인 버튼 */}
       </form>
-      <div>
+      {/* <div>
         <Link to="/findId">
           아이디 찾기
         </Link>
         <Link to="/findPw">
           비밀번호 찾기
         </Link>
-      </div>
+      </div> */}
     </section>
   );
 };

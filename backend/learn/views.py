@@ -378,9 +378,11 @@ def get_wrong_question(request):
     data = json.loads(request.body)
     user_number = data.get('user_no')
     question_number = data.get('question_no')
-   
     instance =Result.objects.get(user_no = user_number, question_no = question_number)
-    user = instance.content
+    if instance.content != '':
+        user = instance.content
+    else:
+        user =instance.answer_no.content
     question = Question.objects.get(question_no = question_number).content
     answer = Answer.objects.get(question_no = question_number, is_correct = 1).content
    
@@ -395,7 +397,7 @@ def get_wrong_question(request):
         'user_content' : user,
         'question_content' : question,
         'answer_content' : answer,
-        'answer_ration' : answer_ration
+        'answer_ratio' : answer_ration
     }
     return JsonResponse({'content':result})
 
