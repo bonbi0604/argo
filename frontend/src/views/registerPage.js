@@ -86,7 +86,7 @@ function Register() {
   const validatePwd = (password) => {
     return password
       .toLowerCase()
-      .match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/);
+      .match(/^(?=.*[a-zA-Z])(?=.*[!@#$%^*_+=-])(?=.*[0-9]).{8,15}$/);
   };
 
   // 이메일 유효성 검사 함수
@@ -321,7 +321,7 @@ function Register() {
             <option value="3">부서3</option>
           </select>
         </div>
-        <button type="submit" disabled={!isAllValid}>회원가입</button>
+        <button id="regBtn" type="submit" disabled={!isAllValid}>회원가입</button>
       </form>
     </section>
   );
