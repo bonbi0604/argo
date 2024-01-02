@@ -443,7 +443,7 @@ def recommendation(request):
 def score(request):
     data = json.loads(request.body)
     user_no = data.get('user_no', 0)
-    
+   
     total_result = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 푼 문제
     total_result_correct = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자가 맞춘 문제
     user_result = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자가 푼 문제
@@ -452,6 +452,43 @@ def score(request):
     accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
    
     #커뮤니케이션 추가해야함
+    # 각 품질에 대한 점수 계산
+    label_scores = {}
+    labels = ["clear", "concise", "concrete", "correct", "coherent", "complete", "courteous"]
+ 
+    for label in labels:
+        # 모든 레코드에서 해당 레이블의 점수를 평균 계산
+        avg_score = Comm_History_Sentence.objects.filter(
+            speaker="user",
+            **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+        ).aggregate(avg_score=models.Avg(f"label_{label}"))["avg_score"]
+ 
+        # 특정 사용자의 점수 계산
+        user_score = Comm_History_Sentence.objects.filter(
+            speaker="user",
+            history_no__user_no=user_no,
+            **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+        ).aggregate(user_score=models.Avg(f"label_{label}"))["user_score"]
+ 
+        # null 값이 아닐 경우에만 연산 수행
+        if avg_score is not None:
+            avg_score = int(avg_score * 100 / 3)
+        if user_score is not None:
+            user_score = int(user_score * 100 / 3)
+ 
+        label_scores[label] = {
+            "avg": avg_score,
+            "score": user_score
+        }
+    total_avg = sum(item['avg'] for item in label_scores.values())
+    total_score = sum(item['score'] for item in label_scores.values())
+    num_items = len(label_scores)
+ 
+    avg_communication = total_avg / num_items
+    score_communication = total_score / num_items
+ 
+    all_comm_score = {'communication': avg_communication}
+    user_comm_score = {'communication': score_communication}
    
     #모든 사용자가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter()
@@ -462,14 +499,17 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         total_result[classification] = total
-
+ 
     #모든 사용자가 맞춘 문제 유형별 개수
-    question_nos_good = Result.objects.filter(is_correct=1).values_list('question_no', flat=True)
-    categories_good = Question.objects.filter(question_no__in=question_nos_good).values('category_no')
-    classifications_good = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_good]).values_list('classification', flat=True)
-    classification_counts_good = Counter(list(classifications_good))
-    total_classification_good = dict(classification_counts_good)
-    
+    result_counts = (Result.objects.filter(is_correct = 1)
+                 .values('question_no__category_no__classification')
+                 .annotate(total=Count('question_no__category_no__classification'))
+                 .order_by())
+    for item in result_counts:
+        classification = item['question_no__category_no__classification']
+        total = item['total']
+        total_result_correct[classification] = total
+   
     #모든 사용자 유형별 문제 정답률
     for classification, total_attempts in total_result.items():
         correct_attempts = total_result_correct.get(classification, 0)
@@ -485,20 +525,23 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         user_result[classification] = total
-
+ 
     #유저가 맞춘 문제 유형별 개수
-    question_nos_user_good = Result.objects.filter(user_no=user_no,is_correct=1).values_list('question_no', flat=True)
-    categories_user_good = Question.objects.filter(question_no__in=question_nos_user_good).values('category_no')
-    classifications_user_good = Category.objects.filter(category_no__in=[c['category_no'] for c in categories_user_good]).values_list('classification', flat=True)
-    classification_counts_user_good = Counter(list(classifications_user_good))
-    user_classification_good = dict(classification_counts_user_good)
-    
+    result_counts = (Result.objects.filter(user_no=user_no,is_correct=1)
+                 .values('question_no__category_no__classification')
+                 .annotate(total=Count('question_no__category_no__classification'))
+                 .order_by())
+    for item in result_counts:
+        classification = item['question_no__category_no__classification']
+        total = item['total']
+        user_result_correct[classification] = total
+       
     #유저가 맞춘 유형별 문제 정답률
     for classification_user, total_attempts_user in user_result.items():
         correct_attempts_user = user_result_correct.get(classification_user, 0)
         accuracy_rate_user = (correct_attempts_user/ total_attempts_user * 100) if total_attempts_user else 0
         accuracy_rates_user[classification_user] = round(accuracy_rate_user, 2)
-    
+ 
     #json 형태로 변환
     result = {
         '직무이해': {'avg': accuracy_rates['직무이해'], 'score': accuracy_rates_user['직무이해']},
@@ -506,7 +549,6 @@ def score(request):
         '시사/상식': {'avg': accuracy_rates['시사/상식'], 'score': accuracy_rates_user['시사/상식']},
         '도구': {'avg': accuracy_rates['도구'], 'score': accuracy_rates_user['도구']},
         '윤리': {'avg': accuracy_rates['윤리'], 'score': accuracy_rates_user['윤리']},
-        '커뮤니케이션': {'avg': 0, 'score': 0}
     }
     categories = {
         '직무이해': 'occupation',
@@ -518,8 +560,8 @@ def score(request):
    
     # 영어로 컴럼명 변경
     result_eng = {categories[key]: value for key, value in result.items()}
-    print(result_eng)
-    
+    result_eng['communication']['avg'] = all_comm_score['communication']
+    result_eng['communication']['score'] = user_comm_score['communication']
     return JsonResponse({"result": result_eng})
 
 
