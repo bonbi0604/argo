@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Count, F
 import random
 import json
 import os
@@ -443,14 +443,14 @@ def recommendation(request):
 def score(request):
     data = json.loads(request.body)
     user_no = data.get('user_no', 0)
-    
+   
     total_result = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 푼 문제
     total_result_correct = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자가 맞춘 문제
     user_result = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자가 푼 문제
     user_result_correct = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자가 맞춘 문제
     accuracy_rates = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 유형별 문제 정답률
     accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
-    
+   
     #커뮤니케이션 추가해야함
     # 각 품질에 대한 점수 계산
     label_scores = {}
@@ -499,7 +499,7 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         total_result[classification] = total
-
+ 
     #모든 사용자가 맞춘 문제 유형별 개수
     result_counts = (Result.objects.filter(is_correct = 1)
                  .values('question_no__category_no__classification')
@@ -509,13 +509,13 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         total_result_correct[classification] = total
-    
+   
     #모든 사용자 유형별 문제 정답률
     for classification, total_attempts in total_result.items():
         correct_attempts = total_result_correct.get(classification, 0)
         accuracy_rate = (correct_attempts/ total_attempts * 100) if total_attempts else 0
         accuracy_rates[classification] = round(accuracy_rate, 2)
-    
+   
     #유저가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter(user_no=user_no)
                  .values('question_no__category_no__classification')
@@ -525,7 +525,7 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         user_result[classification] = total
-
+ 
     #유저가 맞춘 문제 유형별 개수
     result_counts = (Result.objects.filter(user_no=user_no,is_correct=1)
                  .values('question_no__category_no__classification')
@@ -535,13 +535,13 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         user_result_correct[classification] = total
-        
+       
     #유저가 맞춘 유형별 문제 정답률
     for classification_user, total_attempts_user in user_result.items():
         correct_attempts_user = user_result_correct.get(classification_user, 0)
         accuracy_rate_user = (correct_attempts_user/ total_attempts_user * 100) if total_attempts_user else 0
         accuracy_rates_user[classification_user] = round(accuracy_rate_user, 2)
-
+ 
     #json 형태로 변환
     result = {
         '직무이해': {'avg': accuracy_rates['직무이해'], 'score': accuracy_rates_user['직무이해']},
@@ -557,9 +557,11 @@ def score(request):
         '도구': 'tools',
         '윤리': 'ethic',
     }
-    
+   
     # 영어로 컴럼명 변경
     result_eng = {categories[key]: value for key, value in result.items()}
+    result_eng['communication']['avg'] = all_comm_score['communication']
+    result_eng['communication']['score'] = user_comm_score['communication']
     result_eng['communication']['avg'] = all_comm_score['communication']
     result_eng['communication']['score'] = user_comm_score['communication']
     return JsonResponse({"result": result_eng})
@@ -571,17 +573,28 @@ def score(request):
 # 틀린문제 뽑기. question에 있는 모든 내용 가져오기
 def get_wrong_question_list(filter_no, count, user_no=None):
     specific_user = Result.objects.filter(user_no = user_no)
+    # 사용자가 틀린 문제 필터링
     value = specific_user.filter(is_correct=0)
     value = value.order_by('-timestamp')
+    #틀린 문제 종류별 n개씩 추출
     content_list = list(value.filter(question_no__category_no=filter_no))[:min(count, len(value.filter(question_no__category_no=filter_no)))]
     question = []
+   
     for content in content_list:
+        # 틀린 문제에 대한 정답률 고르기
+        question_number = content.question_no.question_no
+        question_query = Result.objects.filter(question_no = question_number)
+        question_total = question_query.count()
+        question_correct_num =question_query.filter(is_correct = 1).count()
+        answer_ration = round((question_correct_num / question_total) * 100,2)
+       
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
-                'content' : content.question_no.content[:13],
+                'content' : content.question_no.content[:18],
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
+                'answer_ratio' : answer_ration
                 }
         question.append(dic)
     return question
@@ -591,6 +604,7 @@ def wrong_question_list(request):
     data = json.loads(request.body)
     cat = data.get('cat')
     user_no = data.get('user_no')
+    question = []
     if cat == 'occupation':
         question = get_wrong_question_list(4, 20, user_no)
     elif cat=='commonsense':
@@ -602,7 +616,7 @@ def wrong_question_list(request):
     elif cat =='tools':
         question = get_wrong_question_list(5, 20, user_no)
     elif cat =='ethic':
-        pass
+        question = get_wrong_question_list(6, 20, user_no)
     return JsonResponse({'wrong_question_list' : question })
     
           
@@ -611,12 +625,18 @@ def search_list(request):
     data = json.loads(request.body)
     keyword = data.get('search')
     if keyword:
+        search = []
         value = Result.objects.filter(is_correct=0)
-        content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content')
-        content_list = [{'content': item['question_no__content']} for item in content_list]
+        content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content', 'question_no')
+        for content in content_list:
+            dic = {
+                'question_no' : content['question_no'],
+                'content' : content['question_no__content'][:18]
+            }
+            search.append(dic)  
     else:
         pass
-    return Response(content_list)    
+    return JsonResponse({'wrong_question_list' : search })
 
 @csrf_exempt
 def give_question(request):
@@ -630,7 +650,7 @@ def give_question(request):
     elif cat =='tools':
         number = 5
     elif cat =='ethic':
-        pass
+        number = 6
     
     question = Question.objects.filter(category_no = number).order_by('?').first()
     choice = Answer.objects.filter(question_no = question.question_no)
@@ -695,3 +715,30 @@ def insertResult(request):
     }
     new_user = Result.objects.create(**save)
     return JsonResponse({'response' : True })
+
+@csrf_exempt
+def get_wrong_question(request):
+    data = json.loads(request.body)
+    user_number = data.get('user_no')
+    question_number = data.get('question_no')
+   
+    instance =Result.objects.get(user_no = user_number, question_no = question_number)
+    user = instance.content
+    question = Question.objects.get(question_no = question_number).content
+    answer = Answer.objects.get(question_no = question_number, is_correct = 1).content
+   
+    question_number = instance.question_no.question_no
+    question_query = Result.objects.filter(question_no = question_number)
+    question_total = question_query.count()
+    question_correct_num =question_query.filter(is_correct = 1).count()
+    answer_ration = round((question_correct_num / question_total) * 100,2)
+   
+   
+    result = {
+        'user_content' : user,
+        'question_content' : question,
+        'answer_content' : answer,
+        'answer_ration' : answer_ration
+    }
+    return JsonResponse({'content':result})
+

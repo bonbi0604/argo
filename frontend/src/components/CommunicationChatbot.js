@@ -121,7 +121,7 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
     useEffect(() => {
       if (statecode != 0) {
         setIsButtonDisabled(true);
-        console.log(statecode, isSaved);
+        // console.log(statecode, isSaved);
         if (!isSaved && messages.length > 1) {
           setIsSaved(true);
           const sendingData = {
@@ -131,14 +131,14 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
             'timestamp': new Date().getTime(),
             'history': messages
           };
-          console.log(sendingData);
+          // console.log(sendingData);
           submit(sendingData, "http://127.0.0.1:8000/learn/communication/save/");
         }
       }
       else {
         setIsButtonDisabled(false);
       }
-      console.log(statecode);
+      // console.log(statecode);
     }, [statecode]);
 
 
