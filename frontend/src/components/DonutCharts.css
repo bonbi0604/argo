@@ -32,7 +32,7 @@
 .donut_pentagon_chart {
     width: 25%;
     height: 100%;
-    min-width: 25em;
+    min-width: 20em;
     position :relative;
 }
 
@@ -49,4 +49,18 @@
     display: flex;
     align-items: center;
     padding: 12%;
+}
+
+.donut_pentagon_chart_inner_icon {
+    width: 100%;
+    max-width: 100%;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* display: table-cell;
+    vertical-align: middle; */
+    display: flex;
+    align-items: center;
 }

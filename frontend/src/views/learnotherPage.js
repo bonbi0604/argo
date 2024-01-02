@@ -18,7 +18,7 @@ import React, { useState, useContext, useCallback } from "react";
 
 // 한번에 전부 불러오는걸로
 
-const LearnOtherPage = ({cat, wrongList, question}) => {
+const LearnOtherPage = ({cat, question}) => {
   const { user } = useContext(AuthContext);
   const [buttonValue, setButtonValue] = useState("문제 풀기");
   const [isstudy, setStudy] = useState(false);
@@ -44,7 +44,7 @@ const LearnOtherPage = ({cat, wrongList, question}) => {
         <LearnNavComponent/>
         <div id="learn_body">
           <button id="isstudyBtn" onClick={handleButtonClick}>{buttonValue}</button>
-          {isstudy? <SolveQuestion cat={cat} question={question}/> : <WrongQuestion cat={cat} wrongList={wrongList}/>}
+          {isstudy? <SolveQuestion cat={cat} question={question}/> : <WrongQuestion cat={cat}/>}
         </div>
       </div>
     </section>

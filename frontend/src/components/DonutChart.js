@@ -4,17 +4,21 @@ import {Chart, ArcElement} from 'chart.js';
 
 
 
-const DonutChart = ({cat, color, score, size}) => {
+const DonutChart = ({cat, color, score, size, backgroundColor}) => {
   Chart.register(ArcElement);
+
+  const bgcolor = backgroundColor? backgroundColor: '#fff';
   
   const data = {
     labels: [cat, "none"],
     datasets: [
       {
         data: [score, 100-score],
-        backgroundColor: [color, '#fff'],
-        hoverBackgroundColor: [color, '#fff'],
+        backgroundColor: [color, bgcolor],
+        hoverBackgroundColor: [color, bgcolor],
         borderRadius: 10,
+        borderColor: [bgcolor,bgcolor],
+        // borderBackgroundColor: [bgcolor,bgcolor],
       },
     ],
   };
@@ -24,12 +28,11 @@ const DonutChart = ({cat, color, score, size}) => {
   const options = {
     cutout : temp.toString() + "%",
     maintainAspectRatio: false,
-    legend: {
-      display: false,
-    },
-    tooltips: {
-      enabled: false
-    },
+    plugins: {
+        legend: {
+            display: false,
+        }
+    }
   };
 
   return (

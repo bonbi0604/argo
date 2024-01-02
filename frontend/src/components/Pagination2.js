@@ -21,7 +21,7 @@ const Pagination2 = ({ totalItems, itemsPerPage, pagesToShow, currentPage, setCu
         // const temp = Math.floor((currentPage - 1) / itemsPerPage) * itemsPerPage + 1;
         setIndexOfFirstPage(Math.floor((currentPage - 1) / itemsPerPage) * itemsPerPage + 1);
         setIndexOfLastPage(Math.min((Math.floor((currentPage - 1) / itemsPerPage) * itemsPerPage + 1) + itemsPerPage - 1, totalPages));
-        console.log(currentPage, indexOfFirstPage, indexOfLastPage);
+        // console.log(currentPage, indexOfFirstPage, indexOfLastPage);
     }, [currentPage]);
 
 
@@ -32,7 +32,6 @@ const Pagination2 = ({ totalItems, itemsPerPage, pagesToShow, currentPage, setCu
         changePage(currentPage - 1);
         }
 
-        console.log("prev");
     };
 
     // 다음 페이지
@@ -40,19 +39,19 @@ const Pagination2 = ({ totalItems, itemsPerPage, pagesToShow, currentPage, setCu
         if (currentPage < totalPages) {
         changePage(currentPage + 1);
         }
-        console.log("nextPage");
+
     };
 
     // 뒤 페이지
     const goBackPages = () => {
         changePage(Math.max(1, indexOfFirstPage - 1));
-        console.log("goBackPages");
+
     };
 
     // 앞 페이지
     const goForwardPages = () => {
         changePage(Math.min(totalPages, indexOfLastPage + 1));
-        console.log("goForwardPages");
+
     };
 
 
