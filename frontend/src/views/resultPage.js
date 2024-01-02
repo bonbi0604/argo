@@ -24,11 +24,11 @@ const data = {
     tools: {
         time: [1704115257000, 1704116257000, 1704117257000, 1704118257000, 1704119257000, 1704120257000],
         avg: [34, 45, 56, 67, 78, 89],
-        score: [65, 57, 86, 75, 68, 86], 
+        score: [65, 57, 86, 75, 68, 86],
     },
     ethic: {
         time: [1704115257000, 1704116257000, 1704117257000, 1704118257000, 1704119257000, 1704120257000],
-        avg: [65, 57, 86, 75, 68, 86], 
+        avg: [65, 57, 86, 75, 68, 86],
         score: [45, 23, 56, 76, 78, 80],
     },
 }
@@ -96,7 +96,7 @@ const ResultPage = () => {
             <div className='result_page_chart'>
                 <div className='result_page_donut_chart'>
                     <div className='pentagon'></div>
-                    <DonutCharts data={scoreData} backgroundColor={"#758AF9"} setCat={setCat}/>    
+                    <DonutCharts data={scoreData} backgroundColor={"#758AF9"} setCat={setCat}/>
                 </div>
                 <div className='result_page_line_chart'>
                     <LineChart data={data} cat={cat}/>
@@ -109,7 +109,7 @@ const ResultPage = () => {
                 </div>
             </div>
 
-            
+
         </section>
 
     );
