@@ -20,7 +20,7 @@
       overflow-y: auto;
       scroll-behavior: smooth;
       height: 100%;
-      -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+      -ms-overflow-style: none;
       scrollbar-width: none;
     }
   
