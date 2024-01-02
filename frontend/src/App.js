@@ -7,7 +7,8 @@ import HeaderMenu from "./components/HeaderMenu";
 import { BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 // import PrivateRoute from "./utils/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext";
-import { ChatbotProvider, ChatbotContext } from './context/ChatbotContext';
+import { ChatbotProvider, ChatbotContext } from "./context/ChatbotContext";
+
 import Home from "./views/homePage";
 import Login from "./views/loginPage";
 import Register from "./views/registerPage";
@@ -27,7 +28,8 @@ import LearnTools from "./views/learn_other/learnTools";
 import MyPage from "./views/myPage";
 import NoticeDetail from "./views/NoticeDetail"
 import PostDetail from "./views/PostDetail";
-import UpdatePost from "./views/UpdatePost"
+import UpdatePost from "./views/UpdatePost";
+import ResultPage from "./views/resultPage";
 
 function App() {
   return (
@@ -69,6 +71,8 @@ function App() {
 
             <Route path="/profile" element={<><MyPage /></>} />
 
+            <Route path="result" element={<><ResultPage /></>} />
+
           </Routes>
           <Footer />
         </AuthProvider>
@@ -83,8 +87,8 @@ const PageWithChatbot = ({ children }) => {
   const { isChatbotExpanded } = useContext(ChatbotContext);
 
   const appStyle = isChatbotExpanded 
-    ? { width: '85%', transition: 'width 0.3s' } // Adjust width instead of margin
-    : { width: '100%', transition: 'width 0.3s' };
+    ? { height:'calc(100% - 5em)', width: '85%', transition: 'width 0.3s' } // Adjust width instead of margin
+    : { height:'calc(100% - 5em)', width: '100%', transition: 'width 0.3s' };
 
   return (
     <div style={appStyle}>
