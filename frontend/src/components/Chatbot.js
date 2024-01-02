@@ -62,7 +62,6 @@ const Chatbot = () => {
 
   const handleSubmit = async () => {
     if (!input.trim() || isSubmitting) return;
-    console.log(user.user_no)
     setIsSubmitting(true);
 
     const userMessage = { text: input, sender: 'user' };
@@ -87,10 +86,7 @@ const Chatbot = () => {
       });
 
       const data = await response.json();
-      setMessages((currentMessages) => {
-        const updatedMessages = [...currentMessages, { text: data.reply, sender: 'bot' }];
-        return updatedMessages;
-      });
+      setMessages((currentMessages) => [...currentMessages, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
       console.error('Error sending message to the chatbot API:', error);
     } finally {
@@ -99,7 +95,7 @@ const Chatbot = () => {
   };
   const saveChatSession = async () => {
     if (!localSessionTitle || messages.length === 0) return;
-    const chatContent = messages.map((m) => m.text).join('\n');
+    const chatContent = JSON.stringify(messages);
 
     try {
       const endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
