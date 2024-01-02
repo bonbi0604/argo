@@ -33,9 +33,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   }, [chatContent, id]);
   const saveChatSession = async () => {
     if (!localSessionTitle || messages.length === 0) return;
-    // const chatContent = messages.map((m) => m.text).join('\n');
     const chatContent = JSON.stringify(messages);
-    console.log(chatContent);
     let endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
     let method = 'POST';
 

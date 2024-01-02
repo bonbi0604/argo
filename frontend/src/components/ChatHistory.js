@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useContext,forwardRef  } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
+import _ from 'lodash';
 
 const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSessionId, chatbotRef}, ref) => {
   const [sessions, setSessions] = useState([]);
@@ -68,6 +69,9 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
       }
     }
   };
+  const handleCreateNewChatDebounced = _.debounce(() => {
+    handleCreateNewChat();
+  }, 500);
   const handleCreateNewChat = async () => {
   if (creatingNewChat) return;
   
