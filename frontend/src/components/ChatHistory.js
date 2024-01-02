@@ -2,11 +2,11 @@ import React, { useState, useEffect, useContext,forwardRef  } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, setSelectedSessionId, setSelectedChatContent, setSelectedSessionTitle }, ref) => {
+const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSessionId }, ref) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
   const [creatingNewChat, setCreatingNewChat] = useState(false);
-
+  
   const fetchSessions = async () => {
     try {
       const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/?user_no=${user.user_no}`);
@@ -27,6 +27,9 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, setSelectedS
   }, [user]);
 
   const handleSessionClick = async (id) => {
+    if (selectedSessionId === id) {
+      return;
+    }
     if (ref && ref.current) {
       await ref.current.saveChatSession();
     }
