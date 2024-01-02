@@ -16,28 +16,34 @@ const WritePost = () => {
     // 게시물 제출 핸들러
     const handleSubmit = async (e) => {
         e.preventDefault(); // 폼 제출 기본 동작을 막습니다.
-
+    
         let formData = new FormData();
         formData.append('title', title);
         formData.append('content', content);
+        formData.append('author', user.user_no);
         for (let i = 0; i < files.length; i++) {
-            formData.append('file_field_name', files[i]); // 각 파일을 FormData에 추가
-            formData.append('file_name', files[i].name); // 각 파일 이름을 FormData에 추가
+            formData.append('file_field_name', files[i]); // 공백 제거
+            formData.append('file_name', files[i].name);
         }
-
-        // 관리자인 경우 공지사항 여부에 따라 엔드포인트 결정
-        const endpoint = user.is_admin && isNotice ? '/notices/' : '/posts/';
-        try {
-            const response = await api.post(`http://127.0.0.1:8000/noticeboard${endpoint}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+        for (let key of formData.keys()) {
+            console.log(key, formData.getAll(key));
+        }
+        if (user.is_admin) {
+            const endpoint = isNotice ? '/notices/' : '/posts/';
+            try {
+                const response = await api.post(`http://127.0.0.1:8000/noticeboard${endpoint}`, formData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                });
+                if (response.status === 201) {
+                    navigate('/Dashboard');
                 }
-            });
-            if (response.status === 201) {
-                navigate('/Dashboard'); 
+            } catch (error) {
+                console.error('게시물 작성 오류', error);
             }
-        } catch (error) {
-            console.error('게시글 작성 오류', error);
+        } else {
+            console.error('관리자만 공지사항을 작성할 수 있습니다.');
         }
     };
 

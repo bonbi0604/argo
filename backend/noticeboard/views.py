@@ -25,19 +25,21 @@ def notice_list_create(request):
         serializer = NoticeSerializer(notices, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
+        try:
+            author_id = int(request.data['author'])
+        except ValueError:
+            # 여기서 적절한 오류 메시지를 반환합니다.
+            return Response({'detail': 'author 필드는 정수여야 합니다.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        request.data['author'] = author_id
         serializer = NoticeSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
-            # 'author' 필드에 현재 사용자 할당
-            notice = serializer.save(author=request.user)
-            files = request.FILES.getlist('file_field_name')
-            file_names = request.data.getlist('file_name')
-            for uploaded_file, file_name in zip(files, file_names):
-                NoticeFile.objects.create(notice=notice, file=uploaded_file, name=file_name)
-
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
+            # 유효성 검증 실패 로그 출력
+            print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 @api_view(['GET', 'POST'])
 def post_list_create(request):
@@ -47,6 +49,7 @@ def post_list_create(request):
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data, context={'request': request})
+        print(request.data)
         if serializer.is_valid():
             post = serializer.save(author=request.user)
             files_data = request.FILES.getlist('file_field_name')
