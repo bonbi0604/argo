@@ -12,7 +12,7 @@ const Chat = () => {
 
   const handleSessionSelect = async (sessionId, chatContent, sessionTitle) => {
     if (chatbotRef.current) {
-      await chatbotRef.current.saveChatSession(); // 현재 세션 저장
+      await chatbotRef.current.saveChatSession();
     }
     setSelectedSessionId(sessionId);
     setSelectedChatContent(chatContent);
@@ -34,7 +34,7 @@ const Chat = () => {
 
   return (
     <div className="chat-chat-container">
-      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat} selectedSessionId={selectedSessionId} ref={chatHistoryRef} />
+      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat} selectedSessionId={selectedSessionId} ref={chatHistoryRef} chatbotRef={chatbotRef} />
       <ChatPageChatbot ref={chatbotRef} id={selectedSessionId} chatContent={selectedChatContent} sessionTitle={selectedTitle} />
     </div>
   );

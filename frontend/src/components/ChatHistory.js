@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext,forwardRef  } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSessionId}, ref) => {
+const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSessionId, chatbotRef}, ref) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
   const [creatingNewChat, setCreatingNewChat] = useState(false);
@@ -46,6 +46,9 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
     } catch (error) {
       console.error('Error fetching session data:', error);
     }
+    setTimeout(() => {
+      fetchSessions();
+    }, 100);
   };
   const handleDeleteSession = async (sessionId) => {
     if (window.confirm("Are you sure you want to delete this session?")) {
@@ -57,6 +60,9 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
           throw new Error('Failed to delete session');
         }
         fetchSessions();
+        if (sessionId === selectedSessionId && chatbotRef && chatbotRef.current) {
+          chatbotRef.current.resetChat();
+        }
       } catch (error) {
         console.error('Error deleting session:', error);
       }
