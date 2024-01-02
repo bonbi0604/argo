@@ -70,11 +70,14 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
   }
   setCreatingNewChat(true);
   onCreateNewChat();
-
+  
   setTimeout(() => {
     fetchSessions();
     setCreatingNewChat(false);
-  }, 20);
+    if (onSessionSelect) {
+      onSessionSelect(null, null, null); 
+    }
+  }, 30);
 };
 
 

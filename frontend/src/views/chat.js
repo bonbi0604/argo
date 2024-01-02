@@ -8,6 +8,7 @@ const Chat = () => {
   const [selectedChatContent, setSelectedChatContent] = useState(null);
   const [selectedTitle, setSelectedSessionTitle] = useState(null);
   const chatbotRef = useRef(null);
+  const chatHistoryRef = useRef(null);
 
   const handleSessionSelect = (sessionId, chatContent, sessionTitle) => {
     setSelectedSessionId(sessionId);
@@ -19,10 +20,16 @@ const Chat = () => {
     if (chatbotRef.current) {
       chatbotRef.current.saveChatSession();
     }
+    if (chatHistoryRef.current) {
+      chatHistoryRef.current.fetchSessions();
+    }
+    setSelectedSessionId(null);
+    setSelectedChatContent(null);
+    setSelectedSessionTitle(null);
   };
   return (
     <div className="chat-chat-container">
-      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat} selectedSessionId={selectedSessionId} ref={chatbotRef} />
+      <ChatHistory onSessionSelect={handleSessionSelect} onCreateNewChat={handleCreateNewChat} selectedSessionId={selectedSessionId} ref={chatHistoryRef} />
       <ChatPageChatbot ref={chatbotRef} id={selectedSessionId} chatContent={selectedChatContent} sessionTitle={selectedTitle} />
     </div>
   );
