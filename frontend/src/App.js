@@ -44,32 +44,28 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/findId" element={<FindId />} />
             <Route path="/findPw" element={<FindPw />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/writepost" element={<WritePost />} />
-            <Route path="/PostDetail/:id" element={<PostDetail />} />
-            <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
-            <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
-            <Route path="/chat" element={<Chat />} />
-
-            {/* #챗봇이 들어가는 페이지 */}
-
-            <Route path="/" element={<Home />} />
+            
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/findId" element={<FindId />} />
             <Route path="/findPw" element={<FindPw />} />
-
             <Route path="/learn/communication" element={<CommunicationPage />} />
             <Route path="/learn" element={<LearningPage />} />
             <Route path="/learn/ethic" element={<LearnEthic />} />
-
             <Route path="/learn/commonsense" element={<LearnCommonSense />} />
             <Route path="/learn/occupation" element={<LearnOccupation />} />
             <Route path="/learn/tools" element={<LearnTools />} />
-
             <Route path="/profile" element={<MyPage />} />
-
             <Route path="result" element={<ResultPage />} />
+            <Route path="/chat" element={<Chat />} />
+            <Route path="/writepost" element={<WritePost />} />
+            <Route path="/PostDetail/:id" element={<PostDetail />} />
+            <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
+            <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
+
+            {/* #챗봇이 들어가는 페이지 */}
+            <Route path="/" element={<><Home /><Chatbot /></>} />
+            <Route path="/dashboard" element={<><Dashboard /><Chatbot /></>} />
 
           </Routes>
           <Footer />

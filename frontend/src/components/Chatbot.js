@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef, useContext  } from 'react';
 import './Chatbot.css';
 import AuthContext from "../context/AuthContext";
-import { ChatbotContext } from '../context/ChatbotContext';
 
 const Chatbot = () => {
   const [input, setInput] = useState('');
@@ -11,7 +10,6 @@ const Chatbot = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
   const { user } = useContext(AuthContext);
-  const { isChatbotExpanded, setIsChatbotExpanded } = useContext(ChatbotContext);
 
   useEffect(() => {
     chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
@@ -57,7 +55,7 @@ const Chatbot = () => {
   };
 
   const toggleChatbot = () => {
-    setIsChatbotExpanded(!isChatbotExpanded);
+    setIsExpanded(prevState => !prevState);
   };
 
   const handleSubmit = async () => {
@@ -120,7 +118,7 @@ const Chatbot = () => {
   };
   return (
     <div>
-      <div className={`chatbot-wrapper ${isChatbotExpanded ? 'expanded' : 'collapsed'}`}>
+      <div className={`chatbot-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
         <button onClick={toggleChatbot} className="toggle-chatbot">
           {isExpanded ? '◀' : '▶'}
         </button>
