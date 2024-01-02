@@ -77,7 +77,7 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
     if (onSessionSelect) {
       onSessionSelect(null, null, null); 
     }
-  }, 30);
+  }, 100);
 };
 
 

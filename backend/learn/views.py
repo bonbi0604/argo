@@ -452,6 +452,43 @@ def score(request):
     accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
     
     #커뮤니케이션 추가해야함
+    # 각 품질에 대한 점수 계산
+    label_scores = {}
+    labels = ["clear", "concise", "concrete", "correct", "coherent", "complete", "courteous"]
+
+    for label in labels:
+        # 모든 레코드에서 해당 레이블의 점수를 평균 계산
+        avg_score = Comm_History_Sentence.objects.filter(
+            speaker="user",
+            **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+        ).aggregate(avg_score=models.Avg(f"label_{label}"))["avg_score"]
+
+        # 특정 사용자의 점수 계산
+        user_score = Comm_History_Sentence.objects.filter(
+            speaker="user",
+            history_no__user_no=user_no,
+            **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+        ).aggregate(user_score=models.Avg(f"label_{label}"))["user_score"]
+
+        # null 값이 아닐 경우에만 연산 수행
+        if avg_score is not None:
+            avg_score = int(avg_score * 100 / 3)
+        if user_score is not None:
+            user_score = int(user_score * 100 / 3)
+
+        label_scores[label] = {
+            "avg": avg_score,
+            "score": user_score
+        }
+    total_avg = sum(item['avg'] for item in label_scores.values())
+    total_score = sum(item['score'] for item in label_scores.values())
+    num_items = len(label_scores)
+
+    avg_communication = total_avg / num_items
+    score_communication = total_score / num_items
+
+    all_comm_score = {'communication': avg_communication}
+    user_comm_score = {'communication': score_communication}
     
     #모든 사용자가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter()
@@ -523,7 +560,8 @@ def score(request):
     
     # 영어로 컴럼명 변경
     result_eng = {categories[key]: value for key, value in result.items()}
-
+    result_eng['communication']['avg'] = all_comm_score['communication']
+    result_eng['communication']['score'] = user_comm_score['communication']
     return JsonResponse({"result": result_eng})
 
 
