@@ -49,7 +49,7 @@ const RadarChart = ({dataUser, dataAvg, name}) => {
     };
 
   const maxScore = Math.ceil(Math.max(...[...dataUser, ...dataAvg]) / 10);
-  const colorList = Array.from({ length: maxScore+1 }, (_, index) => index < maxScore ? '#ccc' : '#ccc');
+  const colorList = Array.from({ length: maxScore+1 }, (_, index) => index < maxScore ? '#ccc' : '#888');
 
   const options = {
     scales: {

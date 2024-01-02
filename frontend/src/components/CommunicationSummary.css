@@ -5,8 +5,8 @@
 }
 
 .radar_chart_wrapper {
-    height: 94%;
-    padding: 3% 0;
+    height: 100%;
+    /* padding: 3% 0; */
     display: flex;
     flex-direction: row;
     width: 100%;

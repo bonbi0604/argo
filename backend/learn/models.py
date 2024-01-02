@@ -55,7 +55,7 @@ class Result(models.Model):
         db_table = 'Result'
 
 
-class Comm_Histroy(models.Model):
+class Comm_History(models.Model):
     history_no = models.AutoField(primary_key=True, db_column='history_no')
     user_no = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=255, blank=True, null=True, db_column='title')
@@ -64,12 +64,12 @@ class Comm_Histroy(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'Comm_Histroy'
+        db_table = 'Comm_History'
 
 
 class Comm_History_Sentence(models.Model):
     sentence_no = models.AutoField(primary_key=True, db_column='sentence_no')
-    history_no = models.ForeignKey(Comm_Histroy, blank=True, null=True, on_delete=models.CASCADE)
+    history_no = models.ForeignKey(Comm_History, blank=True, null=True, on_delete=models.CASCADE)
     speaker = models.CharField(max_length = 32, blank=True, null=True, db_column='speaker')
     sentence = models.TextField(blank=True, null=True, db_column='sentence')
     label_clear = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_clear')

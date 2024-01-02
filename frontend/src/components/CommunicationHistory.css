@@ -8,6 +8,11 @@
   margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
+  display: flex;
+}
+
+.comm_history_element a {
+  margin: auto;
 }
 
 .comm_history_wrapper {
@@ -32,8 +37,8 @@
 .history_wrapper {
   display: flex;
   flex-direction: row;
-  height: 94%;
-  padding-top: 3%;
+  height: 100%;
+  /* padding-top: 3%; */
   width: 100%;
   margin: auto;
 }
@@ -69,15 +74,21 @@
 }
 
 .sevenC_wrapper_inner {
-  min-width: 25em;
+  /* min-width: 25em; */
   display: flex;
   flex-direction: row;
   margin-left: auto;
 }
 
 .sevenC_inner {
-  margin: 0 1%;
+  /* margin: 0 1%; */
   font-size: 0.8em;
+}
+
+.sevenC_avg {
+  font-size: 1em;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .history_chat_messages {
@@ -119,6 +130,7 @@
 
 .communication_page_inner2 {
   min-width: 40em;
+  min-height: 32em;
 }
 
 .history_message {
@@ -132,12 +144,12 @@
 }
 
 .history_message_user {
-  margin-left: auto;
+  /* margin-left: auto; */
   background-color: #FAE3A9;
 }
 
 .history_message_chatbot {
-  margin-right: auto;
+  /* margin-right: auto; */
   background-color: #D3E3F7;
 }
 
