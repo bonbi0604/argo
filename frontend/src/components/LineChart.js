@@ -58,7 +58,7 @@ const LineChart = ({data, cat}) => {
 
         // data[catN2S[cat], 'time'],
     useEffect(() => {
-        console.log(getDictData(data, [catN2S[cat], 'score']));
+        // console.log(getDictData(data, [catN2S[cat], 'score']));
         const tempdata = {
             // labels: data[catN2S[cat], 'time'],
             labels: getDictData(data, [catN2S[cat], 'time']).map(elem => convertTimestampToTime2(elem)),
@@ -78,17 +78,21 @@ const LineChart = ({data, cat}) => {
             ],
         };
 
-        console.log(color[cat], cat);
 
         const tempoptions = {
             responsive: true,
             plugins: {
                 legend: {
                     position: 'top',
+                    labels: {
+                        color: 'white', // legend 텍스트 색상
+                    },
                 },
                 title: {
-                display: true,
-                text: `${user.name} 님의 학습 그래프`,
+                    display: true,
+                    text: `${user.name} 님의 학습 그래프`,
+                    color: 'white',
+                    fontSize: 32,
                 },
             },
             scales: {

@@ -60,13 +60,13 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
   );
 
   useEffect(() => {
-    console.log(currentPage)
+    // console.log(currentPage)
   }, [currentPage]);
 
   const goToHistory = (history_id) => {
     setStateN(1);
     setHistoryId(history_id);
-    console.log("Clicked goToHistory");
+    // console.log("Clicked goToHistory");
   };
 
 
