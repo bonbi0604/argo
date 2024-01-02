@@ -14,33 +14,22 @@ import AuthContext from "../../context/AuthContext";
 
 const LearnCommonSense = () => {
   const cat = "commonsense";
+  const [avg, setAvg] = useState("");
+  const[score, setScore] = useState("");
   const { user } = useContext(AuthContext);
   const [wrongList, setWrongList] = useState("");
-  const [question, setQuestion] = useState("");
+  const [question, setQuestion] = useState({
+    'question_no': '',
+    'question_content': '문제를 불러오는 중입니다.',
+    'choices': '',
+    'correct_answer': '',
+    'is_many_choice' : ''
+  });
   const user_no = user.user_no
 
   useEffect(() => {
     const getLearnPageData = async () => {
       try {
-        //틀린문제 리스트
-        const response1 = await fetch(`http://127.0.0.1:8000/learn/wronglist/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cat,
-            user_no
-          })
-        });
-        const data1 = await response1.json();
-
-        if (response1.ok) {
-          setWrongList(data1.wrong_question_list)
-        } else {
-          console.error("틀린문제 리스트 오류");
-        } //틀린문제 리스트 끝
-
         //풀 문제
         const response2 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
           method: "POST",
@@ -59,8 +48,6 @@ const LearnCommonSense = () => {
           console.error("풀 문제 오류");
         } //풀 문제 끝
 
-
-
       } catch (error) {
         console.error('learn-other 오류', error);
       }
@@ -68,11 +55,11 @@ const LearnCommonSense = () => {
 
     //함수 호출
     getLearnPageData();
-  }, []); // useEffect의 두 번째 매개변수로 빈 배열을 전달하여 최초 렌더링 시에만 실행되도록 설정
+  }, []); 
 
 
   return (
-    <LearnOtherPage cat={cat} wrongList={wrongList} question={question}/>
+    <LearnOtherPage cat={cat} question={question}/>
   )
 }
 

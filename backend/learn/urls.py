@@ -20,4 +20,6 @@ urlpatterns = [
     path('insertResult/', insertResult, name='insertResult'),
     path('recommendation/', recommendation, name='recommendation'),
     path('score/', score, name='score'),
+    path('searchList/', search_list, name='search_list'),
+    path('wrongQuestion/', get_wrong_question, name='get_wrong_question'),
 ]
