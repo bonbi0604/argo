@@ -32,13 +32,24 @@ const data = {
     },
 }
 
+const data_description = {
+    occupation: "occupation",
+    communication: "communication",
+    commonsense: "commonsense",
+    tools: "tools",
+    ethic: "ethic",
+}
+
 console.log(new Date().getTime());
 
 const Dashboard = () => {
 
     const [scoreData, setScoreData] = useState({});
+    const [descriptionData, setDescriptionData] = useState("");
     const { user } = useContext(AuthContext);
     const [cat, setCat] = useState(0);
+    const catN2S = ["occupation", "communication", "commonsense", "tools", "ethic"];
+    const color = ['#FFD2D3', '#FFF7DB', '#F4FFE1', '#DEEFFF', '#F4DDFF'];
 
     useEffect(() => {
         const fetchScore = async () => {
@@ -69,6 +80,7 @@ const Dashboard = () => {
     }, [user]);
 
     useEffect(() => {
+        setDescriptionData(data_description[catN2S[cat]]);
         console.log(cat);
     }, [cat]);
 
@@ -81,6 +93,12 @@ const Dashboard = () => {
                 </div>
                 <div className='result_page_line_chart'>
                     <LineChart data={data} cat={cat}/>
+                </div>
+            </div>
+            <div className='result_page_desc'>
+                <div className='result_page_desc_inner' style={{borderColor: `${color[cat]}`}}>
+                    <p className="title">{`${user.name} 님의 ${catN2S[cat]} 설명입니다.`}</p>
+                    {descriptionData}
                 </div>
             </div>
 
