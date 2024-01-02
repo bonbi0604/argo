@@ -5,20 +5,24 @@
 }
 
 .communication_page_button {
-    width: 7em;
+    width: 8em;
     height: 3em;
     border-radius: 1em;
     border: none;
     min-width: 5em;
-    margin: auto;
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+    font-size: 1.1em;
 }
 
 .communication_page_top {
-    width: 100%;
-    height: 15%;
+    /* width: 100%; */
+    height: 10%;
     display: flex;
     flex-direction: row;
     margin: auto;
+    padding-right: 3%;
 }
 
 .communication_page_scorebar{
@@ -29,7 +33,7 @@
 
 .communication_page_contents {
     width: 100%;
-    height: 85%;
+    height: 90%;
     margin: auto;
     display: flex;
 }
@@ -48,8 +52,8 @@
 }
 
 .communication_page_inner2 {
-    width: 80%;
-    height: 60%;
+    width: 90%;
+    height: 80%;
     min-height: 32em;
     margin: auto;
 }

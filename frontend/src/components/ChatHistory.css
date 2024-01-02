@@ -1,11 +1,28 @@
+.session-item {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+  align-self: center;
+  height: 5%;
+  margin-top: 3%;
+}
+
 .session-button {
-  padding: 15px 30px;
-  border: none;
+  background-color: skyblue;
+  width: 70%;
   border-radius: 5px;
-  background-color: #4CAF50;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-align: left;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+  height: 100%;
 }
 
 .session-button:hover {
@@ -13,34 +30,78 @@
 }
 
 .delete-session {
-  padding: 15px 30px;
+  background-color: #4CAF50;
+  width: 15%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  border-radius: 5px;
+  padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #4CAF50;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  align-self: center;
+  height: 100%;
 }
+
 
 .delete-session:hover {
   background-color: #45a049;
 }
 
-
 .session-list {
   display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
-  align-items: start; /* 왼쪽 정렬 */
-  padding: 10px; /* 필요에 따라 조정 */
-  height: 100vh; /* 전체 뷰포트 높이 */
-  padding: 10px;
+  flex-direction: column; 
+  justify-content: space-between;
+  align-items: center; 
+  height: calc(100% - (5rem));
   box-sizing: border-box;
-  justify-content: center;
+  width: 20%;
+  background-color: black;
+  opacity: 0.7;
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  overflow-y: auto;
+  left: 2%;
+  margin-top: 2%;
+  margin-bottom: 2%;
 }
 
-.session-list button {
-  margin-bottom: 10px; /* 버튼 사이의 간격 */
-  width: 200px; /* 또는 필요한 너비 */
-  align-self: center;
-  height: 5%;
+.delete-icon {
+  width: auto;
+  height: 100%;
+}
+
+.create-new-chat-button {
+  margin-top: auto;
+  position: absolute;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; 
+  padding: 10px;
+  height: 8%;
+  bottom: 0;
+}
+
+.plus-icon {
+  width: auto;
+  height: 100%;
+}
+
+.session-items-container {
+  overflow-y: auto;
+  height: 92%;
+  width: 100%;
+  right: 0;
+}
+
+
+.session-items-container::-webkit-scrollbar {
+  display: none;
 }

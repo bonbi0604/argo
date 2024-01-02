@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
+const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [localSessionTitle, setLocalSessionTitle] = useState('');
@@ -57,7 +57,14 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
         response.json().then(data => console.log(data));
       }
     });
+    setInput('');
+    setMessages([]);
+    setLocalSessionTitle('');
   };
+  useImperativeHandle(ref, () => ({
+    saveChatSession
+  }));
+
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -131,31 +138,28 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
   };
  
   return (
-    <div className="chatbot-container">
-      <div className="chat-messages" ref={chatMessagesRef}>
+    <div className="chatpage-chatbot-container">
+      <div className="chatpage-chatbot-messages" ref={chatMessagesRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
+          <div key={index} className={`chatpage-chatbot-message ${message.sender}`}>
             {message.text}
           </div>
         ))}
       </div>
-      <div className="chat-input-container">
+      <div className="chatpage-chatbot-input-container">
         <textarea
-          className="chat-input"
+          className="chatpage-chatbot-input"
           value={input}
           onChange={handleInputChange}
           placeholder="질문을 입력하세요"
           onKeyDown={handleKeyDown}
         />
-        <button className="chat-submit" onClick={handleSubmit}>
+        <button className="chatpage-chatbot-submit" onClick={handleSubmit}>
           Send
-        </button>
-        <button className="chat-check" onClick={saveChatSession}>
-          check
         </button>
       </div>
     </div>
   );
-};
+});
  
 export default ChatPageChatbot;

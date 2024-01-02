@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from account.models import User
+from django.conf import settings
 
 
 class Question(models.Model):
@@ -52,3 +53,34 @@ class Result(models.Model):
     class Meta:
         managed = False
         db_table = 'Result'
+
+
+class Comm_Histroy(models.Model):
+    history_no = models.AutoField(primary_key=True, db_column='history_no')
+    user_no = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=255, blank=True, null=True, db_column='title')
+    code = models.PositiveSmallIntegerField(blank=True, null=True, db_column='code')
+    timestamp = models.DateTimeField(auto_now_add=True, db_column='timestamp')
+
+    class Meta:
+        managed = False
+        db_table = 'Comm_Histroy'
+
+
+class Comm_History_Sentence(models.Model):
+    sentence_no = models.AutoField(primary_key=True, db_column='sentence_no')
+    history_no = models.ForeignKey(Comm_Histroy, blank=True, null=True, on_delete=models.CASCADE)
+    speaker = models.CharField(max_length = 32, blank=True, null=True, db_column='speaker')
+    sentence = models.TextField(blank=True, null=True, db_column='sentence')
+    label_clear = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_clear')
+    label_concise = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_concise')
+    label_concrete = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_concrete')
+    label_correct = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_correct')
+    label_coherent = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_coherent')
+    label_complete = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_complete')
+    label_courteous = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_courteous')
+    timestamp = models.DateTimeField(blank=True, null=True, db_column='timestamp')
+
+    class Meta:
+        managed = False
+        db_table = 'Comm_History_Sentence'
