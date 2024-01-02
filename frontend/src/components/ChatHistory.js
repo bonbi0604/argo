@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext,forwardRef  } from 'react';
 import './ChatHistory.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSessionId }, ref) => {
+const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSessionId}, ref) => {
   const [sessions, setSessions] = useState([]);
   const { user } = useContext(AuthContext);
   const [creatingNewChat, setCreatingNewChat] = useState(false);
@@ -16,7 +16,7 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
       const data = await response.json();
       setSessions(data);
     } catch (error) {
-      console.error('Error fetching sessions:', error);
+      console.error('Error fetching sessions:', error)
     }
   };
 
