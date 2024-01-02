@@ -1,4 +1,5 @@
 import { React, useState, useEffect, useContext } from 'react';
+import { Navigate } from "react-router-dom";
 import './resultPage.css';
 import DonutCharts from '../components/DonutCharts';
 import AuthContext from '../context/AuthContext';
@@ -42,7 +43,7 @@ const data_description = {
 
 console.log(new Date().getTime());
 
-const Dashboard = () => {
+const ResultPage = () => {
 
     const [scoreData, setScoreData] = useState({});
     const [descriptionData, setDescriptionData] = useState("");
@@ -84,6 +85,12 @@ const Dashboard = () => {
         console.log(cat);
     }, [cat]);
 
+    if (!user){
+        console.log("redirect");
+        return (<Navigate to='/login'  />);
+        // return;
+    }
+
     return (
         <section className="result_page">
             <div className='result_page_chart'>
@@ -108,4 +115,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default ResultPage;
