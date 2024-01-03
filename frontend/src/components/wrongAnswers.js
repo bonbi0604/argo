@@ -32,7 +32,6 @@ const WrongAnswers = ({historyId}) => {
       }
     }
     WrongAnswers();
-    console.log(wrong_q)
   }, [historyId]);  //historyId가 바뀔 때마다 실행되게
 
   return (

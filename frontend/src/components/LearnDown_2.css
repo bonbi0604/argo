@@ -1,6 +1,6 @@
 #comLearnDown2 {
     width: 100%;
-    height: 95%;
+    height: 100%;
     text-align: left;
 }
 
@@ -11,7 +11,7 @@
 }
 
 #learn_content {
-    border: 2px solid black;
+    border: 2px solid gray;
     width: 98%;
     height: 88%;
     border-radius: 10px;
@@ -28,6 +28,7 @@
 }
 
 #q_choice {
-    height: 90%;
+    height: 100%;
+    text-align: start;
 }
 

@@ -56,11 +56,6 @@ const SolveQuestion = ({cat, question}) => {
 
   return (
     <div id="solve_question">
-        <div id="learn_up">
-        <div id="learn_up_left">
-            {/* <button id="learnBtn" onClick={getNextQuestion}>다음</button> */}
-        </div>
-        </div>
         <div id="learn_down">
             <LearnDown_2 chooseAnswer={chooseAnswer} question={now_question}/>
         </div>
