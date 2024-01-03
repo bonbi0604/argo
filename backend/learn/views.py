@@ -707,9 +707,9 @@ def insertResult(request):
         else:
             is_correct = 1  
     save = {
-            'user_no' : User.objects.get(user_no = User.objects.get(user_no = user)),
-            'answer_no' : Answer.objects.get(answer_no = Answer.objects.get(answer_no = answer)),
-            'question_no' : Question.objects.get(question_no = Question.objects.get(question_no = question)),
+            'user_no' : User.objects.get(user_no = User.objects.get(user_no = user).user_no),
+            'answer_no' : Answer.objects.get(answer_no = Answer.objects.get(answer_no = answer).answer_no),
+            'question_no' : Question.objects.get(question_no = Question.objects.get(question_no = question).question_no),
             'is_correct' : is_correct,
             'content' : content
     }
