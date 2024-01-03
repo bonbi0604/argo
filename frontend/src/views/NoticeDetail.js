@@ -19,6 +19,7 @@ const NoticeDetail = () => {
             const response = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/`);
             if (response.status === 200 && response.data) {
               setNotice(response.data);
+              console.log(response.data);
             } else {
               console.error('응답 오류:', response);
             }
@@ -115,14 +116,15 @@ const NoticeDetail = () => {
 
   return (
     <div>
-         {(user.user_no === Notice.author_id || user.is_admin) && (
+         {(user.user_no === Notice.author || user.is_admin) && (
         <button onClick={handleDelete}>삭제</button>
         )}
-        {user.user_no === Notice.author_id && (
+        {user.user_no === Notice.author && (
          <button onClick={handleEdit}>수정</button>
         )}
       <h2>{Notice.title}</h2>
       <p>{Notice.content}</p>
+      <p>{Notice.files}</p>
       {/* 파일 다운로드 링크 추가 */}
       <div>
                 {Notice.files && Notice.files.map((file, index) => (

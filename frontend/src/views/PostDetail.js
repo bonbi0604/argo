@@ -19,6 +19,7 @@ const PostDetail = () => {
             const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/${id}/`);
             if (response.status === 200 && response.data) {
               setPost(response.data);
+              console.log(response.data);
             } else {
               console.error('응답 오류:', response);
             }

@@ -6,6 +6,7 @@ from .models import Post, Comment, FileModel, Notice, NoticeFile
 from .serializer import PostSerializer, CommentSerializer, NoticeSerializer
 from django.http import JsonResponse
 from account.models import User
+import logging
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -22,17 +23,12 @@ def notice_list_create(request):
 
     if request.method == 'GET':
         notices = Notice.objects.all()
-        serializer = NoticeSerializer(notices, many=True)
+        # context 파라미터에 request를 전달하여 파일 URL 생성 시 필요한 request 정보를 제공
+        serializer = NoticeSerializer(notices, many=True, context={'request': request})
         return Response(serializer.data)
     elif request.method == 'POST':
-        try:
-            author_id = int(request.data['author'])
-        except ValueError:
-            # 여기서 적절한 오류 메시지를 반환합니다.
-            return Response({'detail': 'author 필드는 정수여야 합니다.'}, status=status.HTTP_400_BAD_REQUEST)
-
-        request.data['author'] = author_id
         serializer = NoticeSerializer(data=request.data, context={'request': request})
+        print(request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -67,6 +63,7 @@ def post_detail(request, id):
     post = get_object_or_404(Post, pk=id)
     if request.method == 'GET':
         serializer = PostSerializer(post)
+        print("Serialized Notice Data:", serializer.data)
         return Response(serializer.data)
     elif request.method == 'PUT':
         # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)
@@ -170,15 +167,20 @@ def update_comment(request, id):
         return Response(serializer.data)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+# 로거 설정
+logger = logging.getLogger(__name__)
+
     
 @api_view(['GET', 'PUT', 'DELETE'])
 def notice_detail(request, id):
     # ID에 해당하는 공지사항을 데이터베이스에서 찾습니다.
     notice = get_object_or_404(Notice, pk=id)
-
+    print(notice)
     if request.method == 'GET':
         # GET 요청인 경우, 공지사항의 상세 정보를 반환합니다.
         serializer = NoticeSerializer(notice)
+        print("Serialized Notice Data:", serializer.data)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -196,3 +198,4 @@ def notice_detail(request, id):
         # DELETE 요청인 경우, 공지사항을 삭제합니다.
         notice.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)    
+    

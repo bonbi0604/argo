@@ -21,9 +21,11 @@ const WritePost = () => {
         formData.append('title', title);
         formData.append('content', content);
         formData.append('author', user.user_no);
-        for (let i = 0; i < files.length; i++) {
-            formData.append('file_field_name', files[i]); // 공백 제거
-            formData.append('file_name', files[i].name);
+        if (files.length > 0) { // 파일이 있을 때만 파일 데이터를 추가
+            for (let i = 0; i < files.length; i++) {
+                formData.append('file_field_name', files[i]);
+                formData.append('file_name', files[i].name);
+            }
         }
         for (let key of formData.keys()) {
             console.log(key, formData.getAll(key));
