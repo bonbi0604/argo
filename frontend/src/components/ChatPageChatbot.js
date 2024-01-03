@@ -41,7 +41,6 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
       endpoint += `${id}/`;
       method = 'PUT';
     }
-    console.log(user.user_no, localSessionTitle, chatContent);
     await fetch(endpoint, { 
       method: method,
       headers: {

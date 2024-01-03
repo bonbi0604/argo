@@ -61,11 +61,11 @@ function App() {
             <Route path="/writepost" element={<WritePost />} />
             <Route path="/PostDetail/:id" element={<PostDetail />} />
             <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
-            <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
 
             {/* #챗봇이 들어가는 페이지 */}
             <Route path="/" element={<><Home /><Chatbot /></>} />
             <Route path="/dashboard" element={<><Dashboard /><Chatbot /></>} />
+            <Route path="/NoticeDetail/:id/" element={<><NoticeDetail /><Chatbot /></>} />
 
           </Routes>
           <Footer />

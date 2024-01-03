@@ -94,13 +94,10 @@ const Chatbot = () => {
   const saveChatSession = async () => {
     if (!localSessionTitle || messages.length === 0) return;
     const chatContent = JSON.stringify(messages);
-
+    console.log(user.user_no,localSessionTitle,chatContent)
     try {
-      const endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
-      const method = 'POST';
-      
-      await fetch(endpoint, { 
-        method: method,
+      await fetch('http://127.0.0.1:8000/chatbot/api/chat-sessions/', { 
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -110,7 +107,6 @@ const Chatbot = () => {
           chat_content: chatContent,  // 채팅 내용
         }),
       });
-
       console.log('Chat session saved successfully');
     } catch (error) {
       console.error('Error saving chat session:', error);
