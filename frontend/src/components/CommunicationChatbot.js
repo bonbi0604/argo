@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import './CommunicationChatbot.css';
 import './CommunicationHistory.css';
 import AuthContext from '../context/AuthContext';
@@ -11,6 +11,7 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [statecode, setStatecode] = useState(0); // 학습 상태를 나타냄. 0: 학습중, 1: chatbot 정상 종료, 2: chat 비정상 종료, 3: 사용자 종료(중단하기 눌렀을 때)
     const [isSaved, setIsSaved] = useState(false);
+    const containerRef = useRef(null);
 
     // timestamp -> 시분초 바꿔주는 함수
     const convertTimestampToTime = (timestamp) => {
@@ -85,6 +86,8 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
       const data = await submit(sendingData, 'http://127.0.0.1:8000/learn/communication/label/');
       return data;
     };
+
+
 
 
     // 첫 렌더링 시 한번만 실행/ 백엔드에 첫 시작 메시지를 보내는 로직
@@ -164,17 +167,8 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
       fetchData();
     }, [messages]);
 
-
-
-    return (
-      <div className="communicaiton_chatbot_container">
-        <div className="communicaiton_chatbot_contents">
-          <div className="communicaiton_chatbot_contents_inner">
-            <div className="communicaiton_title">
-                <div className="communicaiton_title_inner">{subject}</div>
-            </div>
-            <hr />
-            <div className="history_chat_messages">
+    const content = (
+      <div ref={containerRef} className="history_chat_messages">
               {messages.length > 1 && messages.slice(1).map((message, index) => (
                 <div className="history_chat_messages_inner">
                   
@@ -209,6 +203,38 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
                 </div>
               ))}
             </div>
+    )
+
+    useEffect(() => {
+      // 컴포넌트가 업데이트될 때마다 스크롤을 아래로 이동
+      // const container = containerRef.current;
+      // container.scrollTop = container.scrollHeight;
+
+      const container = containerRef.current;
+
+      // .A 클래스를 가진 하위 엘리먼트를 찾아 스크롤을 아래로 이동
+      if (container) {
+        console.log("container selected");
+        const lastMessage = container.lastElementChild;
+        if (lastMessage) {
+          console.log("last element selected");
+          lastMessage.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+        }
+      }
+
+      console.log("content changed");
+
+    }, [content]);
+
+    return (
+      <div className="communicaiton_chatbot_container">
+        <div className="communicaiton_chatbot_contents">
+          <div className="communicaiton_chatbot_contents_inner">
+            <div className="communicaiton_title">
+                <div className="communicaiton_title_inner">{subject}</div>
+            </div>
+            <hr />
+            {content}
           </div>
 
           

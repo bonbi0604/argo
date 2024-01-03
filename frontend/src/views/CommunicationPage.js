@@ -25,6 +25,15 @@ const CommunicationPage = () => {
 
   // console.log(stateN, stopped);
 
+  const getAvgScore = async () => {
+    const sendingData = {'user_no': user.user_no};
+    const recieveData = await submit(sendingData, `${BASEURL}learn/communication/score/`);
+    setScore(recieveData);
+
+    setAvgAvg(Object.values(recieveData).reduce((sum, { avg }) => sum + avg, 0) / Object.keys(recieveData).length);
+    setAvgScore(Object.values(recieveData).reduce((sum, { score }) => sum + score, 0) / Object.keys(recieveData).length);
+  }
+
   const handleButtonClick = () => {
     
     if (stateN === 0) {
@@ -41,6 +50,8 @@ const CommunicationPage = () => {
       setStateN(0);
       setCurrentPage(1);
       setStopped(false);
+      // getAvgScore();
+      window.location.reload();
     }
   };
 
@@ -66,20 +77,10 @@ const CommunicationPage = () => {
     return data;
   }
 
+
+
   useEffect(() => {
-    const getAvgScore = async () => {
-      const sendingData = {'user_no': user.user_no};
-      const recieveData = await submit(sendingData, `${BASEURL}learn/communication/score/`);
-      setScore(recieveData);
-
-      setAvgAvg(Object.values(recieveData).reduce((sum, { avg }) => sum + avg, 0) / Object.keys(recieveData).length);
-      setAvgScore(Object.values(recieveData).reduce((sum, { score }) => sum + score, 0) / Object.keys(recieveData).length);
-    }
-
-    getAvgScore();
-
-
-    
+    getAvgScore();  
   }, []);
 
   return (
