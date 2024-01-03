@@ -18,25 +18,29 @@ const LoginPage = () => {
   };
 
   return (
-    <section className="regloginSection">
-      <form onSubmit={handleSubmit} className="loginForm">
-        <div className="regTitle">로그인</div>
-        <div className="loginContent">
-          <input type="text" id="loginId" name="id" placeholder="아이디" />
+    <section>
+      <div className="regloginSection">
+        <div id="loginFormDiv">
+          <form onSubmit={handleSubmit} className="loginForm">
+            <div className="loginTitle">로그인</div>
+            <div className="loginContent">
+              <input type="text" id="loginId" name="id" placeholder="아이디" />
+            </div>
+            <div className="loginContent">
+              <input type="password" id="password" name="password" placeholder="비밀번호" />
+            </div>
+            <button type="submit" id="loginBtn">로그인</button> {/* 폼 제출을 위한 로그인 버튼 */}
+          </form>
         </div>
-        <div className="loginContent">
-          <input type="password" id="password" name="password" placeholder="비밀번호" />
-        </div>
-        <button type="submit" id="loginBtn">로그인</button> {/* 폼 제출을 위한 로그인 버튼 */}
-      </form>
-      {/* <div>
-        <Link to="/findId">
-          아이디 찾기
-        </Link>
-        <Link to="/findPw">
-          비밀번호 찾기
-        </Link>
-      </div> */}
+        {/* <div>
+          <Link to="/findId">
+            아이디 찾기
+          </Link>
+          <Link to="/findPw">
+            비밀번호 찾기
+          </Link>
+        </div> */}
+      </div>
     </section>
   );
 };

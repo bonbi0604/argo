@@ -401,3 +401,34 @@ def get_wrong_question(request):
     }
     return JsonResponse({'content':result})
 
+@csrf_exempt
+def get_avg_score(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no')
+    cat = data.get('cat')
+    if cat == 'occupation':
+        number = 4
+    elif cat=='commonsense':
+        total, other_user, user =0,0,0
+        for i in range(1,4):
+            total += Result.objects.filter(question_no__category_no=i).count()
+            other_user += Result.objects.filter(question_no__category_no=i, is_correct=1).count()
+            user += Result.objects.filter(question_no__category_no=i, user_no=user_no, is_correct =1).count()
+        dic = {
+        'total_avg' : round(other_user/total*100,2),
+        'user_avg' : round(user/total*100,2)
+        }
+        return JsonResponse({'score': dic})
+    elif cat =='tools':
+        number = 5
+    elif cat =='ethic':
+        number = 6
+    total = Result.objects.filter(question_no__category_no=number).count()
+    other_user = Result.objects.filter(question_no__category_no=number, is_correct=1).count()
+    user = Result.objects.filter(question_no__category_no=number, user_no=user_no, is_correct =1).count()
+    dic = {
+        'total_avg' : round(other_user/total*100,2),
+        'user_avg' : round(user/total*100,2)
+    }  
+    print(dic)        
+    return JsonResponse({'score': dic})

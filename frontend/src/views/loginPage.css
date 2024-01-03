@@ -1,12 +1,26 @@
+.loginTitle {
+    font-size: 2em;
+    font-weight: bold;
+    color: #4B7FBC;
+    margin-bottom: 10%;
+}
+
 .loginForm {
-    max-width: 350px;
+    max-width: 400px;
     margin: 0 auto;
-    padding: 4% 2%;
-    padding-top: 3%;
+    padding: 3% 2%;
     background-color: rgba(255, 255, 255, 0.8); /* 배경색을 반투명하게 설정 */
     margin-bottom: 10%;
     border-radius: 10px; /* 모서리 둥글게 설정 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+}
+
+.loginForm ::placeholder {
+    color: #999;
+}
+
+#loginFormDiv {
+    padding-top: 7%;
 }
 
 .loginContent {
@@ -14,15 +28,15 @@
 }
 
 .loginContent > input {
-    width: 70%;
-    padding: 3%;
+    width: 75%;
+    padding: 4%;
     box-sizing: border-box;
     border: 1px solid #ddd; /* 테두리 추가 */
     border-radius: 5px; /* 모서리를 둥글게 */
 }
 
 #loginBtn {
-    width: 30%;
+    width: 70%;
     padding: 3%;
     background-color: #4B7FBC;
     color: white;
@@ -30,7 +44,7 @@
     border-radius: 5px;
     cursor: pointer;
     margin-bottom: 3%;
-    margin-top: 4%;
+    margin-top: 7%;
 }
 
 #loginBtn:hover {
