@@ -44,6 +44,14 @@ const HeaderMenu = () => {
               <Link to="/DashBoard" className="header-link">
                 게시판
               </Link>
+              {/** 챗봇으로 이동 TODO: 링크 추가 */}
+              <Link to="/chat" className="header-link">
+                챗봇
+              </Link>
+              {/** 마이페이지로 이동 TODO: 링크 추가 */}
+              <Link to="/profile" className="header-link">
+                마이페이지
+              </Link>
             </>
           }
         </div>

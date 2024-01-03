@@ -16,6 +16,10 @@
     font-size: 1.1em;
 }
 
+.communication_page_button:hover {
+    cursor: pointer;
+}
+
 .communication_page_top {
     /* width: 100%; */
     height: 10%;
