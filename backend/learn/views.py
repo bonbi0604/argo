@@ -31,6 +31,7 @@ from rest_framework.response import Response
 from django.db.models import Count
 from datetime import datetime
 from django.utils import timezone
+from random import shuffle
 
 ########################################################################
 #                      learn/communication/study/                      #
@@ -658,7 +659,11 @@ def give_question(request):
     elif cat =='ethic':
         number = 6
     
-    question = Question.objects.filter(category_no = number).order_by('?').first()
+    # question = Question.objects.filter(category_no = number).order_by('?').first()
+    question = Question.objects.filter(category_no = number)
+    question = list(question)
+    shuffle(question)
+    question = question[0]
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
     
