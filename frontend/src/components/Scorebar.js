@@ -13,8 +13,8 @@ const Scorebar = ({cat, avg, score}) => {
             </div>
             <hr style={{ border: "1px solid #808080", width: '1', height: '100%'}} />
             <div className="score-bars">
-              <div className={`score-bar ${cat}`} style={{ width: `${avg}%` }}></div> 
-              <div className={`score-bar user-score ${cat}`} style={{ width: `${score}%` }}></div>            
+              <div className={`score-bar ${cat}`} style={{ width: `${avg}%` }}> {avg}</div> 
+              <div className={`score-bar user-score ${cat}`} style={{ width: `${score}%` }}> {score}</div>            
             </div>
  
         </div>

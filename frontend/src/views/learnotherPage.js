@@ -6,7 +6,8 @@ import LearnNavComponent from '../components/LearnNav';
 import SolveQuestion from "../components/solveQuestion";
 import WrongQuestion from "../components/WrongQuestion";
 import React, { useState, useContext, useCallback } from "react";
-
+import LearnUpLeft from "../components/LearnUpLeft";
+import LearnDown1 from "../components/LearnDown_1";
 
 // 필요한 것들
 // WrongQuestion : 1. cat, avg, score => ScoreBar 데이터
@@ -18,33 +19,27 @@ import React, { useState, useContext, useCallback } from "react";
 
 // 한번에 전부 불러오는걸로
 
-const LearnOtherPage = ({cat, question}) => {
+const LearnOtherPage = ({cat, avg, score, question}) => {
   const { user } = useContext(AuthContext);
-  const [buttonValue, setButtonValue] = useState("문제 풀기");
   const [isstudy, setStudy] = useState(false);
 
   if (!user){
     return (<Navigate to='/login'  />)
   }
-
-  const handleButtonClick = (cat) => {
-    setStudy(!isstudy);
-    if (isstudy) {
-      setButtonValue("문제 풀기")
-    } else {
-      setButtonValue("학습 종료")
-      // 문제를 여기서 가져오나?
-    }
-  };
-
   
   return (
     <section>
       <div id="learn_other">
         <LearnNavComponent/>
         <div id="learn_body">
-          <button id="isstudyBtn" onClick={handleButtonClick}>{buttonValue}</button>
-          {isstudy? <SolveQuestion cat={cat} question={question}/> : <WrongQuestion cat={cat}/>}
+          <div id="learn_right">
+            <div id="learn_up">
+              <LearnUpLeft cat={cat} avg={avg} score={score} isstudy={isstudy} setStudy={setStudy}/>
+            </div>
+            <div id="learn_down">
+                {isstudy? <SolveQuestion cat={cat} question={question}/> : <LearnDown1 cat={cat}/>}
+            </div>
+          </div>
         </div>
       </div>
     </section>

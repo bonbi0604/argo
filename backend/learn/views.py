@@ -32,6 +32,7 @@ from rest_framework.response import Response
 from django.db.models import Count
 from datetime import datetime
 from django.utils import timezone
+from random import shuffle
 
 ########################################################################
 #                      learn/communication/study/                      #
@@ -456,41 +457,42 @@ def score(request):
     # 각 품질에 대한 점수 계산
     label_scores = {}
     labels = ["clear", "concise", "concrete", "correct", "coherent", "complete", "courteous"]
- 
+
     for label in labels:
         # 모든 레코드에서 해당 레이블의 점수를 평균 계산
         avg_score = Comm_History_Sentence.objects.filter(
             speaker="user",
             **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
         ).aggregate(avg_score=models.Avg(f"label_{label}"))["avg_score"]
- 
+
         # 특정 사용자의 점수 계산
         user_score = Comm_History_Sentence.objects.filter(
             speaker="user",
             history_no__user_no=user_no,
             **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
         ).aggregate(user_score=models.Avg(f"label_{label}"))["user_score"]
- 
+
         # null 값이 아닐 경우에만 연산 수행
         if avg_score is not None:
             avg_score = int(avg_score * 100 / 3)
         if user_score is not None:
             user_score = int(user_score * 100 / 3)
- 
+
         label_scores[label] = {
             "avg": avg_score,
             "score": user_score
         }
+        
     total_avg = sum(item['avg'] for item in label_scores.values())
-    total_score = sum(item['score'] for item in label_scores.values())
     num_items = len(label_scores)
- 
     avg_communication = total_avg / num_items
-    score_communication = total_score / num_items
- 
     all_comm_score = {'communication': avg_communication}
-    user_comm_score = {'communication': score_communication}
-   
+    if Comm_History.objects.filter(user_no_id = user_no):
+        total_score = sum(item['score'] for item in label_scores.values())
+        score_communication = total_score / num_items
+        user_comm_score = {'communication': score_communication}
+    else:
+        user_comm_score = {'communication': 0}
     #모든 사용자가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter()
                  .values('question_no__category_no__classification')
@@ -563,6 +565,8 @@ def score(request):
     result_eng = {categories[key]: value for key, value in result.items()}
     result_eng['communication']['avg'] = all_comm_score['communication']
     result_eng['communication']['score'] = user_comm_score['communication']
+    result_eng['communication']['avg'] = all_comm_score['communication']
+    result_eng['communication']['score'] = user_comm_score['communication']
     return JsonResponse({"result": result_eng})
 
 
@@ -587,9 +591,9 @@ def get_wrong_question_list(filter_no, count, user_no=None):
         question_correct_num =question_query.filter(is_correct = 1).count()
         answer_ration = round((question_correct_num / question_total) * 100,2)
         if content.question_no.content[:15] =='다음 문장을 해석하세요 : ':
-           content_value = content.question_no.content[15:29] 
+           content_value = content.question_no.content[15:29]
         else:
-            content_value= content.question_no.content[:15] 
+            content_value= content.question_no.content[:15]
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
@@ -656,10 +660,11 @@ def give_question(request):
     elif cat =='ethic':
         number = 6
     
+    # question = Question.objects.filter(category_no = number).order_by('?').first()
     question = Question.objects.filter(category_no = number)
     question = list(question)
     shuffle(question)
-    question = Question.objects.filter(category_no = number).order_by('?').first()
+    question = question[0]
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
     
@@ -768,7 +773,7 @@ def get_avg_score(request):
             user_total +=Result.objects.filter(question_no__category_no=i, user_no = user_no).count()
             other_user += Result.objects.filter(question_no__category_no=i, is_correct=1).count()
             user += Result.objects.filter(question_no__category_no=i, user_no=user_no, is_correct =1).count()
-            
+           
         if total == 0:
             total_avg = 0
         else:
@@ -777,7 +782,7 @@ def get_avg_score(request):
             user_avg = 0
         else:
             user_avg = round(user/user_total*100,2)
-            
+           
             dic = {
             'total_avg' : total_avg,
             'user_avg' : user_avg
@@ -799,9 +804,9 @@ def get_avg_score(request):
         user_avg = 0
     else:
         user_avg = round(user/user_total*100,2)
-            
+           
     dic = {
             'total_avg' : total_avg,
             'user_avg' : user_avg
-    }
+        }
     return JsonResponse({'score': dic})

@@ -43,7 +43,7 @@ const WrongAnswers = ({historyId}) => {
           <div id="wrAnswerDiv">
             <div>정답: {wrong_q.answer_content}</div>
             <div>입력: {wrong_q.user_content}</div>
-            <div id="ansPer">정답률: {wrong_q.answer_ration}%</div> 
+            <div id="ansPer">정답률: {wrong_q.answer_ratio}%</div> 
           </div>
         </div>
     </div>

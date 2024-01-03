@@ -58,7 +58,7 @@ function Register() {
 
     // 입력된 비밀번호의 유효성을 검사하고, 메시지를 설정합니다.
     if (!validatePwd(currPwd)) {
-      setPwdMsg("영문, 숫자, 특수기호 조합으로 8자리 이상 입력해주세요.");
+      setPwdMsg("영문, 숫자, 특수기호( !@#$%^*_+=- ) 조합으로 8자리 이상 입력해주세요.");
     } else {
       setPwdMsg("안전한 비밀번호입니다.");
     }
@@ -236,93 +236,97 @@ function Register() {
 
 
   return (
-    <section className="registSection">
-      <form onSubmit={handleSubmit} id="registForm">
-        <div id="regTitle">회원가입</div>
-        <div className="regContent">
-          <input
-            type="text"
-            id="name"
-            onChange={(e) => setName(e.target.value)}
-            placeholder="이름"
-            required
-          />
-        </div>
-        <div className="regContent">
-          <input
-            type="text"
-            id="id"
-            onChange={(e) => setId(e.target.value)}
-            placeholder="아이디"
-            required
-            disabled={idIsCuplicate}
-          />
-          <button type="button" onClick={checkDuplicateId}>중복 확인</button>
-          <p style={{ color: idMsgColor }}>{idMsg}</p>
-        </div>
-        <div className="regContent">
-          <input
-            type="password"
-            id="password"
-            onChange={onChangePwd}
-            placeholder="비밀번호"
-            required
-          />
-          <p style={{ color: validatePwd(password) ? 'green' : 'red' }}>{pwdMsg}</p> {/* 비밀번호 유효성 메시지 */}
-        </div>
-        <div className="regContent">
-          <input
-            type="password"
-            id="confirm-password"
-            onChange={onChangeConfirmPwd}
-            placeholder="비밀번호 확인"
-            required
-          />
-          <p style={{ color: password2 === password ? 'green' : 'red' }}>{confirmPwdMsg}</p> {/* 비밀번호 일치 여부 메시지 */}
-        </div>
-        <div className="regContent">
-          <input
-            type="text"
-            id="email"
-            onChange={onChangeEmail}
-            placeholder="이메일"
-            disabled={emailIsDuplicate}
-            required
-          />
-          <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
-          <p style={{ color: emailMsgColor }}>{emailMsg}</p>
+    <section>
+      <div className="regloginSection">
+        <div id="regFormDiv">
+          <form onSubmit={handleSubmit} className="registForm">
+            <div className="regTitle">회원가입</div>
+            <div className="regContent">
+              <input
+                type="text"
+                id="name"
+                onChange={(e) => setName(e.target.value)}
+                placeholder="이름"
+                required
+              />
+            </div>
+            <div className="regContent">
+              <input
+                type="text"
+                id="id"
+                onChange={(e) => setId(e.target.value)}
+                placeholder="아이디"
+                required
+                disabled={idIsCuplicate}
+              />
+              <button type="button" onClick={checkDuplicateId}>중복 확인</button>
+              <p style={{ color: idMsgColor }}>{idMsg}</p>
+            </div>
+            <div className="regContent">
+              <input
+                type="password"
+                id="password"
+                onChange={onChangePwd}
+                placeholder="비밀번호"
+                required
+              />
+              <p style={{ color: validatePwd(password) ? 'green' : 'red' }}>{pwdMsg}</p> {/* 비밀번호 유효성 메시지 */}
+            </div>
+            <div className="regContent">
+              <input
+                type="password"
+                id="confirm-password"
+                onChange={onChangeConfirmPwd}
+                placeholder="비밀번호 확인"
+                required
+              />
+              <p style={{ color: password2 === password ? 'green' : 'red' }}>{confirmPwdMsg}</p> {/* 비밀번호 일치 여부 메시지 */}
+            </div>
+            <div className="regContent">
+              <input
+                type="text"
+                id="email"
+                onChange={onChangeEmail}
+                placeholder="이메일"
+                disabled={emailIsDuplicate}
+                required
+              />
+              <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
+              <p style={{ color: emailMsgColor }}>{emailMsg}</p>
 
-          <div style={{ display: codeDisplay }}>
-            <button onClick={mailSend} type="button">인증번호 보내기</button>
-            <input
-              type="text"
-              id="code"
-              onChange={(e) => setCode(e.target.value)}
-              placeholder="Code"
-              required
-            />
-            <button onClick={checkCode} type="button">확인</button>
-          </div>
+              <div style={{ display: codeDisplay }}>
+                <button onClick={mailSend} type="button">인증번호 보내기</button>
+                <input
+                  type="text"
+                  id="code"
+                  onChange={(e) => setCode(e.target.value)}
+                  placeholder="Code"
+                  required
+                />
+                <button onClick={checkCode} type="button">확인</button>
+              </div>
+            </div>
+            <div className="regContent">
+              <input
+                type="text"
+                id="phone"
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="폰 번호  ex) 01012345678"
+                required
+              />
+            </div>
+            <div className="regContent">
+              <select name="dept" id="dept" onChange={(e) => setDept(e.target.value)} value={dept}>
+                <option value="">부서 선택</option>
+                <option value="1">부서1</option>
+                <option value="2">부서2</option>
+                <option value="3">부서3</option>
+              </select>
+            </div>
+            <button id="regBtn" type="submit" disabled={!isAllValid}>회원가입</button>
+          </form>
         </div>
-        <div className="regContent">
-          <input
-            type="text"
-            id="phone"
-            onChange={(e) => setPhone(e.target.value)}
-            placeholder="폰 번호"
-            required
-          />
-        </div>
-        <div className="regContent">
-          <select name="dept" id="dept" onChange={(e) => setDept(e.target.value)} value={dept}>
-            <option value="">부서 선택</option>
-            <option value="1">부서1</option>
-            <option value="2">부서2</option>
-            <option value="3">부서3</option>
-          </select>
-        </div>
-        <button id="regBtn" type="submit" disabled={!isAllValid}>회원가입</button>
-      </form>
+      </div>
     </section>
   );
 }
