@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useContext  } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import './Chatbot.css';
 import AuthContext from "../context/AuthContext";
 
@@ -24,7 +24,7 @@ const Chatbot = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [messages]);
-
+  
   const handleMouseEnter = () => {
     chatMessagesRef.current.addEventListener('wheel', handleScroll);
   };
@@ -67,34 +67,28 @@ const Chatbot = () => {
     if (!localSessionTitle && messages.length === 0) {
       setLocalSessionTitle(input);
     }
-
-    setMessages((currentMessages) => {
-      return [...currentMessages, userMessage];
-    });
-
+    setMessages(currentMessages => [...currentMessages, userMessage]);
     setInput('');
-
     try {
       const response = await fetch('http://127.0.0.1:8000/chatbot/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input}), 
+        body: JSON.stringify({ message: input }), 
       });
-
       const data = await response.json();
-      setMessages((currentMessages) => [...currentMessages, { text: data.reply, sender: 'bot' }]);
+      setMessages(currentMessages => [...currentMessages, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
       console.error('Error sending message to the chatbot API:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
+
   const saveChatSession = async () => {
     if (!localSessionTitle || messages.length === 0) return;
     const chatContent = JSON.stringify(messages);
-    console.log(user.user_no,localSessionTitle,chatContent)
     try {
       await fetch('http://127.0.0.1:8000/chatbot/api/chat-sessions/', { 
         method: 'POST',
@@ -102,9 +96,9 @@ const Chatbot = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: user.user_no,  // 사용자 ID
-          session_title: localSessionTitle,  // 세션 제목
-          chat_content: chatContent,  // 채팅 내용
+          user_no: user.user_no,
+          session_title: localSessionTitle,
+          chat_content: chatContent,
         }),
       });
       console.log('Chat session saved successfully');
@@ -112,11 +106,12 @@ const Chatbot = () => {
       console.error('Error saving chat session:', error);
     }
   };
+
   return (
     <div>
       <div className={`chatbot-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
         <button onClick={toggleChatbot} className="toggle-chatbot">
-          {isExpanded ? '◀' : '▶'}
+          {isExpanded ? '▶' : '◀'}
         </button>
         <div className="chatbot-container">
           <div
