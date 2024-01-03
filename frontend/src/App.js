@@ -52,12 +52,10 @@ function App() {
             <Route path="/learn/communication" element={<PageWithChatbot><CommunicationPage /></PageWithChatbot>} />
             <Route path="/learn" element={<PageWithChatbot><LearningPage /></PageWithChatbot>} />
             <Route path="/learn/ethic" element={<PageWithChatbot><LearnEthic /></PageWithChatbot>} />
-            {/* <Route path="/learn/commonsense" element={<><LearnCommonSense /><Chatbot /></>} />
+            <Route path="/learn/commonsense" element={<><LearnCommonSense /><Chatbot /></>} />
             <Route path="/learn/occupation" element={<><LearnOccupation /><Chatbot /></>} />
             <Route path="/learn/tools" element={<><LearnTools /><Chatbot /></>} />
-
-            <Route path="/profile" element={<><MyPage /><Chatbot /></>} /> */}
-
+            <Route path="/profile" element={<><MyPage /><Chatbot /></>} />
           </Routes>
           <Footer />
         </AuthProvider>
