@@ -721,9 +721,11 @@ def get_wrong_question(request):
     data = json.loads(request.body)
     user_number = data.get('user_no')
     question_number = data.get('question_no')
-   
     instance =Result.objects.get(user_no = user_number, question_no = question_number)
-    user = instance.content
+    if instance.content != '':
+        user = instance.content
+    else:
+        user =instance.answer_no.content
     question = Question.objects.get(question_no = question_number).content
     answer = Answer.objects.get(question_no = question_number, is_correct = 1).content
    
@@ -738,7 +740,38 @@ def get_wrong_question(request):
         'user_content' : user,
         'question_content' : question,
         'answer_content' : answer,
-        'answer_ration' : answer_ration
+        'answer_ratio' : answer_ration
     }
     return JsonResponse({'content':result})
 
+@csrf_exempt
+def get_avg_score(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no')
+    cat = data.get('cat')
+    if cat == 'occupation':
+        number = 4
+    elif cat=='commonsense':
+        total, other_user, user =0,0,0
+        for i in range(1,4):
+            total += Result.objects.filter(question_no__category_no=i).count()
+            other_user += Result.objects.filter(question_no__category_no=i, is_correct=1).count()
+            user += Result.objects.filter(question_no__category_no=i, user_no=user_no, is_correct =1).count()
+        dic = {
+        'total_avg' : round(other_user/total*100,2),
+        'user_avg' : round(user/total*100,2)
+        }
+        return JsonResponse({'score': dic})
+    elif cat =='tools':
+        number = 5
+    elif cat =='ethic':
+        number = 6
+    total = Result.objects.filter(question_no__category_no=number).count()
+    other_user = Result.objects.filter(question_no__category_no=number, is_correct=1).count()
+    user = Result.objects.filter(question_no__category_no=number, user_no=user_no, is_correct =1).count()
+    dic = {
+        'total_avg' : round(other_user/total*100,2),
+        'user_avg' : round(user/total*100,2)
+    }  
+    print(dic)        
+    return JsonResponse({'score': dic})

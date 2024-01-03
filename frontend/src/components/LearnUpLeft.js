@@ -3,9 +3,7 @@ import IconSense from '../icon/IconSense'
 import Scorebar from "../components/Scorebar";
 import React, { useState, useContext, useCallback } from "react";
 
-const LearnUpLeft = ({cat}) => {
-  const avg = 80
-  const score = 70
+const LearnUpLeft = ({cat, avg, score}) => {
 
   return (
     <div id="comLearnUpLeft">

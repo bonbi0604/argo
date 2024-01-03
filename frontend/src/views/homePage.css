@@ -1,6 +1,6 @@
 #body {
     /* background-color: #9DC2ED; */
-    background-image: url('../../public/background.jpg');
+    background: linear-gradient(rgba(157, 194, 237, 0.8), rgba(206, 224, 246, 0.5)), url('../../public/background.jpg');
     background-size: cover; /* 배경 이미지를 화면에 꽉 차게 설정 */
     background-repeat: no-repeat; /* 배경 이미지 반복 제거 */
     background-attachment: fixed; /* 배경 이미지를 스크롤과 함께 고정시킴 */

@@ -14,8 +14,6 @@ import AuthContext from "../../context/AuthContext";
 
 const LearnCommonSense = () => {
   const cat = "commonsense";
-  const [avg, setAvg] = useState("");
-  const[score, setScore] = useState("");
   const { user } = useContext(AuthContext);
   const [wrongList, setWrongList] = useState("");
   const [question, setQuestion] = useState({
@@ -25,13 +23,14 @@ const LearnCommonSense = () => {
     'correct_answer': '',
     'is_many_choice' : ''
   });
+  const [avgScore, setAvgScore] = useState("");
   const user_no = user.user_no
 
   useEffect(() => {
     const getLearnPageData = async () => {
       try {
         //풀 문제
-        const response2 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
+        const response1 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -40,13 +39,31 @@ const LearnCommonSense = () => {
             cat
           })
         });
-        const data2 = await response2.json();
+        const data1 = await response1.json();
 
-        if (response2.ok) {
-          setQuestion(data2.wrong_question)
+        if (response1.ok) {
+          setQuestion(data1.wrong_question)
         } else {
           console.error("풀 문제 오류");
         } //풀 문제 끝
+
+        //avg, score
+        const response2 = await fetch(`http://127.0.0.1:8000/learn/getAvgScore/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cat,
+            user_no
+          })
+        });
+        const data2 = await response2.json();
+
+        if (response2.ok) {
+          setAvgScore(data2.score)
+        } else {
+        }
 
       } catch (error) {
         console.error('learn-other 오류', error);
@@ -59,7 +76,7 @@ const LearnCommonSense = () => {
 
 
   return (
-    <LearnOtherPage cat={cat} question={question}/>
+    <LearnOtherPage cat={cat} avg={avgScore.total_avg} score={avgScore.user_avg} question={question}/>
   )
 }
 

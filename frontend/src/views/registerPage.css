@@ -1,9 +1,8 @@
 /* footer 없어도 되지않나? */
 /* 위에 빈공간 왜있지 */
 
-.registSection {
-    /* background-color: #9DC2ED; */
-    background-image: url('../../public/background.jpg');
+.regloginSection {
+    background: linear-gradient(rgba(157, 194, 237, 0.8), rgba(206, 224, 246, 0.5)), url('../../public/background.jpg');
     background-size: cover; /* 배경 이미지를 화면에 꽉 차게 설정 */
     background-repeat: no-repeat; /* 배경 이미지 반복 제거 */
     background-attachment: fixed; /* 배경 이미지를 스크롤과 함께 고정시킴 */
@@ -12,7 +11,7 @@
     padding: 0;
 }
 
-#registForm {
+.registForm {
     max-width: 400px;
     margin: 0 auto;
     padding: 3%;
@@ -22,15 +21,19 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
 }
 
-#registForm ::placeholder {
+.registForm ::placeholder {
     color: #999; /* 플레이스홀더 색상 변경 */
 }
   
-#regTitle {
+.regTitle {
     font-size: 2em;
     font-weight: bold;
     color: #4B7FBC;
     margin-bottom: 7%;
+}
+
+#regFormDiv {
+    padding-top: 1.5%;
 }
 
 .regContent {
