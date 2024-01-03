@@ -8,7 +8,7 @@ import React, { useState, useContext, useCallback } from "react";
 //               원래 정답(answer), 유저 입력(user_answer), 정답률(rate)=>이게 avg인가?, 
 //               틀린 문제 리스트(wrongQList)
 
-const WrongQuestion = ({cat, wrongList}) => {
+const WrongQuestion = ({cat}) => {
 
   return (
     <div id="solve_question">
@@ -18,7 +18,7 @@ const WrongQuestion = ({cat, wrongList}) => {
         </div>
         </div>
         <div id="learn_down">
-            <LearnDown_1 wrongList={wrongList}/>
+            <LearnDown_1 cat={cat}/>
         </div>
     </div>
   )

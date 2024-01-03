@@ -5,7 +5,7 @@ import IconUserImage from "../icon/IconUserImage";
 
 const colorlist = ['#FA9DA3', '#FAE3A9', '#BDD98E', '#9DC2ED', '#E2ACF5']
 
-const PentagonIcon = () => {
+const PentagonIcon = ({setCat}) => {
     const icon_list = [
         "M24,11c0-1.568-.752-3.04-2-3.979v-.021c0-1.897-1.327-3.489-3.102-3.898-.409-1.774-2.002-3.102-3.898-3.102-1.194,0-2.267,.526-3,1.357-.733-.832-1.806-1.357-3-1.357-1.896,0-3.489,1.327-3.898,3.102-1.774,.409-3.102,2.001-3.102,3.898v.021c-1.248,.939-2,2.41-2,3.979,0,.886,.235,1.737,.686,2.5-.45,.763-.686,1.614-.686,2.5,0,1.686,.858,3.244,2.267,4.166,.719,2.278,2.812,3.834,5.233,3.834,1.858,0,3.504-.926,4.5-2.342,.996,1.415,2.642,2.342,4.5,2.342,2.422,0,4.515-1.556,5.233-3.834,1.408-.922,2.267-2.48,2.267-4.166,0-.886-.235-1.737-.686-2.5,.45-.763,.686-1.614,.686-2.5ZM7.5,22c-1.634,0-3.033-1.115-3.401-2.712-.065-.281-.248-.52-.502-.656-.985-.528-1.597-1.536-1.597-2.631,0-.675,.234-1.322,.679-1.872,.296-.367,.296-.89,0-1.257-.444-.549-.679-1.196-.679-1.872,0-1.07,.591-2.067,1.543-2.603,.37-.208,.568-.627,.494-1.045-.02-.115-.037-.231-.037-.352,0-1.103,.897-2,2-2,.553,0,1-.448,1-1,0-1.103,.897-2,2-2s2,.897,2,2v4h-2.268c-.346-.598-.992-1-1.732-1-1.105,0-2,.895-2,2s.895,2,2,2c.74,0,1.386-.402,1.732-1h2.268v5h-2.268c-.346-.598-.992-1-1.732-1-1.105,0-2,.895-2,2s.895,2,2,2c.74,0,1.386-.402,1.732-1h2.268v1.5c0,1.93-1.57,3.5-3.5,3.5Zm13.821-7.872c.444,.549,.679,1.196,.679,1.872,0,1.096-.611,2.104-1.597,2.631-.254,.136-.437,.375-.502,.656-.368,1.597-1.768,2.712-3.401,2.712-1.93,0-3.5-1.57-3.5-3.5v-4.5h2c1.654,0,3-1.346,3-3v-.268c.598-.346,1-.992,1-1.732,0-1.105-.895-2-2-2s-2,.895-2,2c0,.74,.402,1.386,1,1.732v.268c0,.551-.448,1-1,1h-2V4c0-1.103,.897-2,2-2s2,.897,2,2c0,.552,.447,1,1,1,1.103,0,2,.897,2,2,0,.121-.018,.237-.037,.352-.074,.418,.124,.837,.494,1.045,.952,.535,1.543,1.533,1.543,2.603,0,.675-.234,1.322-.679,1.872-.296,.367-.296,.89,0,1.257Z",
         "m.5,6.5c0-1.381,1.119-2.5,2.5-2.5s2.5,1.119,2.5,2.5-1.119,2.5-2.5,2.5S.5,7.881.5,6.5Zm8.5,14v2.5c0,.552-.448,1-1,1s-1-.448-1-1v-2.5c0-.276-.224-.5-.5-.5,0,0-3.535,0-3.552-.001-1.63-.028-2.948-1.362-2.948-2.999v-4c0-1.654,1.346-3,3-3s3,1.346,3,3v5h.5c1.378,0,2.5,1.122,2.5,2.5Zm-5-2.5v-5c0-.551-.449-1-1-1s-1,.449-1,1v4c0,.551.449,1,1,1h1Zm17-9c1.381,0,2.5-1.119,2.5-2.5s-1.119-2.5-2.5-2.5-2.5,1.119-2.5,2.5,1.119,2.5,2.5,2.5Zm3,4v4c0,1.637-1.318,2.971-2.948,2.999-.017,0-3.552.001-3.552.001-.276,0-.5.224-.5.5v2.5c0,.552-.448,1-1,1s-1-.448-1-1v-2.5c0-1.378,1.122-2.5,2.5-2.5h.5v-5c0-1.654,1.346-3,3-3s3,1.346,3,3Zm-2,0c0-.551-.449-1-1-1s-1,.449-1,1v5h1c.551,0,1-.449,1-1v-4Zm-6,1c0-.552-.448-1-1-1h-6c-.552,0-1,.448-1,1s.448,1,1,1h6c.552,0,1-.448,1-1ZM7,5.048v-2.096c0-1.628,1.324-2.952,2.952-2.952h4.096c1.628,0,2.952,1.324,2.952,2.952v2.096c0,1.533-1.175,2.797-2.672,2.939l-1.39,1.151c-.272.243-.622.365-.977.365-.363,0-.729-.128-1.021-.388l-1.379-1.141c-1.444-.192-2.561-1.431-2.561-2.926Zm2,0c0,.525.427.952.952.952.233,0,.458.081.638.229l1.363,1.128,1.362-1.128c.179-.149.405-.23.638-.23h.096c.525,0,.952-.427.952-.952v-2.096c0-.525-.427-.952-.952-.952h-4.096c-.525,0-.952.427-.952.952v2.096Zm-5,16.952H1c-.552,0-1,.448-1,1s.448,1,1,1h3c.552,0,1-.448,1-1s-.448-1-1-1Zm19,0h-3c-.552,0-1,.448-1,1s.448,1,1,1h3c.552,0,1-.448,1-1s-.448-1-1-1Z",
@@ -16,14 +16,14 @@ const PentagonIcon = () => {
 
     const viewBox_list = ["0 0 128 128", "0 0 128 128", "0 0 128 128", "0 0 128 128", "0 0 128 128"];
 
-    const radius = 18;
-    const size = 15;
+    const radius = 17;
+    const size = 14;
 
     const pentagonStyle = {
     //   position: 'relative',
-      width: `${size}%`,
-      height: `${size}%`,
-      top: `calc(50% - ${size/2}%)`,
+    //   width: `${size}%`,
+    //   height: `${size}%`,
+      top: `calc(50% - ${size/12*5}%)`,
       left: `calc(50% - ${size/2}%)`,
       position:'absolute',
     //   transform: 'translate(-50%, -50%)'
@@ -56,10 +56,18 @@ const PentagonIcon = () => {
         );
     });
 
+    const handleClick = (index) => {
+        if (setCat) {
+            setCat(index);
+        }
+        // console.log(index);
+    };
+
     //transform: `translate(calc(sin(${index * (360 / 5)}deg) * ${radius}em), calc(-1 * cos(${index * (360 / 5)}deg) * ${radius}em))`
     // transform: translate(`${calculatePosition(index, 0).x + 50}%`, `${calculatePosition(index, 0).y+ 50}%`)
     const pentagon = Array.from({ length: 5 }).map((_, index) => (
       <div className="iconStructure" style={{...pentagonStyle, transform: `translate(${calculatePosition(index, 0).x * (100/size) }%, ${calculatePosition(index, 0).y  * (100/size)}%)`}}>
+        <a onClick={() => handleClick(index)}>
         <IconStructure 
         key={index}
         data={icon_list[index]}
@@ -69,23 +77,24 @@ const PentagonIcon = () => {
         viewBox={viewBox_list[index]}
         x={`${calculatePosition(index, 0).x + 50}%`} y={`${calculatePosition(index, 0).y+ 50}%`}
         />
-
+        </a>
       </div>
 
     ));
   
     return (
         <div className="donutcharts_icon">
-            {pentagon}
+            
             {/* 회색 점선 추가 */}
             <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%" style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
                 {lines}
             </svg>
+            {pentagon}
         </div>
     );
   };
 
-const DonutCharts = ({data}) => {
+const DonutCharts = ({data, backgroundColor, setCat}) => {
     // const sizelist = ['13em', '16em', '19em', '22em', '25em']
     const sizelist = ['60%', '70%', '80%', '90%', '100%']
     
@@ -93,20 +102,20 @@ const DonutCharts = ({data}) => {
     return (
         <>
         <div className="donut_pentagon_chart">
-            <div className="donut_pentagon_chart_inner">
-                <PentagonIcon />
-            </div>
+            
             <div className="donut_pentagon_chart_inner">
                 <div className="donutcharts">
                     {Object.entries(data).map(([cat, { avg, score }], index) => 
-                        <DonutChart key={cat} cat={cat} color={colorlist[index]} score={score} size={sizelist[index]} />
+                        <DonutChart key={cat} cat={cat} color={colorlist[index]} score={score} size={sizelist[index]} backgroundColor={backgroundColor}/>
                     )}
                 </div>
             </div>
             <div className="donut_pentagon_chart_inner">
                 <IconUserImage size={`${30}%`} />
             </div>
-            
+            <div className="donut_pentagon_chart_inner_icon">
+                <PentagonIcon setCat={setCat}/>
+            </div>
         </div>
 
         

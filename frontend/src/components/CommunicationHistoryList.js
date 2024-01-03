@@ -4,15 +4,40 @@ import AuthContext from "../context/AuthContext";
 import Pagination from './Pagination2';
 import useAxios from "../utils/useAxios";
 
-const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId}) => {
+const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId, currentPage, setCurrentPage}) => {
   const { user } = useContext(AuthContext);
   const itemsPerPage = 5;
   const pagesToShow = 5;
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [currentPageWindow, setCurrentPageWindow] = useState(1);
-  const [historys, setHistorys] = useState([]);
+  // const [historys, setHistorys] = useState([]);
+  const [historyList, setHistoryList] = useState([]);
+  const BASEURL = "http://127.0.0.1:8000/";
+
 
   const tempMax = 100;
+
+  const submit = async (dataSend, url) => { 
+    let data;
+    try {
+      const response = await fetch(url, { // 백엔드 서버에 메시지를 POST 요청
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(dataSend),
+        });
+
+      data = await response.json(); // 백엔드로부터의 응답 받기
+
+    } catch (error) {
+      data = null;
+      console.error("Error sending message to the chatbot API:", error);
+    } finally {
+      //
+    }
+    return data;
+  }
 
   // todo : get data from "learn/communication/history"
   useEffect(() => {
@@ -20,51 +45,38 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
     const offset = (currentPageWindow - 1) * itemsPerPage;
   
     const fetchHistoryList = async () => {
-    //   try {
-    //     // back 에서 보니까 GET method 에서 limit, offset 받는 곳이 없음.... 뭐한걸까????
-    //     // limit 이후의 것을 back 에서 가져오는 것이 없음..
-    //     // 계속 전체 post 가져옴.
-    //     // const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/?limit=${itemsPerPage}&offset=${offset}`);
-    //     const response = await api.get(`http://127.0.0.1:8000/learn/communication/history/`);
-    //     if (response.status === 200 && Array.isArray(response.data)) {
-    //       // Reverse the order of the data
-    //       const reversedPosts = [...response.data].reverse();
-    //       setPosts(reversedPosts);
-    //     } else {
-    //       console.error('Data is not an array', response.data);
-    //     }
-    //   } catch (error) {
-    //     console.error('Error retrieving post', error);
-    //   }
+      const sendingData = {'user_no':user.user_no};
+      const recieveData = await submit(sendingData, `${BASEURL}learn/communication/history/`);
+      setHistoryList(recieveData);
+      // console.log("history list", recieveData);
     };
-    const tempData = Array.from({ length: tempMax }, (_, index) => ({ history_id: offset + index + 1, history_title: `Title_${offset + index + 1}` }));
-    setHistorys(tempData);
+
     fetchHistoryList();
   }, []); 
 
-  const currentItems = historys.slice(
+  const currentItems = historyList.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
   useEffect(() => {
-    console.log(currentPage)
+    // console.log(currentPage)
   }, [currentPage]);
 
   const goToHistory = (history_id) => {
     setStateN(1);
     setHistoryId(history_id);
-    console.log("Clicked goToHistory");
+    // console.log("Clicked goToHistory");
   };
 
 
   return (
     <div className='comm_history_wrapper'>
-      {currentItems.map(({ history_id, history_title }) => (
-        <div className='comm_history_element' key={history_id}><a onClick={() => {goToHistory(history_id)}}>{history_title}</a></div>
+      {currentItems.map(({ history_no, title, code }) => (
+        <div className='comm_history_element' key={history_no}><a onClick={() => {goToHistory(history_no)}}>{`${history_no}: ${title}`}</a></div>
       ))}
       <Pagination
-        totalItems={historys.length}
+        totalItems={historyList.length}
         itemsPerPage={itemsPerPage}
         pagesToShow = {pagesToShow}
         currentPage={currentPage}

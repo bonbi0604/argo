@@ -37,7 +37,7 @@ const UpdatePost = () => {
       const response = await api.put(`http://127.0.0.1:8000/noticeboard/posts/${id}/`, updatedPost);
 
       if (response.status === 200) {
-        navigate('/DashBoard');
+        navigate(`/PostDetail/${id}`);
       }
     } catch (error) {
       console.error('게시물 수정 중 오류 발생', error);

@@ -7,7 +7,8 @@ import HeaderMenu from "./components/HeaderMenu";
 import { BrowserRouter as Router,  Routes,  Route} from "react-router-dom";
 // import PrivateRoute from "./utils/PrivateRoute"
 import { AuthProvider } from "./context/AuthContext";
-import { ChatbotProvider, ChatbotContext } from './context/ChatbotContext';
+import { ChatbotProvider, ChatbotContext } from "./context/ChatbotContext";
+
 import Home from "./views/homePage";
 import Login from "./views/loginPage";
 import Register from "./views/registerPage";
@@ -25,6 +26,10 @@ import LearnEthic from "./views/learn_other/learnEthic";
 import LearnOccupation from "./views/learn_other/learnOccupation";
 import LearnTools from "./views/learn_other/learnTools";
 import MyPage from "./views/myPage";
+import NoticeDetail from "./views/NoticeDetail"
+import PostDetail from "./views/PostDetail";
+import UpdatePost from "./views/UpdatePost";
+import ResultPage from "./views/resultPage";
 
 function App() {
   return (
@@ -37,7 +42,15 @@ function App() {
           <HeaderMenu />
           {/* <Navbar /> */}
           <Routes>
-            {/* 챗봇이 안들어가는 페이지 */}
+            <Route path="/login"  element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/findId" element={<FindId />} />
+            <Route path="/findPw" element={<FindPw />} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/writepost" element={<WritePost />} />
+            <Route path="/PostDetail/:id" element={<PostDetail />} />
+            <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
+            <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
             <Route path="/chat" element={<Chat />} />
 
             {/* #챗봇이 들어가는 페이지 */}
@@ -47,15 +60,19 @@ function App() {
             <Route path="/register" element={<PageWithChatbot><Register /></PageWithChatbot>} />
             <Route path="/findId" element={<PageWithChatbot><FindId /></PageWithChatbot>} />
             <Route path="/findPw" element={<PageWithChatbot><FindPw /></PageWithChatbot>} />
-            <Route path="/dashboard" element={<PageWithChatbot><Dashboard /></PageWithChatbot>} />
-            <Route path="/writepost" element={<PageWithChatbot><WritePost /></PageWithChatbot>} />
-            <Route path="/learn/communication" element={<PageWithChatbot><CommunicationPage /></PageWithChatbot>} />
-            <Route path="/learn" element={<PageWithChatbot><LearningPage /></PageWithChatbot>} />
-            <Route path="/learn/ethic" element={<PageWithChatbot><LearnEthic /></PageWithChatbot>} />
-            <Route path="/learn/commonsense" element={<><LearnCommonSense /><Chatbot /></>} />
-            <Route path="/learn/occupation" element={<><LearnOccupation /><Chatbot /></>} />
-            <Route path="/learn/tools" element={<><LearnTools /><Chatbot /></>} />
-            <Route path="/profile" element={<><MyPage /><Chatbot /></>} />
+
+            <Route path="/learn/communication" element={<CommunicationPage />} />
+            <Route path="/learn" element={<LearningPage />} />
+            <Route path="/learn/ethic" element={<LearnEthic />} />
+
+            <Route path="/learn/commonsense" element={<><LearnCommonSense /></>} />
+            <Route path="/learn/occupation" element={<><LearnOccupation /></>} />
+            <Route path="/learn/tools" element={<><LearnTools /></>} />
+
+            <Route path="/profile" element={<><MyPage /></>} />
+
+            <Route path="result" element={<><ResultPage /></>} />
+
           </Routes>
           <Footer />
         </AuthProvider>
@@ -70,8 +87,8 @@ const PageWithChatbot = ({ children }) => {
   const { isChatbotExpanded } = useContext(ChatbotContext);
 
   const appStyle = isChatbotExpanded 
-    ? { width: '85%', transition: 'width 0.3s' } // Adjust width instead of margin
-    : { width: '100%', transition: 'width 0.3s' };
+    ? { height:'calc(100% - 5em)', width: '85%', transition: 'width 0.3s' } // Adjust width instead of margin
+    : { height:'calc(100% - 5em)', width: '100%', transition: 'width 0.3s' };
 
   return (
     <div style={appStyle}>

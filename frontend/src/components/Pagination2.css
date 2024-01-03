@@ -1,6 +1,8 @@
 .Pagination2_wrapper {
     display: flex;
-    margin: auto;
+    margin-top: auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .Pagination2_wrapper2 {

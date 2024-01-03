@@ -3,9 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
 
-const PostDetail = () => {
+const NoticeDetail = () => {
     const { id } = useParams();
-    const [post, setPost] = useState({});
+    const [Notice, setNotice] = useState({});
     const [comments, setComments] = useState([]); // 댓글 목록 상태
     const [newComment, setNewComment] = useState(''); // 새 댓글 입력 상태
     const { user } = useContext(AuthContext);
@@ -16,14 +16,14 @@ const PostDetail = () => {
     useEffect(() => {
         const fetchPostAndComments = async () => {
           try {
-            const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/${id}/`);
+            const response = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/`);
             if (response.status === 200 && response.data) {
-              setPost(response.data);
+              setNotice(response.data);
             } else {
               console.error('응답 오류:', response);
             }
       
-            const commentsResponse = await api.get(`http://127.0.0.1:8000/noticeboard/posts/${id}/comments/`);
+            const commentsResponse = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`);
             if (commentsResponse.status === 200 && commentsResponse.data) {
               setComments(commentsResponse.data);
             }
@@ -38,7 +38,7 @@ const PostDetail = () => {
       const handleDelete = async () => {
         try {
           // Axios를 사용하여 DELETE 요청을 보냅니다.
-          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/posts/${id}/delete/`);
+          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${id}/delete/`);
       
           // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
           if (response.status === 200 || response.status === 204) {
@@ -63,7 +63,7 @@ const PostDetail = () => {
           };
       
           // 댓글 생성 API 엔드포인트를 호출합니다.
-          const response = await api.post(`http://127.0.0.1:8000/noticeboard/posts/${id}/comments/`, commentData);
+          const response = await api.post(`http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`, commentData);
           if (response.status === 201) {
             setComments([...comments, response.data]);
             setNewComment('');
@@ -115,17 +115,17 @@ const PostDetail = () => {
 
   return (
     <div>
-         {(user.user_no === post.author_id || user.is_admin) && (
+         {(user.user_no === Notice.author_id || user.is_admin) && (
         <button onClick={handleDelete}>삭제</button>
         )}
-        {user.user_no === post.author_id && (
+        {user.user_no === Notice.author_id && (
          <button onClick={handleEdit}>수정</button>
         )}
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
+      <h2>{Notice.title}</h2>
+      <p>{Notice.content}</p>
       {/* 파일 다운로드 링크 추가 */}
       <div>
-                {post.files && post.files.map((file, index) => (
+                {Notice.files && Notice.files.map((file, index) => (
                     <div key={index}>
                         <a href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
                     </div>
@@ -180,4 +180,4 @@ const PostDetail = () => {
   );
 };
 
-export default PostDetail;
+export default NoticeDetail;
