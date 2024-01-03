@@ -1,33 +1,60 @@
 import React, { useState, useEffect, useRef, useContext } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
- 
-const ChatPageChatbot = ({ chatContent }) => {
+
+const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
-  const [sessionTitle, setSessionTitle] = useState('');
+  const [localSessionTitle, setLocalSessionTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
  
   const { user } = useContext(AuthContext);
- 
+  useEffect(() => {
+    if (id && chatContent) {
+      setLocalSessionTitle(sessionTitle);
+    }
+  }, [id, chatContent, sessionTitle]);
+  useEffect(() => {
+    if (chatMessagesRef.current) {
+        chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (chatContent) {
+      const newMessages = chatContent.split('\n').map(text => ({
+        text,
+        sender: 'user' 
+      }));
+      setMessages(newMessages);
+    }
+  }, [chatContent,id]);
   const saveChatSession = async () => {
-    if (!sessionTitle || messages.length === 0) return;
- 
+    if (!localSessionTitle || messages.length === 0) return;
     const chatContent = messages.map((m) => m.text).join('\n');
-    await fetch('http://127.0.0.1:8000/chatbot/api/', {
-      method: 'POST',
+    let endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
+    let method = 'POST';
+
+    if (id) {
+      endpoint += `${id}/`;
+      method = 'PUT';
+    }
+    console.log(user.user_no, localSessionTitle, chatContent);
+    await fetch(endpoint, { 
+      method: method,
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        user_id: user.id,  // 사용자 ID
-        session_title: sessionTitle,  // 세션 제목
+        user_no: user.user_no,  // 사용자 no
+        session_title: localSessionTitle,  // 세션 제목
         chat_content: chatContent,  // 채팅 내용
       }),
     }).then(response => {
       if (!response.ok) {
         console.error('Error saving chat session');
+        response.json().then(data => console.log(data));
       }
     });
   };
@@ -36,25 +63,15 @@ const ChatPageChatbot = ({ chatContent }) => {
       e.preventDefault();
       saveChatSession();
     };
- 
+    
     window.addEventListener('beforeunload', handleBeforeUnload);
  
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [messages]);
- 
- 
-  useEffect(() => {
-    if (chatContent) {
-      const newMessages = chatContent.split('\n').map(text => ({
-        text,
-        sender: 'user'
-      }));
-      setMessages(newMessages);
-    }
-  }, [chatContent]);
- 
+
+
   const handleMouseEnter = () => {
     chatMessagesRef.current.addEventListener('wheel', handleScroll);
   };
@@ -86,12 +103,10 @@ const ChatPageChatbot = ({ chatContent }) => {
  
   const handleSubmit = async () => {
     if (!input.trim() || isSubmitting) return;
- 
     setIsSubmitting(true);
- 
     const userMessage = { text: input, sender: 'user' };
-    if (!sessionTitle && messages.length === 0) {
-      setSessionTitle(input);
+    if (!localSessionTitle  && messages.length === 0) {
+      setLocalSessionTitle(input);
     }
     setMessages((currentMessages) => [...currentMessages, userMessage]);
  

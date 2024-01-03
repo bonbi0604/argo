@@ -3,8 +3,8 @@ import CommunicationChatbot from "../components/CommunicationChatbot";
 
 const CommunicationStudy = ({stopped, stateN, setStateN, setStopped}) => {
   return (
-    <div>
-        <CommunicationChatbot />
+    <div style={{width:'100%'}}>
+        <CommunicationChatbot stopped={stopped} stateN={stateN} setStateN={setStateN} setStopped={setStopped} />
     </div>
   )
 }

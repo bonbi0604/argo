@@ -105,7 +105,7 @@ const LearningPage = () => {
         if (response.ok) {
           const data = await response.json();
           setScoreData(data.result);
-          console.log(data.result);
+          // console.log(data.result);
         } else {
           console.error('Failed to fetch score data');
         }
@@ -123,7 +123,7 @@ const LearningPage = () => {
   }, [user]);
 
   if (!user){
-    console.log("redirect");
+    // console.log("redirect");
     return (<Navigate to='/login'  />)
   }
   
@@ -136,7 +136,7 @@ const LearningPage = () => {
           {recommendation(recommendationData)}
           <div className="score-container">
             {Object.entries(scoreData).map(([cat, { avg, score }]) => 
-              <Scorebar key={cat} cat={cat} avg={avg} score={score} />
+              <div className="score-element"><Scorebar key={cat} cat={cat} avg={avg} score={score} /></div>
             )}
           </div>
         </div>
