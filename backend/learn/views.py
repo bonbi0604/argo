@@ -480,16 +480,17 @@ def score(request):
             "avg": avg_score,
             "score": user_score
         }
+        
     total_avg = sum(item['avg'] for item in label_scores.values())
-    total_score = sum(item['score'] for item in label_scores.values())
     num_items = len(label_scores)
-
     avg_communication = total_avg / num_items
-    score_communication = total_score / num_items
-
     all_comm_score = {'communication': avg_communication}
-    user_comm_score = {'communication': score_communication}
-    
+    if Comm_History.objects.filter(user_no_id = user_no):
+        total_score = sum(item['score'] for item in label_scores.values())
+        score_communication = total_score / num_items
+        user_comm_score = {'communication': score_communication}
+    else:
+        user_comm_score = {'communication': 0}
     #모든 사용자가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter()
                  .values('question_no__category_no__classification')
