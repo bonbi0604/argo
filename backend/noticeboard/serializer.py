@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Post, Comment, FileModel, Notice, NoticeFile
+from .models import NoticeComment, Post, Comment, FileModel, Notice, NoticeFile
 from account.models import User
 
 class FileModelSerializer(serializers.ModelSerializer):
@@ -72,3 +72,9 @@ class NoticeSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError({"file_name": "모든 파일은 '.hwp' 확장자를 가져야 합니다."})
 
         return data
+class NoticeCommentSerializer(serializers.ModelSerializer):
+    user_no = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+
+    class Meta:
+        model = NoticeComment
+        fields = ['comm_no', 'notice_no', 'user_no', 'content', 'timestamp']

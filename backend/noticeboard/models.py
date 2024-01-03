@@ -48,4 +48,14 @@ class NoticeFile(models.Model):
     name = models.CharField(max_length=255)  # 사용자가 업로드한 파일의 이름
 
     def __str__(self):
-        return f"{self.notice_no.title}_{self.name}"    
+        return f"{self.notice_no.title}_{self.name}"   
+     
+class NoticeComment(models.Model):
+    comm_no = models.AutoField(primary_key=True)
+    notice_no = models.ForeignKey(Notice, related_name='comments', on_delete=models.CASCADE)
+    user_no = models.ForeignKey(User, on_delete=models.CASCADE)
+    content = models.CharField(max_length=45)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.content

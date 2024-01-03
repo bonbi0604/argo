@@ -2,8 +2,8 @@ from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import Post, Comment, FileModel, Notice, NoticeFile
-from .serializer import PostSerializer, CommentSerializer, NoticeSerializer
+from .models import NoticeComment, Post, Comment, FileModel, Notice, NoticeFile
+from .serializer import NoticeCommentSerializer, PostSerializer, CommentSerializer, NoticeSerializer
 from django.http import JsonResponse
 from account.models import User
 import logging
@@ -111,28 +111,6 @@ def comments_list_create(request, id):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
-@api_view(['GET', 'POST'])
-def notice_comments_list_create(request, id):
-    post = get_object_or_404(Post, pk=id)
-
-    if request.method == 'GET':
-        comments = Comment.objects.filter(board_no=post)
-        serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
-    
-    elif request.method == 'POST':
-        if not request.user.is_authenticated:
-            return Response({'detail': '로그인이 필요합니다.'}, status=status.HTTP_401_UNAUTHORIZED)
-
-        serializer = CommentSerializer(data=request.data)
-        print(request.data)
-        if serializer.is_valid():
-            # save() 호출 시 user_no에 request.user를 전달합니다.
-            serializer.save(board_no=post, user_no=request.user)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)        
-        
         
 @api_view(['GET'])
 def user_detail(request):
@@ -175,12 +153,9 @@ logger = logging.getLogger(__name__)
 @api_view(['GET', 'PUT', 'DELETE'])
 def notice_detail(request, id):
     # ID에 해당하는 공지사항을 데이터베이스에서 찾습니다.
-    notice = get_object_or_404(Notice, pk=id)
-    print(notice)
+    notice = get_object_or_404(Notice.objects.prefetch_related('notice_files'), pk=id)
     if request.method == 'GET':
-        # GET 요청인 경우, 공지사항의 상세 정보를 반환합니다.
         serializer = NoticeSerializer(notice)
-        print("Serialized Notice Data:", serializer.data)
         return Response(serializer.data)
 
     elif request.method == 'PUT':
@@ -199,3 +174,22 @@ def notice_detail(request, id):
         notice.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)    
     
+@api_view(['GET', 'POST'])
+def notice_comments_list_create(request, id):
+    notice = get_object_or_404(Notice, pk=id)
+
+    if request.method == 'GET':
+        comments = NoticeComment.objects.filter(notice_no=notice)
+        serializer = NoticeCommentSerializer(comments, many=True)
+        return Response(serializer.data)
+    
+    elif request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'detail': '로그인이 필요합니다.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+        serializer = NoticeCommentSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(notice_no=notice, user_no=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

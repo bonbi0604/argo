@@ -117,7 +117,7 @@ const PostDetail = () => {
   return (
     <div>
          {(user.user_no === post.author_id || user.is_admin) && (
-        <button onClick={handleDelete}>삭제</button>
+        <button onClick={handleDelete}>삭제{post.author}</button>
         )}
         {user.user_no === post.author_id && (
          <button onClick={handleEdit}>수정</button>

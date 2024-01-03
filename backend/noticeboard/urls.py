@@ -16,5 +16,6 @@ urlpatterns = [
     path('user/detail/', user_detail, name='user_detail'),
     path('', views.getRoutes),
     path('password_reset/', include('django.contrib.auth.urls'))  # 패스워드 재설정
+
 ]
 
