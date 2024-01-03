@@ -582,20 +582,23 @@ def get_wrong_question_list(filter_no, count, user_no=None):
     question = []
    
     for content in content_list:
-        # 틀린 문제에 대한 정답률 고르기
+        # 틀린 문제에 대한 정답률 추출
         question_number = content.question_no.question_no
         question_query = Result.objects.filter(question_no = question_number)
         question_total = question_query.count()
         question_correct_num =question_query.filter(is_correct = 1).count()
         answer_ration = round((question_correct_num / question_total) * 100,2)
-       
+        if content.question_no.content[:15] =='다음 문장을 해석하세요 : ':
+           content_value = content.question_no.content[15:29]
+        else:
+            content_value= content.question_no.content[:15]
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
-                'content' : content.question_no.content[:18],
+                'content' : content_value,
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
-                'answer_ratio' : answer_ration
+                'answer_ratio' : answer_ration,
                 }
         question.append(dic)
     return question
@@ -630,9 +633,11 @@ def search_list(request):
         value = Result.objects.filter(is_correct=0)
         content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content', 'question_no')
         for content in content_list:
+            if content['question_no__content'][:15]=='다음 문장을 해석하세요 : ':
+                content['question_no__content'] = content['question_no__content'][15:28]
             dic = {
                 'question_no' : content['question_no'],
-                'content' : content['question_no__content'][:18]
+                'content' : content['question_no__content'][:15]
             }
             search.append(dic)  
     else:
@@ -753,15 +758,26 @@ def get_avg_score(request):
     if cat == 'occupation':
         number = 4
     elif cat=='commonsense':
-        total, other_user, user =0,0,0
+        total, other_user, user_total, user =0,0,0,0
         for i in range(1,4):
             total += Result.objects.filter(question_no__category_no=i).count()
+            user_total +=Result.objects.filter(question_no__category_no=i, user_no = user_no).count()
             other_user += Result.objects.filter(question_no__category_no=i, is_correct=1).count()
             user += Result.objects.filter(question_no__category_no=i, user_no=user_no, is_correct =1).count()
-        dic = {
-        'total_avg' : round(other_user/total*100,2),
-        'user_avg' : round(user/total*100,2)
-        }
+           
+        if total == 0:
+            total_avg = 0
+        else:
+            total_avg = round(other_user/total*100,2)
+        if user_total ==0:
+            user_avg = 0
+        else:
+            user_avg = round(user/user_total*100,2)
+           
+            dic = {
+            'total_avg' : total_avg,
+            'user_avg' : user_avg
+            }
         return JsonResponse({'score': dic})
     elif cat =='tools':
         number = 5
@@ -770,9 +786,18 @@ def get_avg_score(request):
     total = Result.objects.filter(question_no__category_no=number).count()
     other_user = Result.objects.filter(question_no__category_no=number, is_correct=1).count()
     user = Result.objects.filter(question_no__category_no=number, user_no=user_no, is_correct =1).count()
+    user_total = Result.objects.filter(question_no__category_no=number, user_no = user_no).count()
+    if total == 0:
+        total_avg = 0
+    else:
+        total_avg = round(other_user/total*100,2)
+    if user_total ==0:
+        user_avg = 0
+    else:
+        user_avg = round(user/user_total*100,2)
+           
     dic = {
-        'total_avg' : round(other_user/total*100,2),
-        'user_avg' : round(user/total*100,2)
-    }  
-    print(dic)        
+            'total_avg' : total_avg,
+            'user_avg' : user_avg
+        }
     return JsonResponse({'score': dic})

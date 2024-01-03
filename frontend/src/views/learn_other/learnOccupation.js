@@ -23,7 +23,8 @@ const LearnCommonSense = () => {
     'correct_answer': '',
     'is_many_choice' : ''
   });
-  const [avgScore, setAvgScore] = useState("");
+  const [avg, setAvg] = useState(0);
+  const [score, setScore] = useState(0);
   const user_no = user.user_no
 
   useEffect(() => {
@@ -61,7 +62,8 @@ const LearnCommonSense = () => {
         const data2 = await response2.json();
 
         if (response2.ok) {
-          setAvgScore(data2.score)
+          setAvg(data2.score.total_avg)
+          setScore(data2.score.user_avg)
         } else {
         }
 
@@ -76,7 +78,7 @@ const LearnCommonSense = () => {
 
 
   return (
-    <LearnOtherPage cat={cat} avg={avgScore.total_avg} score={avgScore.user_avg} question={question}/>
+    <LearnOtherPage cat={cat} avg={avg} score={score} question={question}/>
   )
 }
 
