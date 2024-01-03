@@ -114,10 +114,10 @@ const NoticeDetail = () => {
 
   return (
     <div>
-         {(user.user_no === Notice.author || user.is_admin) && (
+         {(user.user_no === Notice.user_no || user.is_admin) && (
         <button onClick={handleDelete}>삭제</button>
         )}
-        {user.user_no === Notice.author && (
+        {user.user_no === Notice.user_no && (
          <button onClick={handleEdit}>수정</button>
         )}
       <h2>{Notice.title}</h2>

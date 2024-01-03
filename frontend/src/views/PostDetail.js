@@ -116,10 +116,10 @@ const PostDetail = () => {
 
   return (
     <div>
-         {(user.user_no === post.author_id || user.is_admin) && (
+         {(user.user_no === post.user_no || user.is_admin) && (
         <button onClick={handleDelete}>삭제{post.author}</button>
         )}
-        {user.user_no === post.author_id && (
+        {user.user_no === post.user_no && (
          <button onClick={handleEdit}>수정</button>
         )}
       <h2>{post.title}</h2>
