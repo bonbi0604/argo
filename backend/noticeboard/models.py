@@ -1,11 +1,9 @@
 from django.db import models
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
+from django.conf import settings
 
 class Post(models.Model):
     post_id=models.AutoField(primary_key=True)
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_no = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -25,7 +23,7 @@ class FileModel(models.Model):
 class Comment(models.Model):
     comm_no = models.AutoField(primary_key=True)
     post_id = models.ForeignKey(Post, related_name='comments', on_delete=models.CASCADE)
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_no = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
     content = models.CharField(max_length=45)
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -34,8 +32,8 @@ class Comment(models.Model):
 
 # 공지사항을 위한 새로운 모델
 class Notice(models.Model):
-    notice_id=models.AutoField(primary_key=True)
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE)
+    notice_id = models.AutoField(primary_key=True)
+    user_no = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     content = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
@@ -55,7 +53,7 @@ class NoticeFile(models.Model):
 class NoticeComment(models.Model):
     comm_no = models.AutoField(primary_key=True)
     notice_id = models.ForeignKey(Notice, related_name='comments', on_delete=models.CASCADE)
-    user_no = models.ForeignKey(User, on_delete=models.CASCADE)
+    user_no = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.CASCADE)
     content = models.CharField(max_length=45)
     timestamp = models.DateTimeField(auto_now_add=True)
 
