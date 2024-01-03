@@ -63,6 +63,12 @@ const LearningPage = () => {
   const [recommendationData, setRecommendationData] = useState(null);
   const [scoreData, setScoreData] = useState({});
 
+  // const [isHoveredIcon, setIsHoveredIcon] = useState(false);
+  // const [isHoveredScorebar, setIsHoveredScorebar] = useState(false);
+
+  const [hoveredPair, setHoveredPair] = useState(null);
+  
+
   useEffect(() => {
     const fetchRecommendation = async () => {
       try {
@@ -130,13 +136,13 @@ const LearningPage = () => {
   return (
     <section className="learning-page">
       <LearnNav />
-      <DonutCharts data={scoreData}/>
+      <DonutCharts data={scoreData} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} />
       <div className="learning_page_right">
         <div className="learning_page_right_ele">
           {recommendation(recommendationData)}
           <div className="score-container">
             {Object.entries(scoreData).map(([cat, { avg, score }]) => 
-              <div className="score-element"><Scorebar key={cat} cat={cat} avg={avg} score={score} /></div>
+              <div className="score-element"><Scorebar key={cat} cat={cat} avg={avg} score={score} hoveredPair={hoveredPair} setHoveredPair={setHoveredPair} /></div>
             )}
           </div>
         </div>
