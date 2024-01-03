@@ -8,7 +8,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   const [localSessionTitle, setLocalSessionTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
- 
+
   const { user } = useContext(AuthContext);
   useEffect(() => {
     if (id && chatContent) {
@@ -69,7 +69,6 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
       setLocalSessionTitle('');
     }
   }));
-
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -81,7 +80,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [messages]);
+  }, [saveChatSession]);
 
 
   const handleMouseEnter = () => {
