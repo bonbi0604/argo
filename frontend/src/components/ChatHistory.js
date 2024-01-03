@@ -23,7 +23,9 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
 
   useEffect(() => {
     if (user && user.user_no) {
-      fetchSessions();
+      setTimeout(() => {
+        fetchSessions();
+      }, 500);
     }
   }, [user]);
 
