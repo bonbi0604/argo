@@ -106,7 +106,7 @@ chain = (
     | output_parser
 )
 
-def generate_response(message, session_history):
+def generate_response(message, session_history, dialog_example, dialog_subject, user_name):
     return chain.invoke({
         "user_name": user_name,
         "subject": dialog_subject,
@@ -132,7 +132,7 @@ def chatbot_response(request):
         # 현재 사용자의 메시지를 대화 내역에 추가
         session_history.append({"speaker": "user", "message": user_message})
 
-        chatbot_response = generate_response(user_message, session_history)
+        chatbot_response = generate_response(user_message, session_history, dialog_example, dialog_subject, user_name)
 
         
         # chatbot 응답 메시지를 대화 내역에 추가
@@ -145,9 +145,6 @@ def chatbot_response(request):
         
         return JsonResponse({'reply': chatbot_response, 'title':dialog_subject})
 
-def generate_response(message, history):
-    return chain.invoke({"example":dialog_example, "history":history, "message":message, "subject":dialog_subject})
-    # return "hello"
 
 # fk로 참조해서 테이블 들어간 후 틀린 문제 뽑아냄
 def wrong_list():
