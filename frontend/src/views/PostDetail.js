@@ -19,6 +19,7 @@ const PostDetail = () => {
             const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/${id}/`);
             if (response.status === 200 && response.data) {
               setPost(response.data);
+              console.log(response.data);
             } else {
               console.error('응답 오류:', response);
             }
@@ -57,7 +58,7 @@ const PostDetail = () => {
         try {
           const commentData = {
             content: newComment,
-            board_no: id,  // 게시글 ID
+            post_id: id,  // 게시글 ID
             user_no: user.user_no,
             // user_no 필드는 백엔드에서 처리합니다. 따라서 여기에서는 제거합니다.
           };
@@ -115,10 +116,10 @@ const PostDetail = () => {
 
   return (
     <div>
-         {(user.user_no === post.author_id || user.is_admin) && (
-        <button onClick={handleDelete}>삭제</button>
+         {(user.user_no === post.user_no || user.is_admin) && (
+        <button onClick={handleDelete}>삭제{post.author}</button>
         )}
-        {user.user_no === post.author_id && (
+        {user.user_no === post.user_no && (
          <button onClick={handleEdit}>수정</button>
         )}
       <h2>{post.title}</h2>

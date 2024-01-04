@@ -1,14 +1,14 @@
-import React, { useState, useEffect, useRef, useContext } from 'react';
+import React, { useState, useEffect, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
 
-const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
+const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState([]);
   const [localSessionTitle, setLocalSessionTitle] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
- 
+
   const { user } = useContext(AuthContext);
   useEffect(() => {
     if (id && chatContent) {
@@ -23,16 +23,17 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
 
   useEffect(() => {
     if (chatContent) {
-      const newMessages = chatContent.split('\n').map(text => ({
-        text,
-        sender: 'user' 
-      }));
-      setMessages(newMessages);
+      try {
+        const loadedMessages = JSON.parse(chatContent);
+        setMessages(loadedMessages);
+      } catch (error) {
+        console.error('Error parsing chat session:', error);
+      }
     }
-  }, [chatContent,id]);
+  }, [chatContent, id]);
   const saveChatSession = async () => {
     if (!localSessionTitle || messages.length === 0) return;
-    const chatContent = messages.map((m) => m.text).join('\n');
+    const chatContent = JSON.stringify(messages);
     let endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
     let method = 'POST';
 
@@ -40,7 +41,6 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
       endpoint += `${id}/`;
       method = 'PUT';
     }
-    console.log(user.user_no, localSessionTitle, chatContent);
     await fetch(endpoint, { 
       method: method,
       headers: {
@@ -57,7 +57,18 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
         response.json().then(data => console.log(data));
       }
     });
+    setInput('');
+    setMessages([]);
+    setLocalSessionTitle('');
   };
+  useImperativeHandle(ref, () => ({
+    saveChatSession,
+    resetChat: () => {
+      setInput('');
+      setMessages([]);
+      setLocalSessionTitle('');
+    }
+  }));
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       e.preventDefault();
@@ -69,7 +80,7 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [messages]);
+  }, [saveChatSession]);
 
 
   const handleMouseEnter = () => {
@@ -131,31 +142,28 @@ const ChatPageChatbot = ({ chatContent,id,sessionTitle }) => {
   };
  
   return (
-    <div className="chatbot-container">
-      <div className="chat-messages" ref={chatMessagesRef}>
+    <div className="chatpage-chatbot-container">
+      <div className="chatpage-chatbot-messages" ref={chatMessagesRef}>
         {messages.map((message, index) => (
-          <div key={index} className={`message ${message.sender}`}>
+          <div key={index} className={`chatpage-chatbot-message ${message.sender}`}>
             {message.text}
           </div>
         ))}
       </div>
-      <div className="chat-input-container">
+      <div className="chatpage-chatbot-input-container">
         <textarea
-          className="chat-input"
+          className="chatpage-chatbot-input"
           value={input}
           onChange={handleInputChange}
           placeholder="질문을 입력하세요"
           onKeyDown={handleKeyDown}
         />
-        <button className="chat-submit" onClick={handleSubmit}>
+        <button className="chatpage-chatbot-submit" onClick={handleSubmit}>
           Send
-        </button>
-        <button className="chat-check" onClick={saveChatSession}>
-          check
         </button>
       </div>
     </div>
   );
-};
+});
  
 export default ChatPageChatbot;

@@ -15,29 +15,52 @@ const WritePost = () => {
     
     // 게시물 제출 핸들러
     const handleSubmit = async (e) => {
-        e.preventDefault(); // 폼 제출 기본 동작을 막습니다.
-
-        let formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        for (let i = 0; i < files.length; i++) {
-            formData.append('file_field_name', files[i]); // 각 파일을 FormData에 추가
-            formData.append('file_name', files[i].name); // 각 파일 이름을 FormData에 추가
-        }
-
-        // 관리자인 경우 공지사항 여부에 따라 엔드포인트 결정
-        const endpoint = user.is_admin && isNotice ? '/notices/' : '/posts/';
         try {
-            const response = await api.post(`http://127.0.0.1:8000/noticeboard${endpoint}`, formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
+            e.preventDefault(); // 폼 제출 기본 동작을 막습니다.
+        
+            let formData = new FormData();
+            formData.append('title', title);
+            formData.append('content', content);
+            formData.append('user_no', user.user_no);
+            if (files.length > 0) { // 파일이 있을 때만 파일 데이터를 추가
+                for (let i = 0; i < files.length; i++) {
+                    formData.append('file_field_name', files[i]);
+                    formData.append('file_name', files[i].name);
                 }
-            });
-            if (response.status === 201) {
-                navigate('/Dashboard'); 
+            }
+            for (let key of formData.keys()) {
+                console.log(key, formData.getAll(key));
+            }
+            if (user.is_admin) {
+                const endpoint = isNotice ? '/notices/' : '/posts/';
+                try {
+                    const response = await api.post(`http://127.0.0.1:8000/noticeboard${endpoint}`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    if (response.status === 201) {
+                        navigate('/Dashboard');
+                    }
+                } catch (error) {
+                    console.error('게시물 작성 오류', error);
+                }
+            } else {
+                try {
+                    const response = await api.post(`http://127.0.0.1:8000/noticeboard/posts/`, formData, {
+                        headers: {
+                            'Content-Type': 'multipart/form-data'
+                        }
+                    });
+                    if (response.status === 201) {
+                        navigate('/Dashboard');
+                    }
+                } catch (error) {
+                    console.error('게시물 작성 오류', error);
+                }
             }
         } catch (error) {
-            console.error('게시글 작성 오류', error);
+            console.error('오류 발생', error);
         }
     };
 

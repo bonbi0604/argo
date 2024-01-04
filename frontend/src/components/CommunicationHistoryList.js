@@ -39,19 +39,23 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
     return data;
   }
 
+  const fetchHistoryList = async () => {
+    const sendingData = {'user_no':user.user_no};
+    const recieveData = await submit(sendingData, `${BASEURL}learn/communication/history/`);
+    setHistoryList(recieveData);
+    // console.log("history list", recieveData);
+  };
+
   // todo : get data from "learn/communication/history"
   useEffect(() => {
     // API request to retrieve data appropriate for the current page
     const offset = (currentPageWindow - 1) * itemsPerPage;
-  
-    const fetchHistoryList = async () => {
-      const sendingData = {'user_no':user.user_no};
-      const recieveData = await submit(sendingData, `${BASEURL}learn/communication/history/`);
-      setHistoryList(recieveData);
-      // console.log("history list", recieveData);
-    };
+    // if (stateN !== 0) {
+    //   fetchHistoryList();
+    // }
 
     fetchHistoryList();
+    
   }, []); 
 
   const currentItems = historyList.slice(
@@ -60,13 +64,13 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
   );
 
   useEffect(() => {
-    console.log(currentPage)
+    // console.log(currentPage)
   }, [currentPage]);
 
   const goToHistory = (history_id) => {
     setStateN(1);
     setHistoryId(history_id);
-    console.log("Clicked goToHistory");
+    // console.log("Clicked goToHistory");
   };
 
 

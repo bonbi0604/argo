@@ -34,7 +34,6 @@ const DonutChart = ({cat, color, score, size, backgroundColor}) => {
         }
     }
   };
-
   return (
     <div className="donutchart_element" style={{ width: size, height: size }}>
       <Doughnut data={data} options={options} style={{ width: "100%", height: "100%" }}/>

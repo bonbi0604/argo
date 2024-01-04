@@ -1,7 +1,6 @@
-import React, { useState, useEffect, useRef, useContext  } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
 import './Chatbot.css';
 import AuthContext from "../context/AuthContext";
-import { ChatbotContext } from '../context/ChatbotContext';
 
 const Chatbot = () => {
   const [input, setInput] = useState('');
@@ -11,7 +10,6 @@ const Chatbot = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const chatMessagesRef = useRef(null);
   const { user } = useContext(AuthContext);
-  const { isChatbotExpanded, setIsChatbotExpanded } = useContext(ChatbotContext);
 
   useEffect(() => {
     chatMessagesRef.current.scrollTop = chatMessagesRef.current.scrollHeight;
@@ -26,7 +24,7 @@ const Chatbot = () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
   }, [messages]);
-
+  
   const handleMouseEnter = () => {
     chatMessagesRef.current.addEventListener('wheel', handleScroll);
   };
@@ -57,12 +55,11 @@ const Chatbot = () => {
   };
 
   const toggleChatbot = () => {
-    setIsChatbotExpanded(!isChatbotExpanded);
+    setIsExpanded(prevState => !prevState);
   };
 
   const handleSubmit = async () => {
     if (!input.trim() || isSubmitting) return;
-    console.log(user.user_no)
     setIsSubmitting(true);
 
     const userMessage = { text: input, sender: 'user' };
@@ -70,63 +67,51 @@ const Chatbot = () => {
     if (!localSessionTitle && messages.length === 0) {
       setLocalSessionTitle(input);
     }
-
-    setMessages((currentMessages) => {
-      return [...currentMessages, userMessage];
-    });
-
+    setMessages(currentMessages => [...currentMessages, userMessage]);
     setInput('');
-
     try {
       const response = await fetch('http://127.0.0.1:8000/chatbot/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input}), 
+        body: JSON.stringify({ message: input }), 
       });
-
       const data = await response.json();
-      setMessages((currentMessages) => {
-        const updatedMessages = [...currentMessages, { text: data.reply, sender: 'bot' }];
-        return updatedMessages;
-      });
+      setMessages(currentMessages => [...currentMessages, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
       console.error('Error sending message to the chatbot API:', error);
     } finally {
       setIsSubmitting(false);
     }
   };
+
   const saveChatSession = async () => {
     if (!localSessionTitle || messages.length === 0) return;
-    const chatContent = messages.map((m) => m.text).join('\n');
-
+    const chatContent = JSON.stringify(messages);
     try {
-      const endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
-      const method = 'POST';
-      
-      await fetch(endpoint, { 
-        method: method,
+      await fetch('http://127.0.0.1:8000/chatbot/api/chat-sessions/', { 
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          user: user.user_no,  // 사용자 ID
-          session_title: localSessionTitle,  // 세션 제목
-          chat_content: chatContent,  // 채팅 내용
+          user_no: user.user_no,
+          session_title: localSessionTitle,
+          chat_content: chatContent,
         }),
       });
-
       console.log('Chat session saved successfully');
     } catch (error) {
       console.error('Error saving chat session:', error);
     }
   };
+
   return (
     <div>
-      <div className={`chatbot-wrapper ${isChatbotExpanded ? 'expanded' : 'collapsed'}`}>
+      <div className={`chatbot-wrapper ${isExpanded ? 'expanded' : 'collapsed'}`}>
         <button onClick={toggleChatbot} className="toggle-chatbot">
-          {isExpanded ? '◀' : '▶'}
+          {isExpanded ? '▶' : '◀'}
         </button>
         <div className="chatbot-container">
           <div

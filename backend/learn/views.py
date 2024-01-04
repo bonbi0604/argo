@@ -6,10 +6,11 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
 from django.db import models
-from django.db.models import Max
+from django.db.models import Max, Count, F
 import random
 import json
 import os
+from random import shuffle
 # from langchain.vectorstores import Chroma
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
@@ -31,6 +32,7 @@ from rest_framework.response import Response
 from django.db.models import Count
 from datetime import datetime
 from django.utils import timezone
+from random import shuffle
 
 ########################################################################
 #                      learn/communication/study/                      #
@@ -443,16 +445,54 @@ def recommendation(request):
 def score(request):
     data = json.loads(request.body)
     user_no = data.get('user_no', 0)
-    
+   
     total_result = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 푼 문제
     total_result_correct = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자가 맞춘 문제
     user_result = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자가 푼 문제
     user_result_correct = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자가 맞춘 문제
     accuracy_rates = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 모든 사용자 유형별 문제 정답률
     accuracy_rates_user = {'시사/상식': 0, '직무이해': 0, '도구': 0, '윤리': 0} # 사용자 유형별 문제 정답률
-    
+   
     #커뮤니케이션 추가해야함
-    
+    # 각 품질에 대한 점수 계산
+    label_scores = {}
+    labels = ["clear", "concise", "concrete", "correct", "coherent", "complete", "courteous"]
+
+    for label in labels:
+        # 모든 레코드에서 해당 레이블의 점수를 평균 계산
+        avg_score = Comm_History_Sentence.objects.filter(
+            speaker="user",
+            **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+        ).aggregate(avg_score=models.Avg(f"label_{label}"))["avg_score"]
+
+        # 특정 사용자의 점수 계산
+        user_score = Comm_History_Sentence.objects.filter(
+            speaker="user",
+            history_no__user_no=user_no,
+            **{f"label_{label}__isnull": False}  # 해당 레이블의 null 값 제외
+        ).aggregate(user_score=models.Avg(f"label_{label}"))["user_score"]
+
+        # null 값이 아닐 경우에만 연산 수행
+        if avg_score is not None:
+            avg_score = int(avg_score * 100 / 3)
+        if user_score is not None:
+            user_score = int(user_score * 100 / 3)
+
+        label_scores[label] = {
+            "avg": avg_score,
+            "score": user_score
+        }
+        
+    total_avg = sum(item['avg'] for item in label_scores.values())
+    num_items = len(label_scores)
+    avg_communication = total_avg / num_items
+    all_comm_score = {'communication': avg_communication}
+    if Comm_History.objects.filter(user_no_id = user_no):
+        total_score = sum(item['score'] for item in label_scores.values())
+        score_communication = total_score / num_items
+        user_comm_score = {'communication': score_communication}
+    else:
+        user_comm_score = {'communication': 0}
     #모든 사용자가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter()
                  .values('question_no__category_no__classification')
@@ -462,7 +502,7 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         total_result[classification] = total
-
+ 
     #모든 사용자가 맞춘 문제 유형별 개수
     result_counts = (Result.objects.filter(is_correct = 1)
                  .values('question_no__category_no__classification')
@@ -472,13 +512,13 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         total_result_correct[classification] = total
-    
+   
     #모든 사용자 유형별 문제 정답률
     for classification, total_attempts in total_result.items():
         correct_attempts = total_result_correct.get(classification, 0)
         accuracy_rate = (correct_attempts/ total_attempts * 100) if total_attempts else 0
         accuracy_rates[classification] = round(accuracy_rate, 2)
-    
+   
     #유저가 푼 문제 유형별 개수
     result_counts = (Result.objects.filter(user_no=user_no)
                  .values('question_no__category_no__classification')
@@ -488,7 +528,7 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         user_result[classification] = total
-
+ 
     #유저가 맞춘 문제 유형별 개수
     result_counts = (Result.objects.filter(user_no=user_no,is_correct=1)
                  .values('question_no__category_no__classification')
@@ -498,13 +538,13 @@ def score(request):
         classification = item['question_no__category_no__classification']
         total = item['total']
         user_result_correct[classification] = total
-        
+       
     #유저가 맞춘 유형별 문제 정답률
     for classification_user, total_attempts_user in user_result.items():
         correct_attempts_user = user_result_correct.get(classification_user, 0)
         accuracy_rate_user = (correct_attempts_user/ total_attempts_user * 100) if total_attempts_user else 0
         accuracy_rates_user[classification_user] = round(accuracy_rate_user, 2)
-
+ 
     #json 형태로 변환
     result = {
         '직무이해': {'avg': accuracy_rates['직무이해'], 'score': accuracy_rates_user['직무이해']},
@@ -520,10 +560,13 @@ def score(request):
         '도구': 'tools',
         '윤리': 'ethic',
     }
-    
+   
     # 영어로 컴럼명 변경
     result_eng = {categories[key]: value for key, value in result.items()}
-
+    result_eng['communication']['avg'] = all_comm_score['communication']
+    result_eng['communication']['score'] = user_comm_score['communication']
+    result_eng['communication']['avg'] = all_comm_score['communication']
+    result_eng['communication']['score'] = user_comm_score['communication']
     return JsonResponse({"result": result_eng})
 
 
@@ -533,17 +576,31 @@ def score(request):
 # 틀린문제 뽑기. question에 있는 모든 내용 가져오기
 def get_wrong_question_list(filter_no, count, user_no=None):
     specific_user = Result.objects.filter(user_no = user_no)
+    # 사용자가 틀린 문제 필터링
     value = specific_user.filter(is_correct=0)
     value = value.order_by('-timestamp')
+    #틀린 문제 종류별 n개씩 추출
     content_list = list(value.filter(question_no__category_no=filter_no))[:min(count, len(value.filter(question_no__category_no=filter_no)))]
     question = []
+    
     for content in content_list:
+        # 틀린 문제에 대한 정답률 추출
+        question_number = content.question_no.question_no
+        question_query = Result.objects.filter(question_no = question_number)
+        question_total = question_query.count()
+        question_correct_num =question_query.filter(is_correct = 1).count()
+        answer_ration = round((question_correct_num / question_total) * 100,2)
+        if content.question_no.content[:15] =='다음 문장을 해석하세요 : ':
+           content_value = content.question_no.content[15:29]
+        else:
+            content_value= content.question_no.content[:15]
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
-                'content' : content.question_no.content[:13],
+                'content' : content_value,
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
+                'answer_ratio' : answer_ration,
                 }
         question.append(dic)
     return question
@@ -553,6 +610,7 @@ def wrong_question_list(request):
     data = json.loads(request.body)
     cat = data.get('cat')
     user_no = data.get('user_no')
+    question = []
     if cat == 'occupation':
         question = get_wrong_question_list(4, 20, user_no)
     elif cat=='commonsense':
@@ -564,7 +622,7 @@ def wrong_question_list(request):
     elif cat =='tools':
         question = get_wrong_question_list(5, 20, user_no)
     elif cat =='ethic':
-        pass
+        question = get_wrong_question_list(6, 20, user_no)
     return JsonResponse({'wrong_question_list' : question })
     
           
@@ -573,12 +631,20 @@ def search_list(request):
     data = json.loads(request.body)
     keyword = data.get('search')
     if keyword:
+        search = []
         value = Result.objects.filter(is_correct=0)
-        content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content')
-        content_list = [{'content': item['question_no__content']} for item in content_list]
+        content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content', 'question_no')
+        for content in content_list:
+            if content['question_no__content'][:15]=='다음 문장을 해석하세요 : ':
+                content['question_no__content'] = content['question_no__content'][15:28]
+            dic = {
+                'question_no' : content['question_no'],
+                'content' : content['question_no__content'][:15]
+            }
+            search.append(dic)  
     else:
         pass
-    return Response(content_list)    
+    return JsonResponse({'wrong_question_list' : search })
 
 @csrf_exempt
 def give_question(request):
@@ -592,13 +658,18 @@ def give_question(request):
     elif cat =='tools':
         number = 5
     elif cat =='ethic':
-        pass
+        number = 6
     
-    question = Question.objects.filter(category_no = number).order_by('?').first()
+    # question = Question.objects.filter(category_no = number).order_by('?').first()
+    question = Question.objects.filter(category_no = number)
+    question = list(question)
+    shuffle(question)
+    question = question[0]
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
     
-    answer = None
+    
+    
     # 주관식이면 0 
     # 객관식이면 1
     is_many_choice = None
@@ -626,6 +697,8 @@ def give_question(request):
     }
     return JsonResponse({'wrong_question' : data })
 
+
+# 푼 문제 저장
 @csrf_exempt
 def insertResult(request):
     data = json.loads(request.body)
@@ -649,11 +722,91 @@ def insertResult(request):
         else:
             is_correct = 1  
     save = {
-            'user_no' : User.objects.get(user_no = User.objects.get(user_no = user)),
-            'answer_no' : Answer.objects.get(answer_no = Answer.objects.get(answer_no = answer)),
-            'question_no' : Question.objects.get(question_no = Question.objects.get(question_no = question)),
+            'user_no' : User.objects.get(user_no = User.objects.get(user_no = user).user_no),
+            'answer_no' : Answer.objects.get(answer_no = Answer.objects.get(answer_no = answer).answer_no),
+            'question_no' : Question.objects.get(question_no = Question.objects.get(question_no = question).question_no),
             'is_correct' : is_correct,
             'content' : content
     }
     new_user = Result.objects.create(**save)
     return JsonResponse({'response' : True })
+
+@csrf_exempt
+def get_wrong_question(request):
+    data = json.loads(request.body)
+    user_number = data.get('user_no')
+    question_number = data.get('question_no')
+    instance =Result.objects.get(user_no = user_number, question_no = question_number)
+    if instance.content != '':
+        user = instance.content
+    else:
+        user =instance.answer_no.content
+    question = Question.objects.get(question_no = question_number).content
+    answer = Answer.objects.get(question_no = question_number, is_correct = 1).content
+    
+    question_number = instance.question_no.question_no
+    question_query = Result.objects.filter(question_no = question_number)
+    question_total = question_query.count()
+    question_correct_num =question_query.filter(is_correct = 1).count()
+    answer_ration = round((question_correct_num / question_total) * 100,2)
+    
+    
+    result = {
+        'user_content' : user,
+        'question_content' : question,
+        'answer_content' : answer,
+        'answer_ratio' : answer_ration
+    }
+    return JsonResponse({'content':result})
+
+@csrf_exempt
+def get_avg_score(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no')
+    cat = data.get('cat')
+    if cat == 'occupation':
+        number = 4
+    elif cat=='commonsense':
+        total, other_user, user_total, user =0,0,0,0
+        for i in range(1,4):
+            total += Result.objects.filter(question_no__category_no=i).count()
+            user_total +=Result.objects.filter(question_no__category_no=i, user_no = user_no).count()
+            other_user += Result.objects.filter(question_no__category_no=i, is_correct=1).count()
+            user += Result.objects.filter(question_no__category_no=i, user_no=user_no, is_correct =1).count()
+           
+        if total == 0:
+            total_avg = 0
+        else:
+            total_avg = round(other_user/total*100,2)
+        if user_total ==0:
+            user_avg = 0
+        else:
+            user_avg = round(user/user_total*100,2)
+           
+            dic = {
+            'total_avg' : total_avg,
+            'user_avg' : user_avg
+            }
+        return JsonResponse({'score': dic})
+    elif cat =='tools':
+        number = 5
+    elif cat =='ethic':
+        number = 6
+    total = Result.objects.filter(question_no__category_no=number).count()
+    other_user = Result.objects.filter(question_no__category_no=number, is_correct=1).count()
+    user = Result.objects.filter(question_no__category_no=number, user_no=user_no, is_correct =1).count()
+    user_total = Result.objects.filter(question_no__category_no=number, user_no = user_no).count()
+    if total == 0:
+        total_avg = 0
+    else:
+        total_avg = round(other_user/total*100,2)
+    if user_total ==0:
+        user_avg = 0
+    else:
+        user_avg = round(user/user_total*100,2)
+           
+    dic = {
+            'total_avg' : total_avg,
+            'user_avg' : user_avg
+        }
+    return JsonResponse({'score': dic})

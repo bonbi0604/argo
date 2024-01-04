@@ -1,46 +1,117 @@
-.session-button {
-  padding: 15px 30px;
+.session-list {
+  display: flex;
+  flex-direction: column; 
+  justify-content: space-between;
+  align-items: center; 
+  height: calc(100% - (5rem));
+  box-sizing: border-box;
+  width: 20%;
+  background-color: rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  position: relative;
+  overflow: hidden;
+  overflow-y: auto;
+  left: 2%;
+  margin-top: 2%;
+  margin-bottom: 2%;
   border: none;
+}
+/* .session-items-container{
+  
+} */
+.session-item {
+  display: flex;
+  justify-content: space-between;
+  width: 96%;
+  align-self: center;
+  margin-left: 2%;
+  height: 10%;
+  margin-top: 2%;
+}
+
+.session-button {
+  background-color: #D3E3F7;
+  width: 100%;
   border-radius: 5px;
-  background-color: #4CAF50;
-  color: white;
+  color: #315279;
   cursor: pointer;
   transition: background-color 0.3s;
+  text-align: left;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  align-self: center;
+  height: 100%;
+  font-size: 1.2rem;
+  font-weight: bold;
 }
 
 .session-button:hover {
-  background-color: #45a049;
+  background-color: #c4dcfa;
 }
 
 .delete-session {
-  padding: 15px 30px;
+  background-color: #D3E3F7;
+  width: 15%; 
+  display: flex; 
+  justify-content: center; 
+  align-items: center;
+  border-radius: 5px;
+  padding: 10px;
   border: none;
   border-radius: 5px;
-  background-color: #4CAF50;
   color: white;
   cursor: pointer;
   transition: background-color 0.3s;
+  align-self: center;
+  height: 100%;
 }
+
 
 .delete-session:hover {
-  background-color: #45a049;
+  background-color: #c4dcfa;
 }
 
 
-.session-list {
-  display: flex;
-  flex-direction: column; /* 세로 방향으로 정렬 */
-  align-items: start; /* 왼쪽 정렬 */
-  padding: 10px; /* 필요에 따라 조정 */
-  height: 100vh; /* 전체 뷰포트 높이 */
+
+.delete-icon {
+  width: auto;
+  height: 100%;
+}
+
+.create-new-chat-button {
+  margin-top: auto;
+  position: absolute;
+  background-color: #D3E3F7;
+  color: #315279;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%; 
   padding: 10px;
-  box-sizing: border-box;
-  justify-content: center;
+  height: calc(8% + 10px);
+  bottom: 0;
 }
 
-.session-list button {
-  margin-bottom: 10px; /* 버튼 사이의 간격 */
-  width: 200px; /* 또는 필요한 너비 */
-  align-self: center;
-  height: 5%;
+.create-new-chat-button:hover{
+  background-color: #c4dcfa;
+}
+
+.plus-icon {
+  width: auto;
+  height: 100%;
+}
+
+.session-items-container {
+  overflow-y: auto;
+  height: 92%;
+  width: 100%;
+  right: 0;
+}
+
+
+.session-items-container::-webkit-scrollbar {
+  display: none;
 }

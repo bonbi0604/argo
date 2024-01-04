@@ -14,31 +14,32 @@ const NoticeDetail = () => {
     const api = useAxios();
 
     useEffect(() => {
-        const fetchPostAndComments = async () => {
+      const fetchPostAndComments = async () => {
           try {
-            const response = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/`);
-            if (response.status === 200 && response.data) {
-              setNotice(response.data);
-            } else {
-              console.error('응답 오류:', response);
-            }
-      
-            const commentsResponse = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`);
-            if (commentsResponse.status === 200 && commentsResponse.data) {
-              setComments(commentsResponse.data);
-            }
+              const response = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/`);
+              if (response.status === 200 && response.data) {
+                  setNotice(response.data);
+                  console.log(response.data);
+              } else {
+                  console.error('응답 오류:', response);
+              }
+    
+              // 공지사항 댓글 데이터를 불러오는 요청으로 수정
+              const commentsResponse = await api.get(`http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`);
+              if (commentsResponse.status === 200 && commentsResponse.data) {
+                  setComments(commentsResponse.data);
+              }
           } catch (error) {
-            console.error('게시물 가져오기 오류', error);
+              console.error('게시물 가져오기 오류', error);
           }
-        };
-      
-        fetchPostAndComments();
+          };
+          fetchPostAndComments();
       }, []);
 
       const handleDelete = async () => {
         try {
           // Axios를 사용하여 DELETE 요청을 보냅니다.
-          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${id}/delete/`);
+          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${id}/noticedelete/`);
       
           // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
           if (response.status === 200 || response.status === 204) {
@@ -55,32 +56,30 @@ const NoticeDetail = () => {
       const handleCommentSubmit = async (e) => {
         e.preventDefault();
         try {
-          const commentData = {
-            content: newComment,
-            board_no: id,  // 게시글 ID
-            user_no: user.user_no,
-            // user_no 필드는 백엔드에서 처리합니다. 따라서 여기에서는 제거합니다.
-          };
-      
-          // 댓글 생성 API 엔드포인트를 호출합니다.
-          const response = await api.post(`http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`, commentData);
-          if (response.status === 201) {
-            setComments([...comments, response.data]);
-            setNewComment('');
-          }
+            const commentData = {
+                content: newComment,
+                notice_id: id,  // 공지사항 ID로 수정
+                user_no: user.user_no,
+            };
+            // 새로운 댓글 작성 API 요청으로 수정
+            const response = await api.post(`http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`, commentData);
+            if (response.status === 201) {
+                setComments([...comments, response.data]);
+                setNewComment('');
+            }
         } catch (error) {
-          console.error('댓글 작성 중 오류 발생', error.response ? error.response.data : error.message);
+            console.error('댓글 작성 중 오류 발생', error.response ? error.response.data : error.message);
         }
-      };
+    };
 
     const handleEdit = () => {
-        navigate(`/UpdatePost/${id}/`); // 올바른 경로 이름으로 수정
+        navigate(`/UpdateNotice/${id}/`); // 올바른 경로 이름으로 수정
       };
 
       // 댓글 삭제 핸들러
       const handleDeleteComment = async (commentId) => {
         try {
-          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/comments/${commentId}/delete/`);
+          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${commentId}/delete/`);
           if (response.status === 200 || response.status === 204) {
             setComments(comments.filter(comment => comment.comm_no !== commentId));
           }
@@ -96,7 +95,7 @@ const NoticeDetail = () => {
 
       const handleUpdateComment = async (commentId, content) => {
         try {
-          const response = await api.put(`http://127.0.0.1:8000/noticeboard/comments/${commentId}/update/`, { content });
+          const response = await api.put(`http://127.0.0.1:8000/noticeboard/notices/${commentId}/update/`, { content });
           if (response.status === 200) {
             // 댓글 목록에서 해당 댓글을 업데이트합니다.
             setComments(comments.map((comment) => {
@@ -115,17 +114,17 @@ const NoticeDetail = () => {
 
   return (
     <div>
-         {(user.user_no === Notice.author_id || user.is_admin) && (
+         {(user.user_no === Notice.user_no || user.is_admin) && (
         <button onClick={handleDelete}>삭제</button>
         )}
-        {user.user_no === Notice.author_id && (
+        {user.user_no === Notice.user_no && (
          <button onClick={handleEdit}>수정</button>
         )}
       <h2>{Notice.title}</h2>
       <p>{Notice.content}</p>
       {/* 파일 다운로드 링크 추가 */}
       <div>
-                {Notice.files && Notice.files.map((file, index) => (
+                {Notice.notice_files && Notice.notice_files.map((file, index) => (
                     <div key={index}>
                         <a href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
                     </div>
