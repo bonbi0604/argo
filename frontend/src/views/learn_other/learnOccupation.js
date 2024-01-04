@@ -13,73 +13,77 @@ import AuthContext from "../../context/AuthContext";
 // 한번에 전부 불러오는걸로
 
 const LearnCommonSense = () => {
-  const cat = "occupation";
-  const { user } = useContext(AuthContext);
-  const [wrongList, setWrongList] = useState("");
-  const [question, setQuestion] = useState({
-    'question_no': '',
-    'question_content': '문제를 불러오는 중입니다.',
-    'choices': '',
-    'correct_answer': '',
-    'is_many_choice' : ''
-  });
-  const [avg, setAvg] = useState(0);
-  const [score, setScore] = useState(0);
-  const user_no = user.user_no
+    const cat = "occupation";
+    const { user } = useContext(AuthContext);
+    const [wrongList, setWrongList] = useState("");
+    const [question, setQuestion] = useState({
+        question_no: "",
+        question_content: "문제를 불러오는 중입니다.",
+        choices: "",
+        correct_answer: "",
+        is_many_choice: "",
+    });
+    const [avg, setAvg] = useState(0);
+    const [score, setScore] = useState(0);
+    const user_no = user.user_no;
 
-  useEffect(() => {
-    const getLearnPageData = async () => {
-      try {
-        //풀 문제
-        const response1 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cat
-          })
-        });
-        const data1 = await response1.json();
+    useEffect(() => {
+        const getLearnPageData = async () => {
+            try {
+                //풀 문제
+                const response1 = await fetch(
+                    `http:// argo12.duckdns.org:8000/learn/getQuestion/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            cat,
+                        }),
+                    }
+                );
+                const data1 = await response1.json();
 
-        if (response1.ok) {
-          setQuestion(data1.wrong_question)
-        } else {
-          console.error("풀 문제 오류");
-        } //풀 문제 끝
+                if (response1.ok) {
+                    setQuestion(data1.wrong_question);
+                } else {
+                    console.error("풀 문제 오류");
+                } //풀 문제 끝
 
-        //avg, score
-        const response2 = await fetch(`http://127.0.0.1:8000/learn/getAvgScore/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cat,
-            user_no
-          })
-        });
-        const data2 = await response2.json();
+                //avg, score
+                const response2 = await fetch(
+                    `http:// argo12.duckdns.org:8000/learn/getAvgScore/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            cat,
+                            user_no,
+                        }),
+                    }
+                );
+                const data2 = await response2.json();
 
-        if (response2.ok) {
-          setAvg(data2.score.total_avg)
-          setScore(data2.score.user_avg)
-        } else {
-        }
+                if (response2.ok) {
+                    setAvg(data2.score.total_avg);
+                    setScore(data2.score.user_avg);
+                } else {
+                }
+            } catch (error) {
+                console.error("learn-other 오류", error);
+            }
+        };
 
-      } catch (error) {
-        console.error('learn-other 오류', error);
-      }
-    };
+        //함수 호출
+        getLearnPageData();
+    }, []);
 
-    //함수 호출
-    getLearnPageData();
-  }, []); 
-
-
-  return (
-    <LearnOtherPage cat={cat} avg={avg} score={score} question={question}/>
-  )
-}
+    return (
+        <LearnOtherPage cat={cat} avg={avg} score={score} question={question} />
+    );
+};
 
 export default LearnCommonSense;
