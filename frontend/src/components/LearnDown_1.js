@@ -13,7 +13,7 @@ const LearnDown1 = (cat) => {
 
   return (
     <div id="comLearnDown">
-      {historyId != null ? <WrongAnswers historyId={historyId}/> : <div id="q_div"><p>문제를 불러오고 있습니다..</p></div>}
+      {historyId != null ? <WrongAnswers historyId={historyId}/> : <div id="q_div"><p>문제를 선택해 주세요</p></div>}
       <QuestionList cat={cat} historyId={historyId} setHistoryId={setHistoryId}/>
     </div>
   )

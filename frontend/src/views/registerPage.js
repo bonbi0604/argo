@@ -4,6 +4,7 @@
 import React, { useState, useContext, useCallback } from "react"; // 리액트 및 필요한 모듈 가져오기
 import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져오기
 import "./registerPage.css";
+import LoginModal from "../components/LoginModal"
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
@@ -15,7 +16,7 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("")
   const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
-  
+
   // 확인
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("") //비번 확인
   const [idIsCuplicate, setIdIsDuplicate] = useState(false) //아이디 중복인지(True,False)
@@ -34,7 +35,26 @@ function Register() {
   const [backCode, setBackCode] = useState('');
   const [code, setCode] = useState('');
   const [codeDisplay, setCodeDisplay] = useState('none');
-  
+
+  //약관 동의
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isTermsChecked, setTermsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    if (isTermsChecked) {
+      setTermsChecked(false);
+    } else {
+      setModalOpen(true)
+    }
+  };
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setTermsChecked(true)
+  };
+
 
   //비밀번호 확인
   const onChangeConfirmPwd = useCallback((e) => {
@@ -176,6 +196,10 @@ function Register() {
     }
   }, [email]);
 
+  /**
+   * 이메일을 보낸 후 인증 검사 과정.
+   * TODO: 승연이가 여기 주석 예쁘게 써줘~ 부탁해!
+   */
   const mailSend = useCallback(async () => {
     const response = await fetch(`http://127.0.0.1:8000/api/mailSend/`, {
       method: "POST",
@@ -198,7 +222,7 @@ function Register() {
   // 인증번호 검사
   const checkCode = () => {
     if(validateCode) {
-      
+
       setEmailMsg('인증되었습니다.')
       setEmailMsgColor('green')
       setCodeDisplay("none");
@@ -210,22 +234,20 @@ function Register() {
 
   // 부서 선택했는지
   const validateDept = (dept) => {
-    return dept === ''
+    return dept != ''
   }
-
-
 
   // 검사 함수로 정리
   const isEmailValid = validateEmail(email);
   const isPwdValid = validatePwd(password);
-  const isCodeValid = validateCode();
+  const isCodeValid = validateCode();  // 이메일 인증 검사
   const isConfirmPwd = password === password2;
   const isDeptValid = validateDept(dept);
   // const isDuId = checkDuplicateId(id);
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid;
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
@@ -322,6 +344,16 @@ function Register() {
                 <option value="2">부서2</option>
                 <option value="3">부서3</option>
               </select>
+            </div>
+            <div id="terms">
+              <label id="terms_label">
+                <input type="checkbox" checked={isTermsChecked} onChange={handleCheckboxChange} />
+                약관 동의
+              </label>
+              <button onClick={handleModalOpen} type="button">약관 보기</button>
+              <LoginModal isOpen={isModalOpen} onClose={handleModalClose}>
+                약관 내용이 여기에 나타납니다.
+              </LoginModal>
             </div>
             <button id="regBtn" type="submit" disabled={!isAllValid}>회원가입</button>
           </form>
