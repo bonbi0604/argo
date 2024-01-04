@@ -39,7 +39,7 @@ const NoticeDetail = () => {
       const handleDelete = async () => {
         try {
           // Axios를 사용하여 DELETE 요청을 보냅니다.
-          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${id}/delete/`);
+          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${id}/noticedelete/`);
       
           // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
           if (response.status === 200 || response.status === 204) {
@@ -58,7 +58,7 @@ const NoticeDetail = () => {
         try {
             const commentData = {
                 content: newComment,
-                notice_no: id,  // 공지사항 ID로 수정
+                notice_id: id,  // 공지사항 ID로 수정
                 user_no: user.user_no,
             };
             // 새로운 댓글 작성 API 요청으로 수정
@@ -73,13 +73,13 @@ const NoticeDetail = () => {
     };
 
     const handleEdit = () => {
-        navigate(`/UpdatePost/${id}/`); // 올바른 경로 이름으로 수정
+        navigate(`/UpdateNotice/${id}/`); // 올바른 경로 이름으로 수정
       };
 
       // 댓글 삭제 핸들러
       const handleDeleteComment = async (commentId) => {
         try {
-          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/comments/${commentId}/delete/`);
+          const response = await api.delete(`http://127.0.0.1:8000/noticeboard/notices/${commentId}/delete/`);
           if (response.status === 200 || response.status === 204) {
             setComments(comments.filter(comment => comment.comm_no !== commentId));
           }
@@ -95,7 +95,7 @@ const NoticeDetail = () => {
 
       const handleUpdateComment = async (commentId, content) => {
         try {
-          const response = await api.put(`http://127.0.0.1:8000/noticeboard/comments/${commentId}/update/`, { content });
+          const response = await api.put(`http://127.0.0.1:8000/noticeboard/notices/${commentId}/update/`, { content });
           if (response.status === 200) {
             // 댓글 목록에서 해당 댓글을 업데이트합니다.
             setComments(comments.map((comment) => {
@@ -122,10 +122,9 @@ const NoticeDetail = () => {
         )}
       <h2>{Notice.title}</h2>
       <p>{Notice.content}</p>
-      <p>{Notice.files}</p>
       {/* 파일 다운로드 링크 추가 */}
       <div>
-                {Notice.files && Notice.files.map((file, index) => (
+                {Notice.notice_files && Notice.notice_files.map((file, index) => (
                     <div key={index}>
                         <a href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
                     </div>

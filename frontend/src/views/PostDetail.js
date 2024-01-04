@@ -58,7 +58,7 @@ const PostDetail = () => {
         try {
           const commentData = {
             content: newComment,
-            board_no: id,  // 게시글 ID
+            post_id: id,  // 게시글 ID
             user_no: user.user_no,
             // user_no 필드는 백엔드에서 처리합니다. 따라서 여기에서는 제거합니다.
           };

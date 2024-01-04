@@ -47,11 +47,11 @@ def post_list_create(request):
         serializer = PostSerializer(data=request.data, context={'request': request})
         print(request.data)
         if serializer.is_valid():
-            post = serializer.save(author=request.user)
+            post = serializer.save(user_no=request.user)
             files_data = request.FILES.getlist('file_field_name')
             files_names = request.data.getlist('file_name')
             # for file_data, file_name in zip(files_data, files_names):
-            #     FileModel.objects.create(board_no=post, src=file_data, name=file_name)
+            #     FileModel.objects.create(post_id=post, src=file_data, name=file_name)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -89,12 +89,25 @@ def delete_post(request, id):
     # 삭제가 성공적으로 이루어졌음을 응답으로 반환합니다.
     return JsonResponse({'message': '게시물이 성공적으로 삭제되었습니다.'})
 
+    
+@api_view(['DELETE'])
+def delete_notice(request, id):
+    # ID에 해당하는 게시물을 데이터베이스에서 찾습니다.
+    notice = get_object_or_404(Notice, pk=id)
+
+    # 게시물을 삭제합니다.
+    notice.delete()
+
+    # 삭제가 성공적으로 이루어졌음을 응답으로 반환합니다.
+    return JsonResponse({'message': '게시물이 성공적으로 삭제되었습니다.'})
+
+
 @api_view(['GET', 'POST'])
 def comments_list_create(request, id):
     post = get_object_or_404(Post, pk=id)
 
     if request.method == 'GET':
-        comments = Comment.objects.filter(board_no=post)
+        comments = Comment.objects.filter(post_id=post)
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
     
@@ -106,7 +119,7 @@ def comments_list_create(request, id):
         print(request.data)
         if serializer.is_valid():
             # save() 호출 시 user_no에 request.user를 전달합니다.
-            serializer.save(board_no=post, user_no=request.user)
+            serializer.save(post_id=post, user_no=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -135,6 +148,15 @@ def delete_comment(request, id):
     comment.delete()
     return Response({'message': '댓글이 성공적으로 삭제되었습니다.'})
 
+
+# 댓글 삭제
+@api_view(['DELETE'])
+def delete_notice_comment(request, id):
+    comment = get_object_or_404(NoticeComment, pk=id)
+    comment.delete()
+    return Response({'message': '댓글이 성공적으로 삭제되었습니다.'})
+
+
 # 댓글 수정
 @api_view(['PUT'])
 def update_comment(request, id):
@@ -145,6 +167,19 @@ def update_comment(request, id):
         return Response(serializer.data)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+# 댓글 수정
+@api_view(['PUT'])
+def update_notice_comment(request, id):
+    comment = get_object_or_404(NoticeComment, pk=id)
+    serializer = NoticeCommentSerializer(comment, data=request.data, partial=True)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    
 
 # 로거 설정
 logger = logging.getLogger(__name__)
@@ -162,7 +197,7 @@ def notice_detail(request, id):
         # PUT 요청인 경우, 공지사항을 수정합니다.
         # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)
         # 여기에 로직 추가
-        serializer = NoticeSerializer(notice, data=request.data, partial=True)
+        serializer = NoticeSerializer(notice, data=request.data, partial=True, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -179,7 +214,7 @@ def notice_comments_list_create(request, id):
     notice = get_object_or_404(Notice, pk=id)
 
     if request.method == 'GET':
-        comments = NoticeComment.objects.filter(notice_no=notice)
+        comments = NoticeComment.objects.filter(notice_id=notice)
         serializer = NoticeCommentSerializer(comments, many=True)
         return Response(serializer.data)
     
@@ -189,7 +224,7 @@ def notice_comments_list_create(request, id):
 
         serializer = NoticeCommentSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save(notice_no=notice, user_no=request.user)
+            serializer.save(notice_id=notice, user_no=request.user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

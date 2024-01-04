@@ -28,6 +28,7 @@ import LearnTools from "./views/learn_other/learnTools";
 import MyPage from "./views/myPage";
 import NoticeDetail from "./views/NoticeDetail"
 import PostDetail from "./views/PostDetail";
+import UpdateNotice from "./views/UpdateNotice";
 import UpdatePost from "./views/UpdatePost"
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
             <Route path="/writepost" element={<WritePost />} />
             <Route path="/PostDetail/:id" element={<PostDetail />} />
             <Route path="/UpdatePost/:id/" element={<UpdatePost />} />
+            <Route path="/UpdateNotice/:id/" element={<UpdateNotice />} />
             <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
             <Route path="/chat" element={<Chat />} />
 

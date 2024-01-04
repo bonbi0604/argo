@@ -21,7 +21,7 @@ const WritePost = () => {
             let formData = new FormData();
             formData.append('title', title);
             formData.append('content', content);
-            formData.append('author', user.user_no);
+            formData.append('user_no', user.user_no);
             if (files.length > 0) { // 파일이 있을 때만 파일 데이터를 추가
                 for (let i = 0; i < files.length; i++) {
                     formData.append('file_field_name', files[i]);
