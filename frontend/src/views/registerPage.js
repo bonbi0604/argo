@@ -4,6 +4,7 @@
 import React, { useState, useContext, useCallback } from "react"; // 리액트 및 필요한 모듈 가져오기
 import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져오기
 import "./registerPage.css";
+import LoginModal from "../components/LoginModal"
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
@@ -34,6 +35,25 @@ function Register() {
   const [backCode, setBackCode] = useState('');
   const [code, setCode] = useState('');
   const [codeDisplay, setCodeDisplay] = useState('none');
+
+  //약관 동의
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isTermsChecked, setTermsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    if (isTermsChecked) {
+      setTermsChecked(false);
+    } else {
+      setModalOpen(true)
+    }
+  };
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setTermsChecked(true)
+  };
   
 
   //비밀번호 확인
@@ -213,8 +233,6 @@ function Register() {
     return dept === ''
   }
 
-
-
   // 검사 함수로 정리
   const isEmailValid = validateEmail(email);
   const isPwdValid = validatePwd(password);
@@ -225,7 +243,7 @@ function Register() {
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid;
+  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid && isTermsChecked;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
@@ -322,6 +340,16 @@ function Register() {
                 <option value="2">부서2</option>
                 <option value="3">부서3</option>
               </select>
+            </div>
+            <div id="terms">
+              <label id="terms_label">
+                <input type="checkbox" checked={isTermsChecked} onChange={handleCheckboxChange} />
+                약관 동의
+              </label>
+              <button onClick={handleModalOpen} type="button">약관 보기</button>
+              <LoginModal isOpen={isModalOpen} onClose={handleModalClose}>
+                약관 내용이 여기에 나타납니다.
+              </LoginModal>
             </div>
             <button id="regBtn" type="submit" disabled={!isAllValid}>회원가입</button>
           </form>
