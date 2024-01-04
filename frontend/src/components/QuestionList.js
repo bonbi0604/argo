@@ -12,8 +12,8 @@ const QuestionList = ({cat, historyId, setHistoryId}) => {
   const pagesToShow = 5;
   const [searchContent, setSearchContent] = useState("");
 
-  const changeWrongQuestion = (question_no) => {
-    setHistoryId(question_no);
+  const changeWrongQuestion = (result_no) => {
+    setHistoryId(result_no);
   }
 
   const searchWrongQuestion = async () => {
@@ -85,7 +85,7 @@ const QuestionList = ({cat, historyId, setHistoryId}) => {
       <div id="q_container">
         {/* 클릭하면 오답노트쪽이 해당 문제로 바뀜 */}
         {Array.isArray(currentItems) && currentItems.map((item) => (
-          <div key={item.question_no} className="q_content" onClick={() => changeWrongQuestion(item.question_no)}>
+          <div key={item.question_no} className="q_content" onClick={() => changeWrongQuestion(item.result_no)}>
             <p>{item.question_no}. {item.content}</p>
           </div>
         ))}
