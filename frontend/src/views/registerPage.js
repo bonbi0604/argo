@@ -16,7 +16,7 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("")
   const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
-  
+
   // 확인
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("") //비번 확인
   const [idIsCuplicate, setIdIsDuplicate] = useState(false) //아이디 중복인지(True,False)
@@ -55,7 +55,7 @@ function Register() {
     setModalOpen(false);
     setTermsChecked(true)
   };
-  
+
 
   //비밀번호 확인
   const onChangeConfirmPwd = useCallback((e) => {
@@ -201,6 +201,10 @@ function Register() {
     }
   }, [email]);
 
+  /**
+   * 이메일을 보낸 후 인증 검사 과정.
+   * TODO: 승연이가 여기 주석 예쁘게 써줘~ 부탁해!
+   */
   const mailSend = useCallback(async () => {
     setMailChecked(true)
     const response = await fetch(`http://127.0.0.1:8000/api/mailSend/`, {
@@ -236,7 +240,7 @@ function Register() {
 
   // 부서 선택했는지
   const validateDept = (dept) => {
-    return dept === ''
+    return dept !== ''
   }
 
   const idChange = (e) => {
@@ -255,7 +259,7 @@ function Register() {
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = idIsCuplicate && emailIsDuplicate && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid && isTermsChecked;
+  const isAllValid = idIsCuplicate && emailIsDuplicate && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
