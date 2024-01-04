@@ -1,0 +1,63 @@
+[
+    {
+        "id": 1,
+        "chatbot_role": "",
+        "user_role": "",
+        "conversation" : [
+            {
+                "speaker": "chatbot", 
+                "sentence": "전화 주셔서 감사합니다. <Corp>의 <Dept>입니다.", 
+                "guide":["전화 인삿말", "소속(회사, 부서) 명시"], 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": "user", 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": chatbot, 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": chatbot, 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": chatbot, 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": chatbot, 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": chatbot, 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+            {
+                "speaker": chatbot, 
+                "sentence": "", 
+                "guide":"", 
+                "senvenC":[Clear, ...]
+            },
+        ],
+        "title": "",
+        "situation" : "",
+        "goal": "",
+        "masking": {
+            
+        }
+    }
+]
