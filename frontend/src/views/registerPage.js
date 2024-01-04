@@ -236,7 +236,7 @@ function Register() {
 
 
   return (
-    <section>
+    <section style={{height: 'auto', minHeight:'calc(100% - 5em)', display:'flex'}}>
       <div className="regloginSection">
         <div id="regFormDiv">
           <form onSubmit={handleSubmit} className="registForm">

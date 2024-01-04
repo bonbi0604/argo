@@ -6,17 +6,18 @@
     background-size: cover; /* 배경 이미지를 화면에 꽉 차게 설정 */
     background-repeat: no-repeat; /* 배경 이미지 반복 제거 */
     background-attachment: fixed; /* 배경 이미지를 스크롤과 함께 고정시킴 */
-    height: 100vh; /* body의 높이를 화면 높이와 같게 설정 */
-    margin: 0;
+    min-height: 100%; /* body의 높이를 화면 높이와 같게 설정 */
+    margin: auto;
     padding: 0;
+    display: flex;
 }
 
 .registForm {
     max-width: 400px;
-    margin: 0 auto;
+    margin: 7% auto;
     padding: 3%;
     background-color: rgba(255, 255, 255, 0.8); /* 배경색을 반투명하게 설정 */
-    margin-bottom: 10%;
+    /* margin-bottom: 10%; */
     border-radius: 10px; /* 모서리 둥글게 설정 */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
 }
@@ -33,7 +34,11 @@
 }
 
 #regFormDiv {
-    padding-top: 1.5%;
+    /* padding-top: 1.5%; */
+    width: 50%;
+    height: 80%;
+    margin: auto;
+    min-height: 34em;
 }
 
 .regContent {

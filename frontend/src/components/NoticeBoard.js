@@ -16,43 +16,33 @@ const NoticeBoard = () => {
     // API request to retrieve data appropriate for the current page
     const offset = (currentPage - 1) * itemsPerPage;
 
-    const fetchItems = async () => {
+    const fetchPosts = async () => {
       const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
       try {
-          const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}`);
-          setItems(response.data);
-      } catch (error) {
-          console.error('Error fetching items', error);
-      }
-      };
-
-      fetchItems();
-
-    const fetchPosts = async () => {
-      try {
-        const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/?limit=${itemsPerPage}&offset=${offset}`);
+        const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`);
         if (response.status === 200 && Array.isArray(response.data)) {
-          // Reverse the order of the data
-          const reversedPosts = [...response.data].reverse();
-          setPosts(reversedPosts);
+          const data = [...response.data].reverse();
+          if (selectedTab === 'notices') {
+            setItems(data); // 공지사항 데이터 저장
+          } else {
+            setPosts(data); // 일반 게시글 데이터 저장
+          }
         } else {
           console.error('Data is not an array', response.data);
         }
       } catch (error) {
-        console.error('Error retrieving post', error);
+        console.error('Error retrieving data', error);
       }
     };
   
     fetchPosts();
   }, [currentPage, selectedTab, itemsPerPage]); // currentPage도 의존성 배열에 추가
 
-  const dataToShow = selectedTab === 'notices' ? posts : posts; // 필요에 따라 데이터를 조건에 따라 필터링합니다.
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = selectedTab === 'notices' ? items : posts.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const currentItems = selectedTab === 'notices' 
+  ? items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) // 공지사항에 대한 페이지네이션 적용
+  : posts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); // 일반 게시물에 대한 페이지네이션 적용
 
   return (
     <div className="mt-6">
@@ -81,12 +71,12 @@ const NoticeBoard = () => {
                     </thead>
                     <tbody>
                         {currentItems.map((item) => (
-                             <tr key={item.id} onClick={() => navigate(selectedTab === 'posts' ? `/PostDetail/${item.id}/` : `/NoticeDetail/${item.id}`)}>
-                                <td className="p-4">{item.id}</td>
+                             <tr key={item.id} onClick={() => navigate(selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`)}>
+                                <td className="p-4">{selectedTab === 'posts' ? item.post_id : item.notice_id}</td>
                                 <td className="p-4">
-                                    <Link to={selectedTab === 'posts' ? `/PostDetail/${item.id}/` : `/NoticeDetail/${item.id}`}>{item.title}</Link>
+                                    <Link to={selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`}>{item.title}</Link>
                                 </td>
-                                <td className="p-4">{item.author_id}</td>
+                                <td className="p-4">{item.user_no}</td>
                                 <td className="p-4">{new Date(item.timestamp).toLocaleDateString()}</td>
                             </tr>
                         ))}
