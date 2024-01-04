@@ -29,6 +29,7 @@ import NoticeDetail from "./views/NoticeDetail"
 import PostDetail from "./views/PostDetail";
 import UpdatePost from "./views/UpdatePost";
 import ResultPage from "./views/resultPage";
+import ChangePassword from "./views/changePassword";
 
 function App() {
   return (
@@ -45,17 +46,16 @@ function App() {
             <Route path="/findId" element={<FindId />} />
             <Route path="/findPw" element={<FindPw />} />
             
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-            <Route path="/findId" element={<FindId />} />
-            <Route path="/findPw" element={<FindPw />} />
             <Route path="/learn/communication" element={<CommunicationPage />} />
             <Route path="/learn" element={<LearningPage />} />
             <Route path="/learn/ethic" element={<LearnEthic />} />
             <Route path="/learn/commonsense" element={<LearnCommonSense />} />
             <Route path="/learn/occupation" element={<LearnOccupation />} />
             <Route path="/learn/tools" element={<LearnTools />} />
+
             <Route path="/profile" element={<MyPage />} />
+            <Route path="/profile/changePassword" element={<ChangePassword />} />
+
             <Route path="result" element={<ResultPage />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/writepost" element={<WritePost />} />

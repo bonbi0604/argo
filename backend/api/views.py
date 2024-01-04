@@ -31,7 +31,8 @@ def getRoutes(request):
     routes = [
         '/api/token/',
         '/api/register/',
-        '/api/token/refresh/'
+        '/api/token/refresh/',
+        '/api/password_change/'
     ]
     return Response(routes)
 
@@ -66,7 +67,6 @@ def testEndPoint(request):
 
 @csrf_exempt
 def checkId(request):
-    print("오긴했다")
     try:
         # 아이디 가져오기
         data = json.loads(request.body)

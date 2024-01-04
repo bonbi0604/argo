@@ -2,6 +2,9 @@ from noticeboard.views import post_list_create
 from django.urls import path, include
 from . import views
 from .views import checkId, checkEmail, mailSend
+from django.contrib.auth.views import PasswordChangeView
+from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.views import PasswordResetView
 
 from rest_framework_simplejwt.views import (
     TokenRefreshView,
@@ -15,5 +18,6 @@ urlpatterns = [
     path('checkEmail/', checkEmail, name='checkEmail'),
     path('mailSend/', mailSend, name='mailSend'),
     path('', views.getRoutes),
-    path('password_reset/', include('django.contrib.auth.urls'))  # 패스워드 재설정
+    path('password_change/', csrf_exempt(PasswordChangeView.as_view()), name='password_change'),
+    path('password_reset/', csrf_exempt(PasswordResetView.as_view()), name='password_reset'), # 비번 재설정 이메일 요청
 ]
