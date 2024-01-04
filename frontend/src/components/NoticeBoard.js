@@ -72,7 +72,7 @@ const NoticeBoard = () => {
                     <tbody>
                         {currentItems.map((item) => (
                              <tr key={item.id} onClick={() => navigate(selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`)}>
-                                <td className="p-4">{item.id}</td>
+                                <td className="p-4">{selectedTab === 'posts' ? item.post_id : item.notice_id}</td>
                                 <td className="p-4">
                                     <Link to={selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`}>{item.title}</Link>
                                 </td>
