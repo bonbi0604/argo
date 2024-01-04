@@ -8,13 +8,17 @@ urlpatterns = [
     path('notices/', notice_list_create, name='notice_list_create'),
     path('posts/<int:id>/', post_detail, name='post_detail'),
     path('posts/<int:id>/delete/', views.delete_post, name='delete_post'),
+    path('notices/<int:id>/noticedelete/', views.delete_notice, name='delete_notice'),
     path('posts/<int:id>/comments/', views.comments_list_create, name='comments_list_create'),
     path('notices/<int:id>/comments/', views.notice_comments_list_create, name='notice_comments_list_create'),
     path('comments/<int:id>/delete/', views.delete_comment, name='delete_comment'),
     path('comments/<int:id>/update/', views.update_comment, name='update_comment'),
+    path('notices/<int:id>/update/', views.update_notice_comment, name='update_notice_comment'),
+    path('notices/<int:id>/delete/', views.delete_notice_comment, name='delete_notice_comment'),
     path('notices/<int:id>/', notice_detail, name='notice_detail'),
     path('user/detail/', user_detail, name='user_detail'),
     path('', views.getRoutes),
-    path('password_reset/', include('django.contrib.auth.urls'))  # 패스워드 재설정
+    path('password_reset/', include('django.contrib.auth.urls')),  # 패스워드 재설정
+
 ]
 
