@@ -33,7 +33,7 @@ const CommunicationHistory = ({
         Courteous: 0,
     };
     const [historyDetail, setHistoryDetail] = useState({});
-    const BASEURL = "http://argo12.duckdns.org:8000/";
+    const BASEURL = "http:// argo12.duckdns.org:8000/";
     const [labelAverages, setLabelAverages] = useState({});
 
     // data 보내는 함수

@@ -19,7 +19,7 @@ const QuestionList = ({ cat, historyId, setHistoryId }) => {
     const searchWrongQuestion = async () => {
         try {
             const response = await fetch(
-                `http://argo12.duckdns.org:8000/learn/searchList/`,
+                `http:// argo12.duckdns.org:8000/learn/searchList/`,
                 {
                     method: "POST",
                     headers: {
@@ -46,7 +46,7 @@ const QuestionList = ({ cat, historyId, setHistoryId }) => {
             //틀린문제 리스트
             // currPage 보내주기
             const response1 = await fetch(
-                `http://argo12.duckdns.org:8000/learn/wronglist/`,
+                `http:// argo12.duckdns.org:8000/learn/wronglist/`,
                 {
                     method: "POST",
                     headers: {

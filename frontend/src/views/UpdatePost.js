@@ -13,7 +13,7 @@ const UpdatePost = () => {
         const fetchPost = async () => {
             try {
                 const response = await api.get(
-                    `http://argo12.duckdns.org:8000/noticeboard/posts/${id}/`
+                    `http:// argo12.duckdns.org:8000/noticeboard/posts/${id}/`
                 );
                 if (response.status === 200 && response.data) {
                     setTitle(response.data.title);
@@ -37,7 +37,7 @@ const UpdatePost = () => {
             };
 
             const response = await api.put(
-                `http://argo12.duckdns.org:8000/noticeboard/posts/${id}/`,
+                `http:// argo12.duckdns.org:8000/noticeboard/posts/${id}/`,
                 updatedPost
             );
 

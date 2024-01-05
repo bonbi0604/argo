@@ -91,7 +91,7 @@ const LearningPage = () => {
         const fetchRecommendation = async () => {
             try {
                 const response = await fetch(
-                    `http://argo12.duckdns.org:8000/learn/recommendation/`,
+                    `http:// argo12.duckdns.org:8000/learn/recommendation/`,
                     {
                         // 백엔드 서버에 메시지를 POST 요청
                         method: "POST",
@@ -122,7 +122,7 @@ const LearningPage = () => {
         const fetchScore = async () => {
             try {
                 const response = await fetch(
-                    `http://argo12.duckdns.org:8000/learn/score/`,
+                    `http:// argo12.duckdns.org:8000/learn/score/`,
                     {
                         // 백엔드 서버에 메시지를 POST 요청
                         method: "POST",

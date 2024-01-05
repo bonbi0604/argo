@@ -15,7 +15,7 @@ const ChatHistory = forwardRef(
         const fetchSessions = async () => {
             try {
                 const response = await fetch(
-                    `http://argo12.duckdns.org:8000/chatbot/api/chat-sessions/?user_no=${user.user_no}`
+                    `http:// argo12.duckdns.org:8000/chatbot/api/chat-sessions/?user_no=${user.user_no}`
                 );
                 if (!response.ok) {
                     throw new Error("Failed to fetch sessions");
@@ -44,7 +44,7 @@ const ChatHistory = forwardRef(
             }
             try {
                 const response = await fetch(
-                    `http://argo12.duckdns.org:8000/chatbot/api/chat-sessions/${id}/`
+                    `http:// argo12.duckdns.org:8000/chatbot/api/chat-sessions/${id}/`
                 );
                 if (!response.ok) {
                     throw new Error("Failed to fetch session data");
@@ -71,7 +71,7 @@ const ChatHistory = forwardRef(
             ) {
                 try {
                     const response = await fetch(
-                        `http://argo12.duckdns.org:8000/chatbot/api/chat-sessions/${sessionId}/`,
+                        `http:// argo12.duckdns.org:8000/chatbot/api/chat-sessions/${sessionId}/`,
                         {
                             method: "DELETE",
                         }
