@@ -135,8 +135,8 @@
 .header-menu button:active,
 .header-menu .button:hover,
 .header-menu .button:active {
-    box-shadow: inset 0 0 0 2px #9bf1ff;
-    color: #9bf1ff;
+    box-shadow: inset 0 0 0 1.5px white;
+    color: white;
   }
 
   .header-menu input[type="submit"]:active,
@@ -145,7 +145,7 @@
   .header-menu button:active,
   .header-menu .button:active {
     background-color: rgba(155, 241, 255, 0.1);
-    box-shadow: inset 0 0 0 2px #53e3fb;
+    box-shadow: inset 0 0 0 2px #c4dcfa;
     color: #53e3fb;
   }
 
@@ -279,7 +279,7 @@
     .header-menu button.primary:active,
     .header-menu .button.primary:hover,
     .header-menu .button.primary:active {
-      background-color: #9bf1ff;
+      background-color: #c4dcfa;
       color: #242943 !important;
     }
 
@@ -288,7 +288,7 @@
     .header-menu input[type="button"].primary:active,
     .header-menu button.primary:active,
     .header-menu .button.primary:active {
-      background-color: #53e3fb;
+      background-color: #c4dcfa;
     }
 
   .header-menu input[type="submit"].disabled, input[type="submit"]:disabled,
@@ -305,4 +305,6 @@
     opacity: 0.25;
   }
 
- 
+  .header-menu, .header-menu *, .header-menu *:before, .header-menu *:after {
+    box-sizing: border-box;
+  }
