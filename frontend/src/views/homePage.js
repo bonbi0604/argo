@@ -7,9 +7,17 @@ console.log("homepage"); // "homepage"을 콘솔에 출력합니다.
 
 const Home = () => {
   const { user } = useContext(AuthContext); // AuthContext에서 user 정보를 가져옵니다.
-  // <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
   useEffect(() => {
+    const loadScript = src => {
+      return new Promise((resolve, reject) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => resolve();
+        script.onerror = () => reject();
+        document.body.appendChild(script);
+      });
+    };
+  
     const scripts = [
       "../../test/assets/js/jquery.min.js",
       "../../test/assets/js/jquery.scrolly.min.js",
@@ -19,14 +27,12 @@ const Home = () => {
       "../../test/assets/js/util.js",
       "../../test/assets/js/main.js",
     ];
-
-    scripts.forEach((script) => {
-      const scriptElement = document.createElement("script");
-      scriptElement.src = script;
-      scriptElement.async = true;
-      document.body.appendChild(scriptElement);
-    });
+  
+    scripts.reduce((prev, curr) => {
+      return prev.then(() => loadScript(curr));
+    }, Promise.resolve());
   }, []);
+  
   return (
     <div>
           <link rel="stylesheet" href="../../test/assets/css/main.css" />
