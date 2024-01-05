@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.status === 200) {
         alert("비밀번호가 성공적으로 변경되었습니다.");
-        // navigate("../profile");
+        navigate("../profile");
       } else if (response.status === 400) {
         const data = await response.json();
         alert(`비밀번호 변경 실패: ${data.detail}`);
