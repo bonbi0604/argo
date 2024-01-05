@@ -601,6 +601,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
                 'answer_ratio' : answer_ration,
+                'result_no' : content.result_no,
                 }
         question.append(dic)
     return question
@@ -734,28 +735,37 @@ def insertResult(request):
 @csrf_exempt
 def get_wrong_question(request):
     data = json.loads(request.body)
-    user_number = data.get('user_no')
-    question_number = data.get('question_no')
-    instance =Result.objects.get(user_no = user_number, question_no = question_number)
+    result_no = data.get('result_no')
+    print('-------------------------------------------------------------',result_no)
+    instance =Result.objects.get(result_no = result_no)
+    print('-------------------------------------------------------------',instance)
     if instance.content != '':
         user = instance.content
     else:
         user =instance.answer_no.content
-    question = Question.objects.get(question_no = question_number).content
-    answer = Answer.objects.get(question_no = question_number, is_correct = 1).content
-    
+    # 문제 내용 뽑기
+    question = Question.objects.get(question_no = instance.question_no.question_no).content
+   
+    answer = Answer.objects.filter(question_no = instance.question_no.question_no, is_correct = 1)
+    answer = answer.first().content
+    question_number = instance.question_no.question_no
+   
+   
+    # 정답률
     question_number = instance.question_no.question_no
     question_query = Result.objects.filter(question_no = question_number)
     question_total = question_query.count()
     question_correct_num =question_query.filter(is_correct = 1).count()
     answer_ration = round((question_correct_num / question_total) * 100,2)
-    
-    
+   
+   
     result = {
         'user_content' : user,
         'question_content' : question,
         'answer_content' : answer,
-        'answer_ratio' : answer_ration
+        'answer_ratio' : answer_ration,
+        'question_no' : question_number
+       
     }
     return JsonResponse({'content':result})
 
