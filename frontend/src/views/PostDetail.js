@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
+import "./PostDetail.css"
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -115,69 +116,72 @@ const PostDetail = () => {
       };
 
   return (
-    <div>
-         {(user.user_no === post.user_no || user.is_admin) && (
-        <button onClick={handleDelete}>삭제{post.author}</button>
+    <section>
+      <div className="post-container">
+        {(user.user_no === post.user_no || user.is_admin) && (
+          <button className="delete-btn" onClick={handleDelete}>삭제{post.author}</button>
         )}
         {user.user_no === post.user_no && (
-         <button onClick={handleEdit}>수정</button>
+          <button className="edit-btn" onClick={handleEdit}>수정</button>
         )}
-      <h2>{post.title}</h2>
-      <p>{post.content}</p>
-      {/* 파일 다운로드 링크 추가 */}
-      <div>
-                {post.files && post.files.map((file, index) => (
-                    <div key={index}>
-                        <a href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
-                    </div>
-                ))}
-            </div>
-
-    {comments.map((comment) => (
-    <div key={comment.comm_no} style={{ display: 'flex', alignItems: 'center' }}>
-        {editingComment && editingComment.id === comment.comm_no ? (
-        // 수정 모드 활성화
-        <div>
-            <input
-            type="text"
-            value={editingComment.content}
-            onChange={(e) => setEditingComment({ ...editingComment, content: e.target.value })}
-            />
-            <button onClick={() => handleUpdateComment(editingComment.id, editingComment.content)}>수정 완료</button>
+        <div className='post_content_div'>
+          <div className="title">{post.title}</div>
+          <p className="content">{post.content}</p>
+          {/* 파일 다운로드 링크 추가 */}
+          <div>
+            {post.files && post.files.map((file, index) => (
+              <div key={index}>
+                  <a className="file-link" href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+              </div>
+            ))}
+          </div>
         </div>
-        ) : (
-        // 기본 댓글 표시
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-            
-            <div style={{ marginRight: '10px' }}>{comment.content}</div>
-            {user.user_no === comment.user_no && (
+
+        {comments.map((comment) => (
+        <div key={comment.comm_no} className="comment-container">
+            {editingComment && editingComment.id === comment.comm_no ? (
+            // 수정 모드 활성화
             <div>
-                <button onClick={() => handleEditComment(comment)}>수정</button>
+                <input
+                type="text"
+                value={editingComment.content}
+                onChange={(e) => setEditingComment({ ...editingComment, content: e.target.value })}
+                />
+                <button onClick={() => handleUpdateComment(editingComment.id, editingComment.content)}>수정 완료</button>
             </div>
-            )}
-             {(user.user_no === comment.user_no || user.is_admin) && (
-                <button onClick={() => handleDeleteComment(comment.comm_no)}>삭제</button>
-            )}
-        </div>
-            )}
-        </div>
-        ))}
+            ) : (
+            // 기본 댓글 표시
+            <div className="comment-content">
+                
+                <div style={{ marginRight: '10px' }}>{comment.content}</div>
+                {user.user_no === comment.user_no && (
+                <div>
+                    <button onClick={() => handleEditComment(comment)}>수정</button>
+                </div>
+                )}
+                {(user.user_no === comment.user_no || user.is_admin) && (
+                    <button onClick={() => handleDeleteComment(comment.comm_no)}>삭제</button>
+                )}
+            </div>
+                )}
+            </div>
+            ))}
 
-      {/* 댓글 작성 폼 */}
-      {user && (
-        <form onSubmit={handleCommentSubmit}>
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-          ></textarea>
-          <button type="submit">댓글 작성</button>
-        </form>
-      )}
-      <div>
-     
-</div>
-      
-    </div>
+          {/* 댓글 작성 폼 */}
+          {user && (
+            <form onSubmit={handleCommentSubmit} className="comment-form">
+              <textarea
+                className='postdetail_textarea'
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              ></textarea>
+              <button className="submit-comment-btn" type="submit">댓글 작성</button>
+            </form>
+          )}
+          <div>
+        </div>
+      </div>
+    </section>
   );
 };
 

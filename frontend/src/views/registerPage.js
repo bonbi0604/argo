@@ -142,7 +142,6 @@ function Register() {
           id
         })
       });
-      console.log(id)
       const data = await response.json();
 
       if (response.ok) {
