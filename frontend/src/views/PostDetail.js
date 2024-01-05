@@ -17,7 +17,7 @@ const PostDetail = () => {
         const fetchPostAndComments = async () => {
             try {
                 const response = await api.get(
-                    `http://argo12.duckdns.org:8000/noticeboard/posts/${id}/`
+                    `http://127.0.0.1:8000/noticeboard/posts/${id}/`
                 );
                 if (response.status === 200 && response.data) {
                     setPost(response.data);
@@ -27,7 +27,7 @@ const PostDetail = () => {
                 }
 
                 const commentsResponse = await api.get(
-                    `http://argo12.duckdns.org:8000/noticeboard/posts/${id}/comments/`
+                    `http://127.0.0.1:8000/noticeboard/posts/${id}/comments/`
                 );
                 if (commentsResponse.status === 200 && commentsResponse.data) {
                     setComments(commentsResponse.data);
@@ -44,7 +44,7 @@ const PostDetail = () => {
         try {
             // Axios를 사용하여 DELETE 요청을 보냅니다.
             const response = await api.delete(
-                `http://argo12.duckdns.org:8000/noticeboard/posts/${id}/delete/`
+                `http://127.0.0.1:8000/noticeboard/posts/${id}/delete/`
             );
 
             // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
@@ -71,7 +71,7 @@ const PostDetail = () => {
 
             // 댓글 생성 API 엔드포인트를 호출합니다.
             const response = await api.post(
-                `http://argo12.duckdns.org:8000/noticeboard/posts/${id}/comments/`,
+                `http://127.0.0.1:8000/noticeboard/posts/${id}/comments/`,
                 commentData
             );
             if (response.status === 201) {
@@ -94,7 +94,7 @@ const PostDetail = () => {
     const handleDeleteComment = async (commentId) => {
         try {
             const response = await api.delete(
-                `http://argo12.duckdns.org:8000/noticeboard/comments/${commentId}/delete/`
+                `http://127.0.0.1:8000/noticeboard/comments/${commentId}/delete/`
             );
             if (response.status === 200 || response.status === 204) {
                 setComments(
@@ -114,7 +114,7 @@ const PostDetail = () => {
     const handleUpdateComment = async (commentId, content) => {
         try {
             const response = await api.put(
-                `http://argo12.duckdns.org:8000/noticeboard/comments/${commentId}/update/`,
+                `http://127.0.0.1:8000/noticeboard/comments/${commentId}/update/`,
                 { content }
             );
             if (response.status === 200) {

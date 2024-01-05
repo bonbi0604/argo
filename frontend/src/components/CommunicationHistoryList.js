@@ -1,8 +1,6 @@
-// import "./CommunicationHistoryList.css"
 import React, { useState, useContext, useEffect } from "react";
 import AuthContext from "../context/AuthContext";
 import Pagination from "./Pagination2";
-import useAxios from "../utils/useAxios";
 
 const CommunicationHistoryList = ({
     stopped,
@@ -21,7 +19,7 @@ const CommunicationHistoryList = ({
     const [currentPageWindow, setCurrentPageWindow] = useState(1);
     // const [historys, setHistorys] = useState([]);
     const [historyList, setHistoryList] = useState([]);
-    const BASEURL = "http://argo12.duckdns.org:8000/";
+    const BASEURL = "http://127.0.0.1:8000/";
 
     const tempMax = 100;
 

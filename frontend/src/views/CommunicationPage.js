@@ -12,7 +12,7 @@ import IconStructure from "../icon/IconStructure";
 const CommunicationPage = () => {
     const { user } = useContext(AuthContext); // AuthContext에서 user 정보를 가져옵니다.
     const [currentPage, setCurrentPage] = useState(1);
-    const BASEURL = "http://argo12.duckdns.org:8000/";
+    const BASEURL = "http://127.0.0.1:8000/";
 
     const [stateN, setStateN] = useState(0); // 0: summary, 1: history, 2: study
     const [stopped, setStopped] = useState(false); //  state == 2 일때 학습중/중단

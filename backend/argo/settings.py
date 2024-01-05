@@ -25,8 +25,6 @@ SECRET_KEY = 'django-insecure-gvb5@_39dz)mu(%a_c35)r39$h4!yet)_+8!179@)-_wl(i-%g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '43.200.52.223', 'argo12.duckdns.org', 'www.argo12.duckdns.org', 'be.argo12.duckdns.org']
-
 
 # Application definition
 
@@ -205,19 +203,32 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
-
-CORS_ALLOWED_ORIGINS = [
-    'http://43.200.52.223:3000',
-    'http://argo12.duckdns.org:3000',
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    'https://www.argo12.duckdns.org',
-]
-
 # 세션 백엔드 설정
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # 세션 저장소 설정
 SESSION_COOKIE_NAME = 'my_chat_session'
 # SESSION_SAVE_EVERY_REQUEST = True
+
+
+
+
+
+
+
+# CORS 관련 설정
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '43.200.52.223', 'argo12.duckdns.org', 'www.argo12.duckdns.org', 'be.argo12.duckdns.org']
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://43.200.52.223:3000',
+    'http://argo12.duckdns.org:3000',
+    'https://www.argo12.duckdns.org',
+]
+
+# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+# SECURE_SSL_REDIRECT = True

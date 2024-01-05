@@ -21,7 +21,7 @@ const NoticeBoard = () => {
                 selectedTab === "notices" ? "/notices/" : "/posts/";
             try {
                 const response = await api.get(
-                    `http://argo12.duckdns.org:8000/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`
+                    `http://127.0.0.1:8000/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`
                 );
                 if (response.status === 200 && Array.isArray(response.data)) {
                     const data = [...response.data].reverse();
