@@ -75,7 +75,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
         setIsButtonDisabled(true); // 버튼 비활성화
         const data = await submit(
             { message: input, history: messages },
-            "http:// argo12.duckdns.org:8000/learn/communication/study/"
+            "http://argo12.duckdns.org:8000/learn/communication/study/"
         );
 
         setMessages((currentMessages) => {
@@ -111,7 +111,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
         const sendingData = { message: message, history: messages };
         const data = await submit(
             sendingData,
-            "http:// argo12.duckdns.org:8000/learn/communication/label/"
+            "http://argo12.duckdns.org:8000/learn/communication/label/"
         );
         return data;
     };
@@ -136,7 +136,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
             setIsButtonDisabled(true); // 버튼 비활성화
             const data = await submit(
                 { message: "<START>", history: messages },
-                "http:// argo12.duckdns.org:8000/learn/communication/study/"
+                "http://argo12.duckdns.org:8000/learn/communication/study/"
             );
 
             setMessages((currentMessages) => {
@@ -186,7 +186,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
                 // console.log(sendingData);
                 submit(
                     sendingData,
-                    "http:// argo12.duckdns.org:8000/learn/communication/save/"
+                    "http://argo12.duckdns.org:8000/learn/communication/save/"
                 );
             }
         } else {

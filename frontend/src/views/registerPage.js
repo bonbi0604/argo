@@ -140,7 +140,7 @@ function Register() {
 
             // 백엔드 API 호출하여 아이디 중복 여부 확인
             const response = await fetch(
-                `http:// argo12.duckdns.org:8000/api/checkId/`,
+                `http://argo12.duckdns.org:8000/api/checkId/`,
                 {
                     method: "POST",
                     headers: {
@@ -183,7 +183,7 @@ function Register() {
 
             // 백엔드 API 호출하여 이메일 중복 여부 확인
             const response = await fetch(
-                `http:// argo12.duckdns.org:8000/api/checkEmail/`,
+                `http://argo12.duckdns.org:8000/api/checkEmail/`,
                 {
                     method: "POST",
                     headers: {
@@ -220,7 +220,7 @@ function Register() {
     const mailSend = useCallback(async () => {
         setMailChecked(true);
         const response = await fetch(
-            `http:// argo12.duckdns.org:8000/api/mailSend/`,
+            `http://argo12.duckdns.org:8000/api/mailSend/`,
             {
                 method: "POST",
                 headers: {

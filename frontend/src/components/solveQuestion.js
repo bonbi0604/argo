@@ -18,7 +18,7 @@ const SolveQuestion = ({ cat, question }) => {
             // setAnswerNo(choose);
 
             //Result 저장
-            await fetch(`http:// argo12.duckdns.org:8000/learn/insertResult/`, {
+            await fetch(`http://argo12.duckdns.org:8000/learn/insertResult/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,7 +33,7 @@ const SolveQuestion = ({ cat, question }) => {
 
             //문제 불러오기
             const response2 = await fetch(
-                `http:// argo12.duckdns.org:8000/learn/getQuestion/`,
+                `http://argo12.duckdns.org:8000/learn/getQuestion/`,
                 {
                     method: "POST",
                     headers: {

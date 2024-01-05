@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-gvb5@_39dz)mu(%a_c35)r39$h4!yet)_+8!179@)-_wl(i-%g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['argo12.duckdns.org']
+ALLOWED_HOSTS = ['argo12.duckdns.org', '43.200.52.223', '127.0.0.1', 'localhost']
 
 
 # Application definition
@@ -212,6 +212,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://argo12.duckdns.org:3000',
     'http://127.0.0.1:3000',
     'http://localhost:3000',
+    'https://argo12.duckdns.org',
 ]
 
 # 세션 백엔드 설정
