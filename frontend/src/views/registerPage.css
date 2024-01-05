@@ -16,6 +16,7 @@
     max-width: 400px;
     margin: 7% auto;
     padding: 3%;
+    padding-bottom: 2%;
     background-color: rgba(255, 255, 255, 0.8); /* 배경색을 반투명하게 설정 */
     /* margin-bottom: 10%; */
     border-radius: 10px; /* 모서리 둥글게 설정 */
@@ -116,4 +117,49 @@
 
 #dept option {
     font-size: 14px;
+}
+
+#terms {
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    width: 80%;
+    padding-bottom: 3%;
+}
+
+#terms_label {
+    cursor: pointer;
+    font-size: 0.9em;
+}
+  
+#terms_label > input[type="checkbox"] {
+    cursor: pointer;
+}
+
+#terms > button {
+    /* width: 20%; */
+    margin-left: 3%;
+    background-color: #4B7FBC; 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#emailCheckDiv > input {
+    width: 40%;
+    padding: 2%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px; 
+}
+
+#emailCheckDiv > button {
+    padding: 1%;
+    margin-left: 3%;
+    background-color: #4B7FBC; 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }

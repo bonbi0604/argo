@@ -1,0 +1,104 @@
+.post-container {
+    margin: auto;
+    height: 94%;
+    padding: 3% 8%;
+    background-color: white;
+}
+
+.delete-btn {
+    background-color: rgb(231, 87, 87);
+    color: white;
+    margin-right: 10px;
+}
+
+.edit-btn {
+    background-color: rgb(107, 107, 250);
+    color: white;
+    margin-right: 10px;
+}
+
+.post_content_div {
+    height: 60%;
+    width: 80%;
+    margin: auto;
+}
+
+.title {
+    color: #333;
+    font-size: 1.3em;
+    text-align: left;
+    padding-left: 3%;
+    padding-bottom: 0.7%;
+    border-bottom: 2px solid black;
+}
+
+.content {
+    color: #555;
+    font-size: 1em;
+    text-align: left;
+    border: 1px solid black;
+    padding: 4%;
+}
+
+.file-link {
+    text-decoration: none;
+    color: blue;
+}
+
+.comment-container {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.edit-comment-btn {
+    background-color: blue;
+    color: white;
+    margin-left: 10px;
+}
+
+.delete-comment-btn {
+    color: red;
+    margin-left: 10px;
+}
+
+.comment-content {
+    margin-right: 10px;
+    color: #333;
+}
+
+.comment-form {
+    margin-top: 20px;
+}
+
+.comment-input {
+    width: 100%;
+    margin-bottom: 10px;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.submit-comment-btn {
+    background-color: green;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+}
+
+.postdetail_textarea {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    resize: none; /* 사용자가 크기를 조절하지 못하게 함 */
+}
+
+.postdetail_textarea:focus {
+    border-color: blue;
+    box-shadow: 0 0 5px rgba(0, 0, 255, 0.5);
+}
+
+/* textarea에 placeholder 스타일 적용 */
+.postdetail_textarea::placeholder {
+    color: #999;
+}

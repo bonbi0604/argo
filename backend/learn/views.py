@@ -582,7 +582,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
     #틀린 문제 종류별 n개씩 추출
     content_list = list(value.filter(question_no__category_no=filter_no))[:min(count, len(value.filter(question_no__category_no=filter_no)))]
     question = []
-    
+   
     for content in content_list:
         # 틀린 문제에 대한 정답률 추출
         question_number = content.question_no.question_no
@@ -601,7 +601,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
                 'answer_ratio' : answer_ration,
-                'result_no' : content.result_no,
+                'answer_no' : content.answer_no.answer_no
                 }
         question.append(dic)
     return question
@@ -736,9 +736,7 @@ def insertResult(request):
 def get_wrong_question(request):
     data = json.loads(request.body)
     result_no = data.get('result_no')
-    print('-------------------------------------------------------------',result_no)
     instance =Result.objects.get(result_no = result_no)
-    print('-------------------------------------------------------------',instance)
     if instance.content != '':
         user = instance.content
     else:

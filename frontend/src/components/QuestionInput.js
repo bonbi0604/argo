@@ -1,8 +1,7 @@
 import "./QuestionInput.css"
 import React, { useState, useContext, useCallback } from "react";
  
-const QuestionInput = ({chooseAnswer, question}) => {
-  const [user_content, setUserContent] = useState("");
+const QuestionInput = ({chooseAnswer, question, user_content, setUserContent}) => {
  
   return (
     <div id="a">

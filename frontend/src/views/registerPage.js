@@ -4,6 +4,7 @@
 import React, { useState, useContext, useCallback } from "react"; // 리액트 및 필요한 모듈 가져오기
 import AuthContext from "../context/AuthContext"; // 인증 컨텍스트 가져오기
 import "./registerPage.css";
+import LoginModal from "../components/LoginModal"
 
 function Register() {
   // 사용자 입력값을 상태 변수로 관리
@@ -15,7 +16,7 @@ function Register() {
   const [phone, setPhone] = useState("");
   const [id, setId] = useState("")
   const { registerUser } = useContext(AuthContext); // 사용자 등록 함수
-  
+
   // 확인
   const [confirmPwdMsg, setConfirmPwdMsg] = useState("") //비번 확인
   const [idIsCuplicate, setIdIsDuplicate] = useState(false) //아이디 중복인지(True,False)
@@ -34,7 +35,27 @@ function Register() {
   const [backCode, setBackCode] = useState('');
   const [code, setCode] = useState('');
   const [codeDisplay, setCodeDisplay] = useState('none');
-  
+  const [isMailChecked, setMailChecked] = useState(false);
+
+  //약관 동의
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [isTermsChecked, setTermsChecked] = useState(false);
+
+  const handleCheckboxChange = () => {
+    if (isTermsChecked) {
+      setTermsChecked(false);
+    } else {
+      setModalOpen(true)
+    }
+  };
+  const handleModalOpen = () => {
+    setModalOpen(true);
+  };
+  const handleModalClose = () => {
+    setModalOpen(false);
+    setTermsChecked(true)
+  };
+
 
   //비밀번호 확인
   const onChangeConfirmPwd = useCallback((e) => {
@@ -66,6 +87,11 @@ function Register() {
 
   // 이메일 변경 핸들러
   const onChangeEmail = useCallback(async (e) => {
+    setEmailIsDuplicate(false);
+    setCodeDisplay("none");
+    setCode("")
+    setBackCode("")
+    setMailChecked(false)
     // 입력한 이메일 값을 가져옵니다.
     const currEmail = e.target.value;
 
@@ -116,7 +142,6 @@ function Register() {
           id
         })
       });
-      console.log(id)
       const data = await response.json();
 
       if (response.ok) {
@@ -164,7 +189,6 @@ function Register() {
           setEmailMsgColor("red")
         } else {
           setEmailMsg("사용 가능한 이메일입니다.");
-          setEmailIsDuplicate(true);
           setEmailMsgColor("green");
           setCodeDisplay("");
         }
@@ -176,7 +200,12 @@ function Register() {
     }
   }, [email]);
 
+  /**
+   * 이메일을 보낸 후 인증 검사 과정.
+   * TODO: 승연이가 여기 주석 예쁘게 써줘~ 부탁해!
+   */
   const mailSend = useCallback(async () => {
+    setMailChecked(true)
     const response = await fetch(`http://127.0.0.1:8000/api/mailSend/`, {
       method: "POST",
         headers: {
@@ -191,17 +220,17 @@ function Register() {
       setBackCode(data.code)
   }, [email]);
 
-  const validateCode = () => {
-    return code === backCode
+  const validateCode = (code) => {
+    return (code === backCode)
   };
 
   // 인증번호 검사
-  const checkCode = () => {
-    if(validateCode) {
-      
+  const checkCode = e => {
+    if(code === backCode) {
       setEmailMsg('인증되었습니다.')
       setEmailMsgColor('green')
       setCodeDisplay("none");
+      setEmailIsDuplicate(true);
     } else {
       setEmailMsg('잘못된 인증번호입니다.')
       setEmailMsgColor('red')
@@ -210,22 +239,26 @@ function Register() {
 
   // 부서 선택했는지
   const validateDept = (dept) => {
-    return dept === ''
+    return dept !== ''
   }
 
-
+  const idChange = (e) => {
+    setId(e.target.value)
+    setIdMsg("")
+    setIdIsDuplicate(false);
+  }
 
   // 검사 함수로 정리
-  const isEmailValid = validateEmail(email);
+  // const isEmailValid = validateEmail(email); 
   const isPwdValid = validatePwd(password);
-  const isCodeValid = validateCode();
+  const isCodeValid = validateCode(code);
   const isConfirmPwd = password === password2;
   const isDeptValid = validateDept(dept);
   // const isDuId = checkDuplicateId(id);
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && !isDeptValid;
+  const isAllValid = idIsCuplicate && emailIsDuplicate && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
@@ -254,10 +287,10 @@ function Register() {
               <input
                 type="text"
                 id="id"
-                onChange={(e) => setId(e.target.value)}
+                onChange={idChange}
                 placeholder="아이디"
                 required
-                disabled={idIsCuplicate}
+                // disabled={idIsCuplicate}
               />
               <button type="button" onClick={checkDuplicateId}>중복 확인</button>
               <p style={{ color: idMsgColor }}>{idMsg}</p>
@@ -288,22 +321,22 @@ function Register() {
                 id="email"
                 onChange={onChangeEmail}
                 placeholder="이메일"
-                disabled={emailIsDuplicate}
+                // disabled={emailIsDuplicate}
                 required
               />
               <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
               <p style={{ color: emailMsgColor }}>{emailMsg}</p>
 
-              <div style={{ display: codeDisplay }}>
-                <button onClick={mailSend} type="button">인증번호 보내기</button>
+              <div style={{ display: codeDisplay }} id="emailCheckDiv">
                 <input
                   type="text"
                   id="code"
                   onChange={(e) => setCode(e.target.value)}
                   placeholder="Code"
+                  value={code}
                   required
                 />
-                <button onClick={checkCode} type="button">확인</button>
+                {isMailChecked ? <button onClick={checkCode} type="button">확인</button> : <button onClick={mailSend} type="button">인증번호 보내기</button>}
               </div>
             </div>
             <div className="regContent">
@@ -322,6 +355,16 @@ function Register() {
                 <option value="2">부서2</option>
                 <option value="3">부서3</option>
               </select>
+            </div>
+            <div id="terms">
+              <label id="terms_label">
+                <input type="checkbox" checked={isTermsChecked} onChange={handleCheckboxChange} />
+                약관 동의
+              </label>
+              <button onClick={handleModalOpen} type="button">약관 보기</button>
+              <LoginModal isOpen={isModalOpen} onClose={handleModalClose}>
+                약관 내용이 여기에 나타납니다.
+              </LoginModal>
             </div>
             <button id="regBtn" type="submit" disabled={!isAllValid}>회원가입</button>
           </form>

@@ -1,9 +1,7 @@
 import "./wrongAnswers.css"
 import React, { useEffect, useState, useContext } from "react";
-import AuthContext from "../context/AuthContext";
 
 const WrongAnswers = ({historyId}) => {
-  const { user } = useContext(AuthContext);
   const [wrong_q, setWrongQ] = useState({
     'user_content' : '',
     'question_content' : '문제를 불러오는 중입니다..',
@@ -20,8 +18,7 @@ const WrongAnswers = ({historyId}) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          question_no: historyId,
-          user_no: user.user_no
+          result_no: historyId,
         })
       });
       const data = await response.json();
@@ -38,7 +35,7 @@ const WrongAnswers = ({historyId}) => {
     <div id="q_div">
         <p>오답노트</p>
         <div id="wrongDiv">
-          <p>{historyId}. {wrong_q.question_content}</p>
+          <p>{wrong_q.question_no}. {wrong_q.question_content}</p>
           <div className="line"></div>
           <div id="wrAnswerDiv">
             <div>정답: {wrong_q.answer_content}</div>
