@@ -35,6 +35,7 @@ function Register() {
   const [backCode, setBackCode] = useState('');
   const [code, setCode] = useState('');
   const [codeDisplay, setCodeDisplay] = useState('none');
+  const [isMailChecked, setMailChecked] = useState(false);
 
   //약관 동의
   const [isModalOpen, setModalOpen] = useState(false);
@@ -86,6 +87,11 @@ function Register() {
 
   // 이메일 변경 핸들러
   const onChangeEmail = useCallback(async (e) => {
+    setEmailIsDuplicate(false);
+    setCodeDisplay("none");
+    setCode("")
+    setBackCode("")
+    setMailChecked(false)
     // 입력한 이메일 값을 가져옵니다.
     const currEmail = e.target.value;
 
@@ -136,7 +142,6 @@ function Register() {
           id
         })
       });
-      console.log(id)
       const data = await response.json();
 
       if (response.ok) {
@@ -184,7 +189,6 @@ function Register() {
           setEmailMsgColor("red")
         } else {
           setEmailMsg("사용 가능한 이메일입니다.");
-          setEmailIsDuplicate(true);
           setEmailMsgColor("green");
           setCodeDisplay("");
         }
@@ -201,6 +205,7 @@ function Register() {
    * TODO: 승연이가 여기 주석 예쁘게 써줘~ 부탁해!
    */
   const mailSend = useCallback(async () => {
+    setMailChecked(true)
     const response = await fetch(`http://127.0.0.1:8000/api/mailSend/`, {
       method: "POST",
         headers: {
@@ -215,17 +220,17 @@ function Register() {
       setBackCode(data.code)
   }, [email]);
 
-  const validateCode = () => {
-    return code === backCode
+  const validateCode = (code) => {
+    return (code === backCode)
   };
 
   // 인증번호 검사
-  const checkCode = () => {
-    if(validateCode) {
-
+  const checkCode = e => {
+    if(code === backCode) {
       setEmailMsg('인증되었습니다.')
       setEmailMsgColor('green')
       setCodeDisplay("none");
+      setEmailIsDuplicate(true);
     } else {
       setEmailMsg('잘못된 인증번호입니다.')
       setEmailMsgColor('red')
@@ -234,20 +239,26 @@ function Register() {
 
   // 부서 선택했는지
   const validateDept = (dept) => {
-    return dept != ''
+    return dept !== ''
+  }
+
+  const idChange = (e) => {
+    setId(e.target.value)
+    setIdMsg("")
+    setIdIsDuplicate(false);
   }
 
   // 검사 함수로 정리
-  const isEmailValid = validateEmail(email);
+  // const isEmailValid = validateEmail(email); 
   const isPwdValid = validatePwd(password);
-  const isCodeValid = validateCode();  // 이메일 인증 검사
+  const isCodeValid = validateCode(code);
   const isConfirmPwd = password === password2;
   const isDeptValid = validateDept(dept);
   // const isDuId = checkDuplicateId(id);
   // const isDuEmail = checkDuplicateEmail(email);
 
   // 검사를 묶기
-  const isAllValid = isEmailValid && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked;
+  const isAllValid = idIsCuplicate && emailIsDuplicate && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
@@ -276,10 +287,10 @@ function Register() {
               <input
                 type="text"
                 id="id"
-                onChange={(e) => setId(e.target.value)}
+                onChange={idChange}
                 placeholder="아이디"
                 required
-                disabled={idIsCuplicate}
+                // disabled={idIsCuplicate}
               />
               <button type="button" onClick={checkDuplicateId}>중복 확인</button>
               <p style={{ color: idMsgColor }}>{idMsg}</p>
@@ -310,22 +321,22 @@ function Register() {
                 id="email"
                 onChange={onChangeEmail}
                 placeholder="이메일"
-                disabled={emailIsDuplicate}
+                // disabled={emailIsDuplicate}
                 required
               />
               <button type="button" onClick={checkDuplicateEmail}>중복 확인</button>
               <p style={{ color: emailMsgColor }}>{emailMsg}</p>
 
-              <div style={{ display: codeDisplay }}>
-                <button onClick={mailSend} type="button">인증번호 보내기</button>
+              <div style={{ display: codeDisplay }} id="emailCheckDiv">
                 <input
                   type="text"
                   id="code"
                   onChange={(e) => setCode(e.target.value)}
                   placeholder="Code"
+                  value={code}
                   required
                 />
-                <button onClick={checkCode} type="button">확인</button>
+                {isMailChecked ? <button onClick={checkCode} type="button">확인</button> : <button onClick={mailSend} type="button">인증번호 보내기</button>}
               </div>
             </div>
             <div className="regContent">

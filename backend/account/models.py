@@ -50,7 +50,7 @@ class User(AbstractBaseUser):
     
     dept = models.IntegerField()
     name = models.CharField(max_length=255)
-    phone = models.IntegerField()
+    phone = models.CharField(max_length=128)
     image = models.TextField(blank=True, null=True)
 
     objects = UserManager()

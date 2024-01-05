@@ -145,3 +145,21 @@
     border-radius: 5px;
     cursor: pointer;
 }
+
+#emailCheckDiv > input {
+    width: 40%;
+    padding: 2%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 5px; 
+}
+
+#emailCheckDiv > button {
+    padding: 1%;
+    margin-left: 3%;
+    background-color: #4B7FBC; 
+    color: white; 
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}

@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'argo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'aivle_practice',
+        'NAME': 'aivle_big',
         'USER': 'aivle0412',
         'PASSWORD': 'aivle20230412',
         'HOST': 'db.aivle0412.duckdns.org',
