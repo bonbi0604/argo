@@ -44,15 +44,15 @@ const LineChart = ({data, cat}) => {
     const convertTimestampToTime2 = (timestamp) => {
 
         const dateObject = new Date(timestamp);
-        
+
         const year = dateObject.getFullYear();
         const month = (dateObject.getMonth() + 1).toString().padStart(2, '0');
-        
+
         const day = dateObject.getDate().toString().padStart(2, '0');
-      
+
         // 시, 분, 초를 문자열로 반환
         const formattedTime = `${year}.${month}.${day}`;
-      
+
         return formattedTime;
       }
 
@@ -124,7 +124,7 @@ const LineChart = ({data, cat}) => {
 
     return (
         <div className="line_chart_wrapper">
-            <div className="line_chart_wrapper2">{Object.keys(displaydata).length > 0 &&<Line options={option} data={displaydata} />}</div> 
+            <div className="line_chart_wrapper2">{Object.keys(displaydata).length > 0 &&<Line options={option} data={displaydata} />}</div>
             {/* height={200}  */}
         </div>
     );

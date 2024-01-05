@@ -13,25 +13,25 @@ const data = {
         description: "occupation...",
     },
     communication: {
-        time: [1704115257000, 1704116257000, 1704117257000, 1704118257000, 1704119257000, 1704120257000],
+        time: [1704115257000, 1704116257000, 1704117257000, 1703918257000, 1704119257000, 1704120257000],
         avg: [34, 54, 33, 23, 67, 78],
         score: [35, 56, 76, 87, 98, 100],
         description: "communication...",
     },
     commonsense: {
-        time: [1704115257000, 1704116257000, 1704117257000, 1704118257000, 1704119257000, 1704120257000],
+        time: [1704115257000, 1704116257000, 1704117257000, 1703918257000, 1704119257000, 1704120257000],
         avg: [35, 56, 76, 87, 98, 100],
         score: [34, 45, 56, 67, 78, 89],
         description: "commonsense...",
     },
     tools: {
-        time: [1704115257000, 1704116257000, 1704117257000, 1704118257000, 1704119257000, 1704120257000],
+        time: [1704115257000, 1704116257000, 1704117257000, 1703918257000, 1704119257000, 1704120257000],
         avg: [34, 45, 56, 67, 78, 89],
-        score: [65, 57, 86, 75, 68, 86], 
+        score: [65, 57, 86, 75, 68, 86],
         description: "tools...",
     },
     ethic: {
-        time: [1704115257000, 1704116257000, 1704117257000, 1704118257000, 1704119257000, 1704120257000],
+        time: [1704115257000, 1704116257000, 1704117257000, 1703918257000, 1704119257000, 1704120257000],
         avg: [65, 57, 86, 75, 68, 86],
         score: [45, 23, 56, 76, 78, 80],
         description: "ethic...",
@@ -100,7 +100,7 @@ const ResultPage = () => {
             <div className='result_page_chart'>
                 <div className='result_page_donut_chart'>
                     <div className='pentagon'></div>
-                    <DonutCharts data={scoreData} backgroundColor={"rgba(117, 138, 249, 0)"} setCat={setCat}/>    
+                    <DonutCharts data={scoreData} backgroundColor={"rgba(117, 138, 249, 0)"} setCat={setCat}/>
                 </div>
                 <div className='result_page_line_chart'>
                     <LineChart data={data} cat={cat}/>
