@@ -218,9 +218,9 @@ SESSION_COOKIE_NAME = 'my_chat_session'
 
 # CORS 관련 설정
 
-# CORS_ALLOW_ALL_ORIGINS = True
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '43.200.52.223', 'argo12.duckdns.org', 'www.argo12.duckdns.org']
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '43.200.52.223', 'argo12.duckdns.org', 'www.argo12.duckdns.org', 'be.argo12.duckdns.org']
+CORS_ALLOW_ALL_ORIGINS = True
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:3000',
@@ -229,6 +229,3 @@ CORS_ALLOWED_ORIGINS = [
     'http://argo12.duckdns.org:3000',
     'https://www.argo12.duckdns.org',
 ]
-
-# SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-# SECURE_SSL_REDIRECT = True
