@@ -5,7 +5,7 @@ import dayjs from "dayjs";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-const baseURL = "http:// argo12.duckdns.org:8000/api";
+const baseURL = "http://argo12.duckdns.org:8000/api";
 
 const useAxios = () => {
     const { authTokens, setUser, setAuthTokens } = useContext(AuthContext);
