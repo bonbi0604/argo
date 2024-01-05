@@ -3,7 +3,7 @@ import React, { useState, useContext, useCallback } from "react";
 import QuestionChoice from "./QuestionChoice";
 import QuestionInput from "./QuestionInput";
 
-const LearnDown2 = ({chooseAnswer, question}) => {
+const LearnDown2 = ({chooseAnswer, question, user_content, setUserContent}) => {
 
     return (
     <div id="comLearnDown2">
@@ -19,7 +19,7 @@ const LearnDown2 = ({chooseAnswer, question}) => {
                     {question.is_many_choice ? <QuestionChoice chooseAnswer={chooseAnswer} question={question}/> : <p></p>}
                 </div>
             </div>
-            {question.is_many_choice ? <p></p> : <QuestionInput chooseAnswer={chooseAnswer} question={question}/>}
+            {question.is_many_choice ? <p></p> : <QuestionInput chooseAnswer={chooseAnswer} question={question} user_content={user_content} setUserContent={setUserContent}/>}
         </div>
     </div>
     )

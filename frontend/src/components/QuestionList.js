@@ -3,7 +3,7 @@ import React, { useEffect, useState, useContext } from "react";
 import Pagination from "./Pagination"
 import AuthContext from "../context/AuthContext";
 
-const QuestionList = ({cat, historyId, setHistoryId}) => {
+const QuestionList = ({cat, historyId, setHistoryId, isstudy}) => {
   const { user } = useContext(AuthContext);
   const [wrongList, setWrongList] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -12,8 +12,8 @@ const QuestionList = ({cat, historyId, setHistoryId}) => {
   const pagesToShow = 5;
   const [searchContent, setSearchContent] = useState("");
 
-  const changeWrongQuestion = (question_no) => {
-    setHistoryId(question_no);
+  const changeWrongQuestion = (result_no) => {
+    setHistoryId(result_no);
   }
 
   const searchWrongQuestion = async () => {
@@ -56,13 +56,14 @@ const QuestionList = ({cat, historyId, setHistoryId}) => {
       const data1 = await response1.json();
 
       if (response1.ok) {
-        setWrongList(data1.wrong_question_list);
+        const sortedQuestionList = data1.wrong_question_list.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        setWrongList(sortedQuestionList);
       } else {
       } //틀린문제 리스트 끝
     }
 
     getWrongList();
-  }, []);
+  }, [isstudy]);
 
   const currentItems = wrongList.slice(
     (currentPage - 1) * itemsPerPage,
@@ -85,7 +86,7 @@ const QuestionList = ({cat, historyId, setHistoryId}) => {
       <div id="q_container">
         {/* 클릭하면 오답노트쪽이 해당 문제로 바뀜 */}
         {Array.isArray(currentItems) && currentItems.map((item) => (
-          <div key={item.question_no} className="q_content" onClick={() => changeWrongQuestion(item.question_no)}>
+          <div key={item.question_no} className="q_content" onClick={() => changeWrongQuestion(item.result_no)}>
             <p>{item.question_no}. {item.content}</p>
           </div>
         ))}
