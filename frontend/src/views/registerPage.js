@@ -139,18 +139,15 @@ function Register() {
             }
 
             // 백엔드 API 호출하여 아이디 중복 여부 확인
-            const response = await fetch(
-                `http://127.0.0.1:8000/api/checkId/`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        id,
-                    }),
-                }
-            );
+            const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id,
+                }),
+            });
             console.log(id);
             const data = await response.json();
 
@@ -219,18 +216,15 @@ function Register() {
      */
     const mailSend = useCallback(async () => {
         setMailChecked(true);
-        const response = await fetch(
-            `http://127.0.0.1:8000/api/mailSend/`,
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    email,
-                }),
-            }
-        );
+        const response = await fetch(`http://127.0.0.1:8000/api/mailSend/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+            }),
+        });
         const data = await response.json();
         console.log(data);
         setBackCode(data.code);
