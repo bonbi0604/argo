@@ -110,7 +110,7 @@
   background-color: transparent;
   border: 0;
   border-radius: 0;
-  box-shadow: inset 0 0 0 2px #ffffff;
+  box-shadow: inset 0 0 0 1px #ffffff;
   color: #ffffff;
   cursor: pointer;
   display: inline-block;
@@ -304,3 +304,5 @@
     cursor: default;
     opacity: 0.25;
   }
+
+ 
