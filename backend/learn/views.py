@@ -1,38 +1,28 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
-from django.utils import timezone
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
-from django.db import models
-from django.db.models import Max, Count, F
-import random
 import json
 import os
-from random import shuffle
-# from langchain.vectorstores import Chroma
+from datetime import datetime
+from operator import itemgetter
+from random import shuffle, random
+
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import Max, Count, F
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
+from rest_framework.response import Response
+
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-from operator import itemgetter
 
-from django.conf import settings
-import random, json
-from django.http import JsonResponse, HttpResponse
-from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
-from django.core.serializers import serialize
-from account.models import User
+from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
 
-### learn-communication
-from rest_framework.response import Response
-from django.db.models import Count
-from datetime import datetime
-from django.utils import timezone
-from random import shuffle
 
 ########################################################################
 #                      learn/communication/study/                      #
