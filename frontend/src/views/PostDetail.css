@@ -18,7 +18,7 @@ button:hover {
 
 .delete-btn {
     background-color: white;
-    color: black;
+    color: rgb(54, 54, 54);
     padding: 7px 12px;
     margin-right: 1%;
     border: 1px solid rgb(98, 98, 98);
@@ -37,7 +37,7 @@ button:hover {
 }
 
 .delete-btn:hover {
-    background-color: #9a9a9a;
+    background-color: rgb(98, 98, 98);
     color: white;
 }
 
@@ -113,7 +113,8 @@ button:hover {
 }
 
 .file-link:hover {
-    color: rgb(41, 41, 41);
+    /* color: rgb(41, 41, 41); */
+    color: rgb(87, 98, 211);
 }
 
 .edit-comment-btn {
@@ -224,13 +225,16 @@ button:hover {
   }
 
   .comm_btn {
-    margin-right: 0.5%;
+    margin-right: 0.7%;
     background-color: white;
     border-radius: 2px;
+    border: 1px solid rgb(67, 67, 67);
+    padding: 4px 5px;
   }
 
   .comm_btn:hover {
-    background-color: #CAD0D6;
+    background-color: rgb(67, 67, 67);
+    color: white;
   }
 
   .comment-content img {
@@ -247,19 +251,28 @@ button:hover {
   
   /* 댓글 수정 입력창에 대한 스타일 */
   .comment-edit-input {
-    margin-right: 10px;
-    padding: 7px;
+    margin: 3% 2%;
+    padding: 2% 1.5%;
     border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
     width: 83%;
   }
 
+  .comment-edit-input:focus {
+    outline: none;
+  }
+
   .comp_edit_btn {
-    border: none;
-    background-color: #9a9a9a;
-    border-radius: 5px;
-    padding: 5px 11px;
+    border: 1px solid rgb(103, 103, 103);
+    background-color: #ffffff;
+    border-radius: 20px;
+    padding: 7px 11px;
+    color: rgb(71, 71, 71);
+  }
+  
+  .comp_edit_btn:hover {
+    background-color: rgb(103, 103, 103);
     color: white;
   }
 

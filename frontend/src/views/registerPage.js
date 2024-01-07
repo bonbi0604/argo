@@ -351,9 +351,9 @@ function Register() {
             <div className="regContent">
               <select name="dept" id="dept" onChange={(e) => setDept(e.target.value)} value={dept}>
                 <option value="">부서 선택</option>
-                <option value="1">부서1</option>
-                <option value="2">부서2</option>
-                <option value="3">부서3</option>
+                <option value="1">개발</option>
+                <option value="2">인사</option>
+                <option value="3">기획</option>
               </select>
             </div>
             <div id="terms">

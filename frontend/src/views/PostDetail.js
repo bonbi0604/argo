@@ -127,7 +127,7 @@ const PostDetail = () => {
           <button className="delete-btn" onClick={handleDelete}>삭제{post.author}</button>
         )}
         {user.user_no === post.user_no && (
-          <button className="edit-btn" onClick={handleEdit}>수정</button>
+          <button className="delete-btn" onClick={handleEdit}>수정</button>
         )}
         <div className='post_content_div'>
           <div className="board_name">게시판</div>
