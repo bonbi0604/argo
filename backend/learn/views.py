@@ -590,10 +590,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
         question_total = question_query.count()
         question_correct_num =question_query.filter(is_correct = 1).count()
         answer_ration = round((question_correct_num / question_total) * 100,2)
-        if content.question_no.content[:15] =='다음 문장을 해석하세요 : ':
-           content_value = content.question_no.content[15:29]
-        else:
-            content_value= content.question_no.content[:15]
+        content_value= content.question_no.content[:15]
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
@@ -601,8 +598,9 @@ def get_wrong_question_list(filter_no, count, user_no=None):
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
                 'answer_ratio' : answer_ration,
-                'answer_no' : content.answer_no.answer_no
-                }
+                'answer_no' : content.answer_no.answer_no,
+                'korean' : content.question_no.korean,
+        }
         question.append(dic)
     return question
 
@@ -636,8 +634,6 @@ def search_list(request):
         value = Result.objects.filter(is_correct=0)
         content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content', 'question_no')
         for content in content_list:
-            if content['question_no__content'][:15]=='다음 문장을 해석하세요 : ':
-                content['question_no__content'] = content['question_no__content'][15:28]
             dic = {
                 'question_no' : content['question_no'],
                 'content' : content['question_no__content'][:15]
@@ -660,7 +656,7 @@ def give_question(request):
         number = 5
     elif cat =='ethic':
         number = 6
-    
+   
     # question = Question.objects.filter(category_no = number).order_by('?').first()
     question = Question.objects.filter(category_no = number)
     question = list(question)
@@ -668,10 +664,12 @@ def give_question(request):
     question = question[0]
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
-    
-    
-    
-    # 주관식이면 0 
+   
+    kor = ''
+    if number == 1:
+        kor = question.korean
+   
+    # 주관식이면 0
     # 객관식이면 1
     is_many_choice = None
     for item in choice:
@@ -680,25 +678,25 @@ def give_question(request):
             'answer_no': item.answer_no
         }
         choice_list.append(tmp_dic)
-        
+       
         if item.is_correct ==1:
             answer = item.content
     if len(choice_list) ==1:
         is_many_choice = 0
     else:
         is_many_choice = 1
-
-    
+       
+       
     data = {
-        'question_no': question.question_no,
-        'question_content': question.content,
-        'choices': choice_list,
-        'correct_answer': answer,
-        'is_many_choice' : is_many_choice
-    }
+            'question_no': question.question_no,
+            'question_content': question.content,
+            'choices': choice_list,
+            'correct_answer': answer,
+            'is_many_choice' : is_many_choice,
+            'korean' : kor
+        }
+       
     return JsonResponse({'wrong_question' : data })
-
-
 # 푼 문제 저장
 @csrf_exempt
 def insertResult(request):

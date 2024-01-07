@@ -12,6 +12,7 @@ const LearnDown2 = ({chooseAnswer, question, user_content, setUserContent}) => {
             <div id="q">
                 <div id="q_content">
                     {question.question_content}
+                    {question.korean && <div>{question.korean}</div>}
                 </div>
                 {/* 여기에 보기 추가 */}
                 <div id="q_choice">
