@@ -27,12 +27,18 @@ const CommunicationPage = () => {
 
   const getAvgScore = async () => {
     const sendingData = {'user_no': user.user_no};
-    const recieveData = await submit(sendingData, `${BASEURL}learn/communication/score/`);
+    let recieveData = await submit(sendingData, `${BASEURL}learn/communication/score/`);
+    recieveData = recieveData? recieveData : {}
     setScore(recieveData);
+    console.log(recieveData);
 
     setAvgAvg(Object.values(recieveData).reduce((sum, { avg }) => sum + avg, 0) / Object.keys(recieveData).length);
     setAvgScore(Object.values(recieveData).reduce((sum, { score }) => sum + score, 0) / Object.keys(recieveData).length);
   }
+
+  useEffect(() => {
+    console.log(avgScore, avgAvg);
+  }, [avgAvg, avgScore]);
 
   const handleButtonClick = () => {
     

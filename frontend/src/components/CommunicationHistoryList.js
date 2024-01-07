@@ -58,10 +58,7 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
     
   }, []); 
 
-  const currentItems = historyList.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
+  const currentItems = historyList? historyList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
 
   useEffect(() => {
     // console.log(currentPage)
@@ -80,7 +77,7 @@ const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, histo
         <div className='comm_history_element' key={history_no}><a onClick={() => {goToHistory(history_no)}}>{`${history_no}: ${title}`}</a></div>
       ))}
       <Pagination
-        totalItems={historyList.length}
+        totalItems={historyList? historyList.length: 0}
         itemsPerPage={itemsPerPage}
         pagesToShow = {pagesToShow}
         currentPage={currentPage}
