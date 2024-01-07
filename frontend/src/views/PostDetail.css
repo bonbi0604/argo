@@ -23,7 +23,7 @@ button:hover {
     margin-right: 1%;
     border: 1px solid rgb(98, 98, 98);
     border-radius: 2px;
-    margin-bottom: 2%;
+    margin-bottom: 3%;
 }
 
 .edit-btn {
@@ -33,7 +33,7 @@ button:hover {
     margin-right: 1%;
     border: 1px solid rgb(98, 98, 98);
     border-radius: 2px;
-    margin-bottom: 2%;
+    margin-bottom: 3%;
 }
 
 .delete-btn:hover {
@@ -210,7 +210,7 @@ button:hover {
   }
 
   .comm_cont_div {
-    margin-top: 2%;
+    margin-top: 1.5%;
     font-size: 0.9em;
   }
 

@@ -115,10 +115,14 @@ const PostDetail = () => {
         }
       };
 
+      const handleBoard = () => {
+        navigate("../DashBoard")
+      }
+
   return (
     <section id="postdetail_section">
       <div className="post-container">
-        <button className="delete-btn">목록</button>
+        <button className="delete-btn" onClick={handleBoard}>목록</button>
         {(user.user_no === post.user_no || user.is_admin) && (
           <button className="delete-btn" onClick={handleDelete}>삭제{post.author}</button>
         )}
