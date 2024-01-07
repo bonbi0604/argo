@@ -116,9 +116,11 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
     if (!input.trim() || isSubmitting) return;
     setIsSubmitting(true);
     const userMessage = { text: input, sender: 'user' };
-    if (!localSessionTitle  && messages.length === 0) {
-      setLocalSessionTitle(input);
+    const isFirstMessage = messages.length === 0;
+    if (isFirstMessage) {
+      setLocalSessionTitle('');
     }
+    
     setMessages((currentMessages) => [...currentMessages, userMessage]);
  
     setInput('');
@@ -129,10 +131,16 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ message: input }),
+        body: JSON.stringify({ 
+          message: input,
+          is_first_message: isFirstMessage
+        }),
       });
  
       const data = await response.json();
+      if (data.session_title) {
+        setLocalSessionTitle(data.session_title);
+      }
       setMessages((currentMessages) => [...currentMessages, { text: data.reply, sender: 'bot' }]);
     } catch (error) {
       console.error('Error sending message to the chatbot API:', error);
