@@ -26,6 +26,7 @@ const LearnCommonSense = () => {
   const [avg, setAvg] = useState(0);
   const [score, setScore] = useState(0);
   const user_no = user.user_no
+  const [isstudy, setStudy] = useState(false);
 
   useEffect(() => {
     const getLearnPageData = async () => {
@@ -74,11 +75,11 @@ const LearnCommonSense = () => {
 
     //함수 호출
     getLearnPageData();
-  }, []); 
+  }, [isstudy]); 
 
 
   return (
-    <LearnOtherPage cat={cat} avg={avg} score={score} question={question}/>
+    <LearnOtherPage cat={cat} avg={avg} score={score} question={question} isstudy={isstudy} setStudy={setStudy}/>
   )
 }
 
