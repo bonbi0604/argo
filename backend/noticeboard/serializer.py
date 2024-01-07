@@ -9,10 +9,11 @@ class FileModelSerializer(serializers.ModelSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     files = FileModelSerializer(many=True, read_only=True)
+    user_id = serializers.ReadOnlyField(source='user_no.id')
 
     class Meta:
         model = Post
-        fields = ['post_id', 'title', 'content', 'user_no', 'timestamp', 'files']
+        fields = ['post_id', 'title', 'content', 'user_no', 'timestamp', 'files', 'user_id']
 
     # 게시글 생성 시 파일 데이터와 파일 이름을 저장합니다.
     def create(self, validated_data):
@@ -37,10 +38,11 @@ class NoticeFileSerializer(serializers.ModelSerializer):
 
 class NoticeSerializer(serializers.ModelSerializer):
     notice_files = NoticeFileSerializer(many=True, read_only=True)
+    user_id = serializers.ReadOnlyField(source='user_no.id', required=False, allow_null=True)
 
     class Meta:
         model = Notice
-        fields = ['notice_id', 'title', 'content', 'user_no', 'timestamp', 'notice_files']
+        fields = ['notice_id', 'title', 'content', 'user_no', 'timestamp', 'notice_files', 'user_id']
 
     def create(self, validated_data):
         # 게시글 생성 로직

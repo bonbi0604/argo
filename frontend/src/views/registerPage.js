@@ -243,10 +243,17 @@ function Register() {
   }
 
   const idChange = (e) => {
-    setId(e.target.value)
-    setIdMsg("")
-    setIdIsDuplicate(false);
+    const newId = e.target.value;
+  setId(newId);
+  setIdMsg("");
+  setIdIsDuplicate(false);
+
+  // 아이디 길이 검증 추가
+  if (newId.length < 4) {
+    setIdMsg("아이디는 최소 4자 이상이어야 합니다.");
+    setIdMsgColor("red");
   }
+}
 
   // 검사 함수로 정리
   // const isEmailValid = validateEmail(email); 

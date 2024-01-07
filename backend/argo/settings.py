@@ -110,7 +110,7 @@ WSGI_APPLICATION = 'argo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'aivle_practice',
+        'NAME': 'aivle_big',
         'USER': 'aivle0412',
         'PASSWORD': 'aivle20230412',
         'HOST': 'db.aivle0412.duckdns.org',
@@ -172,7 +172,7 @@ REST_FRAMEWORK = {
 
 # JWT 토큰 설정입니다.
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), # ACCESS Token의 유효기간
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=9999), # ACCESS Token의 유효기간
     'REFRESH_TOKEN_LIFETIME': timedelta(days=50), # Refresh 토큰의 유효기간 
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,

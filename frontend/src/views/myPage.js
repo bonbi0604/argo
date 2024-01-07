@@ -1,4 +1,5 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
 import './myPage.css'; 
 import React, { useState, useContext, useCallback } from "react";
@@ -6,13 +7,16 @@ import { Link } from "react-router-dom";
 
 const MyPage = ({cat}) => {
   const { user, requestPasswordReset } = useContext(AuthContext);
+  const navigate = useNavigate();
+
 
   if (!user){
-    return (<Navigate to='/login'  />)
+    return (<navigate to='/login'  />)
   }
 
   const handlePasswordResetRequest = () => {
-    requestPasswordReset(user.email);
+    // requestPasswordReset(user.email);
+    navigate(`/profile/changePassword`);
   };
   
   return (
