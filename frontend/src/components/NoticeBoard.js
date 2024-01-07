@@ -67,13 +67,13 @@ const NoticeBoard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((item) => (
+                        {currentItems.map((item) => (                                
                              <tr key={item.id} onClick={() => navigate(selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`)}>
                                 <td id="board_no">{selectedTab === 'posts' ? item.post_id : item.notice_id}</td>
                                 <td className='text_left'>
                                     <Link to={selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`}>{item.title}</Link>
                                 </td>
-                                <td>{item.user_no}</td>
+                                <td>{item.user_id}</td>
                                 <td id="board_date">{new Date(item.timestamp).toLocaleDateString()}</td>
                             </tr>
                         ))}
