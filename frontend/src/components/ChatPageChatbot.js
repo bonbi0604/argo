@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
 import './ChatPageChatbot.css';
 import AuthContext from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   const [input, setInput] = useState('');
@@ -10,6 +11,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
   const chatMessagesRef = useRef(null);
 
   const { user } = useContext(AuthContext);
+
   useEffect(() => {
     if (id && chatContent) {
       setLocalSessionTitle(sessionTitle);
@@ -148,7 +150,9 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
       setIsSubmitting(false);
     }
   };
- 
+  if (!user){
+    return (<Navigate to='/login'  />)
+  }
   return (
     <div className="chatpage-chatbot-container">
       <div className="chatpage-chatbot-messages" ref={chatMessagesRef}>
