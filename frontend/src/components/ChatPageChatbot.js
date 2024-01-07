@@ -159,7 +159,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
           onKeyDown={handleKeyDown}
         />
         <button className="chatpage-chatbot-submit" onClick={handleSubmit}>
-          Send
+          제출
         </button>
       </div>
     </div>
