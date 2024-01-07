@@ -36,6 +36,7 @@ const WrongAnswers = ({historyId}) => {
         <p>오답노트</p>
         <div id="wrongDiv">
           <p>{wrong_q.question_no}. {wrong_q.question_content}</p>
+          {wrong_q.korean && <div>{wrong_q.korean}</div>}
           <div className="line"></div>
           <div id="wrAnswerDiv">
             <div>정답: {wrong_q.answer_content}</div>
