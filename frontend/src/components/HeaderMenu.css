@@ -27,7 +27,6 @@
   text-decoration: none;
   font-size: 1.5rem;
 }
-
 .header-middle {
   flex: 2;
   display: flex;
@@ -45,6 +44,10 @@
   font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+.header-link:hover{
+  font-weight: bold;
 }
 
 .header-right {
@@ -79,7 +82,6 @@
   color: #FFF;
   text-align: center;
   /* font-family: Inter; */
-  font-size: 1rem;
   /* font-style: normal; */
   font-weight: 600;
   line-height: normal;
@@ -92,6 +94,12 @@
   cursor: pointer;
 }
 
+.header-login {
+  display: flex;
+  justify-content: center; 
+  align-items: center;    
+  width: 15em;            
+}
 /* Button */
 
 .header-menu input[type="submit"],
@@ -114,12 +122,12 @@
   color: #ffffff;
   cursor: pointer;
   display: inline-block;
-  font-size: 0.8em;
+  font-size: 1rem;
   font-weight: 600;
   height: 3.5em;
   letter-spacing: 0.25em;
   line-height: 3.5em;
-  padding: 0 1.75em;
+  padding: 0 1em;
   text-align: center;
   text-decoration: none;
   text-transform: uppercase;
@@ -135,8 +143,8 @@
 .header-menu button:active,
 .header-menu .button:hover,
 .header-menu .button:active {
-    box-shadow: inset 0 0 0 1.5px white;
-    color: white;
+    box-shadow: inset 0 0 0 1.5px rgb(97, 97, 97);
+    color: rgb(97, 97, 97);
   }
 
   .header-menu input[type="submit"]:active,
@@ -144,9 +152,9 @@
   .header-menu input[type="button"]:active,
   .header-menu button:active,
   .header-menu .button:active {
-    background-color: rgba(155, 241, 255, 0.1);
+    background-color: rgb(97, 97, 97);
     box-shadow: inset 0 0 0 2px #c4dcfa;
-    color: #53e3fb;
+    color: rgb(97, 97, 97);
   }
 
   .header-menu input[type="submit"].icon:before,

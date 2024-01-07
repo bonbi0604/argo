@@ -8,7 +8,6 @@ console.log("homepage"); // "homepage"을 콘솔에 출력합니다.
 const Home = () => {
   
   useEffect(() => {
-    
     const loadScript = src => {
       return new Promise((resolve, reject) => {
         const script = document.createElement('script');
@@ -33,7 +32,7 @@ const Home = () => {
       return prev.then(() => loadScript(curr));
     }, Promise.resolve());
   }, []);
-  
+
   return (
     <div>
       <link rel="stylesheet" href="../../home/assets/css/main.css" />
@@ -44,7 +43,7 @@ const Home = () => {
         <section id="banner" className="major">
           <div className="inner">
             <header className="major">
-              <h1>환영합니다~</h1>
+              <h1>안녕하세요</h1>
             </header>
             <div className="content">
               <p>신입사원분들의 역량 개발을 도와드립니다.<br />
@@ -61,7 +60,7 @@ const Home = () => {
           <section id="one" className="tiles">
             <article>
               <span className="image">
-                <img src="../../home/images/pic01.jpg" alt />
+                <img src="../../home/images/feedback.jpg" alt />
               </span>
               <header className="major">
                 <h3><a href="../../home/landing.html" className="link">피드백</a></h3>
@@ -70,16 +69,16 @@ const Home = () => {
             </article>
             <article>
               <span className="image">
-                <img src="../../home/images/pic02.jpg" alt />
+                <img src="../../home/images/development.jpg" alt />
               </span>
               <header className="major">
-                <h3><a href="../../home/landing.html" className="link">역량 개발</a></h3>
+                <h3><a href="../..l/home/landing.htm" className="link">역량 개발</a></h3>
                 <p>feugiat amet tempus</p>
               </header>
             </article>
             <article>
               <span className="image">
-                <img src="../../home/images/pic03.jpg" alt />
+                <img src="../../home/images/chatbot.jpg" alt />
               </span>
               <header className="major">
                 <h3><a href="../../home/landing.html" className="link">사내규정 도우미</a></h3>
@@ -88,39 +87,21 @@ const Home = () => {
             </article>
             <article>
               <span className="image">
-                <img src="../../home/images/pic04.jpg" alt />
+                <img src="../../home/images/notice.jpg" alt />
               </span>
               <header className="major">
                 <h3><a href="../../home/landing.html" className="link">게시판</a></h3>
                 <p>Nisl sed aliquam</p>
               </header>
             </article>
-            {/* <article>
-              <span className="image">
-                <img src="../../home/images/pic05.jpg" alt />
-              </span>
-              <header className="major">
-                <h3><a href="../../home/landing.html" className="link">Consequat</a></h3>
-                <p>Ipsum dolor sit amet</p>
-              </header>
-            </article>
-            <article>
-              <span className="image">
-                <img src="../../home/images/pic06.jpg" alt />
-              </span>
-              <header className="major">
-                <h3><a href="../../home/landing.html" className="link">Etiam</a></h3>
-                <p>Feugiat amet tempus</p>
-              </header>
-            </article> */}
           </section>
           {/* Two */}
           <section id="two">
             <div className="inner">
               <header className="major">
-                <h2>Massa libero</h2>
+                <h2>sdfa</h2>
               </header>
-              <p>Nullam et orci eu lorem consequat tincidunt vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus pharetra. Pellentesque condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.</p>
+              <p>Nullam eue condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.</p>
               <ul className="actions">
                 <li><a href="./home/landing.html" className="button next">Get Started</a></li>
               </ul>
@@ -139,7 +120,7 @@ const Home = () => {
                   </div>
                   <div className="field half">
                     <label htmlFor="email">Email</label>
-                    <input type="text" name="email" id="email" />
+                    <input type="text" name="main_email" id="main_email" />
                   </div>
                   <div className="field">
                     <label htmlFor="message">Message</label>
