@@ -656,7 +656,7 @@ def give_question(request):
         number = 5
     elif cat =='ethic':
         number = 6
-    
+   
     # question = Question.objects.filter(category_no = number).order_by('?').first()
     question = Question.objects.filter(category_no = number)
     question = list(question)
@@ -664,12 +664,12 @@ def give_question(request):
     question = question[0]
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
-    
+   
     kor = ''
     if number == 1:
         kor = question.korean
-    
-    # 주관식이면 0 
+   
+    # 주관식이면 0
     # 객관식이면 1
     is_many_choice = None
     for item in choice:
@@ -678,15 +678,15 @@ def give_question(request):
             'answer_no': item.answer_no
         }
         choice_list.append(tmp_dic)
-        
+       
         if item.is_correct ==1:
             answer = item.content
     if len(choice_list) ==1:
         is_many_choice = 0
     else:
         is_many_choice = 1
-        
-        
+       
+       
     data = {
             'question_no': question.question_no,
             'question_content': question.content,
@@ -695,9 +695,8 @@ def give_question(request):
             'is_many_choice' : is_many_choice,
             'korean' : kor
         }
+       
     return JsonResponse({'wrong_question' : data })
-
-
 # 푼 문제 저장
 @csrf_exempt
 def insertResult(request):

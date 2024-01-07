@@ -15,7 +15,7 @@ class Question(models.Model):
     question_no = models.IntegerField(primary_key=True)
     category_no = models.ForeignKey('Category', models.DO_NOTHING, db_column='category_no', blank=True, null=True)
     korean = models.CharField(max_length=255, db_collation='utf8mb4_unicode_ci', blank=True, null=True)
-
+ 
     class Meta:
         managed = False
         db_table = 'Question'

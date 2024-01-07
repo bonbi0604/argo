@@ -37,17 +37,27 @@ const LearnCommonSense = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({
-            cat
-          })
+          body: JSON.stringify({cat})
         });
         const data1 = await response1.json();
+        console.log("서버 응답:", data1); // 로깅 추가
 
         if (response1.ok) {
-          setQuestion(data1.wrong_question)
+          const wrongQuestion = data1.wrong_question;
+          // 한글 번역 존재 여부 확인
+          if (wrongQuestion.korean===null) {
+            // 한글 번역이 있는 경우, 영어 문제와 결합하여 표시
+            setQuestion(wrongQuestion);
+            
+          } else {
+            setQuestion({
+              ...wrongQuestion,
+              question_content: `${wrongQuestion.question_content}\n\n${wrongQuestion.korean}`
+            });
+          }
         } else {
           console.error("풀 문제 오류");
-        } //풀 문제 끝
+        }
 
         //avg, score
         const response2 = await fetch(`http://127.0.0.1:8000/learn/getAvgScore/`, {
@@ -75,7 +85,7 @@ const LearnCommonSense = () => {
 
     //함수 호출
     getLearnPageData();
-  }, [isstudy]); 
+  }, [cat, isstudy]);
 
 
   return (

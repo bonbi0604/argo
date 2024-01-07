@@ -16,6 +16,7 @@ const HeaderMenu = () => {
 
   return (
     <header className="header-menu">
+    {/* <header id="header" className="alt"> */}
       <div className="header-container">
         <div className="main-logo">
           <Link to="/" className="header-logo">
