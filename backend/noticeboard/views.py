@@ -7,6 +7,7 @@ from .serializer import NoticeCommentSerializer, PostSerializer, CommentSerializ
 from django.http import JsonResponse
 from account.models import User
 import logging
+import json
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -22,7 +23,7 @@ def notice_list_create(request):
         return Response({'detail': '관리자 권한이 필요합니다.'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'GET':
-        notices = Notice.objects.all()
+        notices = Notice.objects.all()   
         # context 파라미터에 request를 전달하여 파일 URL 생성 시 필요한 request 정보를 제공
         serializer = NoticeSerializer(notices, many=True, context={'request': request})
         return Response(serializer.data)
@@ -37,11 +38,18 @@ def notice_list_create(request):
             print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['GET', 'POST'])
 def post_list_create(request):
     if request.method == 'GET':
-        posts = Post.objects.all()
+        # posts = Post.objects.all()
+        # posts = Post.objects.select_related('user_no').all()  
+        posts = Post.objects.values('post_id','title','content','timestamp','user_no__name')
+        
+        
         serializer = PostSerializer(posts, many=True)
+        
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data, context={'request': request})
