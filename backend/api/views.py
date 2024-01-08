@@ -6,13 +6,15 @@ from api.serializer import MyTokenObtainPairSerializer, RegisterSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import generics
 # from django.contrib.auth.models import User
-from account.models import User
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from django.contrib.auth.hashers import check_password
+from django.contrib.auth import get_user_model
 # 올바른 임포트:
 from noticeboard.models import Post
 from noticeboard.serializer import PostSerializer
 from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import EmailMessage
+from account.models import User
 
 
 # Create your views here.
@@ -118,3 +120,38 @@ import string
 
 def generate_random_code(length):
     return ''.join(random.choices(string.ascii_uppercase + string.digits, k=length))
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    user = request.user
+    data = json.loads(request.body)
+    old_password = data.get('old_password')
+    new_password = data.get('new_password')
+    confirm_new_password = data.get('confirm_new_password')
+
+    if not check_password(old_password, user.password):
+        return JsonResponse({'error': '현재 비밀번호가 일치하지 않습니다.'}, status=400)
+
+    # 새 비밀번호와 확인된 새 비밀번호가 일치하는지 확인
+    if new_password != confirm_new_password:
+        return JsonResponse({'error': '새 비밀번호와 확인된 새 비밀번호가 일치하지 않습니다.'}, status=400)
+
+    # 새 비밀번호를 설정하고 저장
+    user.set_password(new_password)
+    user.save()
+    return JsonResponse({'success': '비밀번호가 변경되었습니다.'}, status=200)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+        if request.user == user:
+            user.delete()
+            return Response({'message': '회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+    except User.DoesNotExist:
+        return Response({'error': '사용자가 존재하지 않습니다.'}, status=status.HTTP_404_NOT_FOUND)

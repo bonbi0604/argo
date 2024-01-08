@@ -7,14 +7,14 @@ import React, { useState, useContext } from 'react';
 //                원래 정답(answer), 유저 입력(user_answer), 정답률(rate)=>이게 avg인가?
 // QuestionList : 틀린 문제 리스트(wrongQList), 페이징에 필요한 내용
 
-const LearnDown1 = (cat) => {
+const LearnDown1 = (cat, isstudy) => {
   const [historyId, setHistoryId] = useState(null);
   // historyId == result_no
 
   return (
     <div id="comLearnDown">
       {historyId != null ? <WrongAnswers historyId={historyId}/> : <div id="q_div"><p>문제를 선택해 주세요</p></div>}
-      <QuestionList cat={cat} historyId={historyId} setHistoryId={setHistoryId}/>
+      <QuestionList cat={cat} historyId={historyId} setHistoryId={setHistoryId} isstudy={isstudy}/>
     </div>
   )
 }

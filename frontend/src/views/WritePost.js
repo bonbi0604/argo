@@ -2,6 +2,7 @@ import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
+import "./WritePost.css"
 
 const WritePost = () => {
     const { user } = useContext(AuthContext); // 현재 로그인한 사용자 정보를 가져옵니다.
@@ -69,75 +70,79 @@ const WritePost = () => {
     };
 
     return (
-        <div className="write-post-page-background">
-            <div className="write-post-container">
-                <div className="write-post-form-container">
-                    <h2 className="write-post-heading">새 게시물 작성</h2>
-                    <form onSubmit={handleSubmit} className="write-post-form">
-                        <div className="write-post-input-group">
-                            <label htmlFor="postTitle" className="write-post-label">
-                                제목
-                            </label>
-                            <input
-                                type="text"
-                                id="postTitle"
-                                className="write-post-title-input"
-                                placeholder="제목을 입력하세요"
-                                value={title}
-                                onChange={(e) => setTitle(e.target.value)}
-                            />
-                        </div>
-
-                        <div className="write-post-input-group">
-                            <label htmlFor="postFile" className="write-post-label">
-                                파일
-                            </label>
-                            <input
-                                type="file"
-                                id="postFile"
-                                className="write-post-file-input"
-                                accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt" // 허용할 파일 형식 지정
-                                onChange={handleFileChange} // 파일 선택 핸들러 연결
-                                multiple
-                            />
-                        </div>
-
-                        <div className="write-post-input-group">
-                            <label htmlFor="postContent" className="write-post-label">
-                                내용
-                            </label>
-                            <textarea
-                                id="postContent"
-                                className="write-post-content-input"
-                                placeholder="내용을 입력하세요"
-                                rows="10"
-                                value={content}
-                                onChange={(e) => setContent(e.target.value)}
-                                />
-                        </div>
-                        {/* 관리자만 볼 수 있는 공지사항 체크박스 */}
-                        {user.is_admin && (
-                            <label>
+        <section>
+            <div className="write-post-page-background">
+                <div className="write-post-container">
+                    <div className="write-post-form-container">
+                        <h2 className="write-post-heading">새 게시물 작성</h2>
+                        <form onSubmit={handleSubmit} className="write-post-form">
+                            <div className="write-post-input-group">
+                                <label htmlFor="postTitle" className="write-post-label">
+                                    제목
+                                </label>
                                 <input
-                                    type="checkbox"
-                                    checked={isNotice}
-                                    onChange={(e) => setIsNotice(e.target.checked)}
+                                    type="text"
+                                    id="postTitle"
+                                    className="write-post-title-input"
+                                    placeholder="제목을 입력하세요"
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
                                 />
-                                공지사항 작성
-                            </label>
-                        )}
-                        <div className="write-post-submit-group">
-                            <button
-                                type="submit"
-                                className="write-post-submit-button"
-                            >
-                                작성 완료
-                            </button>
-                        </div>
-                    </form>
+                            </div>
+
+
+                            <div className="write-post-input-group">
+                                <label htmlFor="postContent" className="write-post-label">
+                                    내용
+                                </label>
+                                <textarea
+                                    id="postContent"
+                                    className="write-post-content-input"
+                                    placeholder="내용을 입력하세요"
+                                    rows="10"
+                                    value={content}
+                                    onChange={(e) => setContent(e.target.value)}
+                                    />
+                            </div>
+
+                            <div className="write-post-input-group">
+                                <label htmlFor="postFile" className="write-post-label">
+                                    파일
+                                </label>
+                                <input
+                                    type="file"
+                                    id="postFile"
+                                    className="write-post-file-input"
+                                    accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt" // 허용할 파일 형식 지정
+                                    onChange={handleFileChange} // 파일 선택 핸들러 연결
+                                    multiple
+                                />
+                            </div>
+
+                            {/* 관리자만 볼 수 있는 공지사항 체크박스 */}
+                            {user.is_admin && (
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={isNotice}
+                                        onChange={(e) => setIsNotice(e.target.checked)}
+                                    />
+                                    공지사항 작성
+                                </label>
+                            )}
+                            <div className="write-post-submit-group">
+                                <button
+                                    type="submit"
+                                    className="write-post-submit-button"
+                                >
+                                    작성 완료
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 };
 

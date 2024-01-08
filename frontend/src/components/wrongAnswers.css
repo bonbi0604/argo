@@ -7,6 +7,7 @@
     border-radius: 1.5em;
     text-align: start;
     padding: 0 2%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 #q_div > p {
@@ -20,6 +21,10 @@
     padding-top: 5%;
     font-size: 1.2em;
     /* font-weight: bold; */
+}
+
+#wrongDiv > p {
+    padding-left: 1%;
 }
 
 .line {
