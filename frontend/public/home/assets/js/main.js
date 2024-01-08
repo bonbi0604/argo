@@ -174,7 +174,7 @@
 								// Redirect.
 									window.setTimeout(function() {
 										location.href = href;
-									}, 500);
+									}, 10);
 
 							}
 
