@@ -33,7 +33,7 @@ const LearnCommonSense = () => {
             try {
                 //풀 문제
                 const response1 = await fetch(
-                    `http://127.0.0.1:8000/learn/getQuestion/`,
+                    `${process.env.REACT_APP_API_URL}/learn/getQuestion/`,
                     {
                         method: "POST",
                         headers: {
@@ -65,7 +65,7 @@ const LearnCommonSense = () => {
 
                 //avg, score
                 const response2 = await fetch(
-                    `http://127.0.0.1:8000/learn/getAvgScore/`,
+                    `${process.env.REACT_APP_API_URL}/learn/getAvgScore/`,
                     {
                         method: "POST",
                         headers: {

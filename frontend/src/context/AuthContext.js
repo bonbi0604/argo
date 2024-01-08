@@ -27,7 +27,7 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate(); // react router dom 6버전 이상부터는 useHistory대신 useNavigate 사용
 
     const loginUser = async (id, password) => {
-        const response = await fetch("http://127.0.0.1:8000/api/token/", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/token/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export const AuthProvider = ({ children }) => {
         phone,
         id
     ) => {
-        const response = await fetch("http://127.0.0.1:8000/api/register/", {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register/`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     const changePassword = async (oldPassword, newPassword, newPassword2) => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/password_change/",
+                `${process.env.REACT_APP_API_URL}/api/password_change/`,
                 {
                     method: "POST",
                     headers: {
@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }) => {
     const requestPasswordReset = async (email) => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/password_reset/",
+                `${process.env.REACT_APP_API_URL}/api/password_reset/`,
                 {
                     method: "POST",
                     headers: {

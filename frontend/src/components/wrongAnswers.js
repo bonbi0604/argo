@@ -13,7 +13,7 @@ const WrongAnswers = ({ historyId }) => {
     useEffect(() => {
         const WrongAnswers = async () => {
             const response = await fetch(
-                `http://127.0.0.1:8000/learn/wrongQuestion/`,
+                `${process.env.REACT_APP_API_URL}/learn/wrongQuestion/`,
                 {
                     method: "POST",
                     headers: {

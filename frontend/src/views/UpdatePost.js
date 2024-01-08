@@ -14,7 +14,7 @@ const UpdatePost = () => {
         const fetchPost = async () => {
             try {
                 const response = await api.get(
-                    `http://127.0.0.1:8000/noticeboard/posts/${id}/`
+                    `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/`
                 );
                 if (response.status === 200 && response.data) {
                     setTitle(response.data.title);
@@ -38,7 +38,7 @@ const UpdatePost = () => {
             };
 
             const response = await api.put(
-                `http://127.0.0.1:8000/noticeboard/posts/${id}/`,
+                `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/`,
                 updatedPost
             );
 

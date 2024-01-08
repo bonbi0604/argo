@@ -71,7 +71,7 @@ const Chatbot = () => {
         setMessages((currentMessages) => [...currentMessages, userMessage]);
         setInput("");
         try {
-            const response = await fetch("http://127.0.0.1:8000/chatbot/", {
+            const response = await fetch("`${process.env.REACT_APP_API_URL}/chatbot/", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -94,7 +94,7 @@ const Chatbot = () => {
         if (!localSessionTitle || messages.length === 0) return;
         const chatContent = JSON.stringify(messages);
         try {
-            await fetch("http://127.0.0.1:8000/chatbot/api/chat-sessions/", {
+            await fetch(`${process.env.REACT_APP_API_URL}/chatbot/api/chat-sessions/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

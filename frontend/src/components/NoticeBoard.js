@@ -23,7 +23,7 @@ const NoticeBoard = () => {
                 selectedTab === "notices" ? "/notices/" : "/posts/";
             try {
                 const response = await api.get(
-                    `http://127.0.0.1:8000/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`
+                    `${process.env.REACT_APP_API_URL}/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`
                 );
                 if (response.status === 200 && Array.isArray(response.data)) {
                     const data = [...response.data].reverse();
@@ -51,7 +51,7 @@ const NoticeBoard = () => {
         const endpoint = selectedTab === "notices" ? "/notices/" : "/posts/";
         try {
             const response = await api.get(
-                `http://127.0.0.1:8000/noticeboard${endpoint}?search=${searchTerm}`
+                `${process.env.REACT_APP_API_URL}/noticeboard${endpoint}?search=${searchTerm}`
             );
             if (response.status === 200 && Array.isArray(response.data)) {
                 const data = [...response.data].reverse();

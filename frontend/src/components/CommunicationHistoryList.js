@@ -19,7 +19,7 @@ const CommunicationHistoryList = ({
     const [currentPageWindow, setCurrentPageWindow] = useState(1);
     // const [historys, setHistorys] = useState([]);
     const [historyList, setHistoryList] = useState([]);
-    const BASEURL = "http://127.0.0.1:8000/";
+    const BASEURL = `${process.env.REACT_APP_API_URL}/`;
 
     const tempMax = 100;
 

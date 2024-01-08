@@ -25,7 +25,7 @@ const MyPage = ({ cat }) => {
             try {
                 // useAxios 훅을 통해 delete 메소드 호출
                 const response = await api.delete(
-                    `http://127.0.0.1:8000/api/users/${user.user_no}/`
+                    `${process.env.REACT_APP_API_URL}/api/users/${user.user_no}/`
                 );
 
                 if (response.status === 200) {

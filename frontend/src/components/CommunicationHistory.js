@@ -33,7 +33,7 @@ const CommunicationHistory = ({
         Courteous: 0,
     };
     const [historyDetail, setHistoryDetail] = useState({});
-    const BASEURL = "http://127.0.0.1:8000/";
+    const BASEURL = `${process.env.REACT_APP_API_URL}/`;
     const [labelAverages, setLabelAverages] = useState({});
 
     // data 보내는 함수

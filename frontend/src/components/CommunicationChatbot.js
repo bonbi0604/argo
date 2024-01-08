@@ -15,7 +15,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
     const [answer, setAnswer] = useState({});
     const [sentenceOrder, setSentenceOrder] = useState(0);
     const containerRef = useRef(null);
-    const BASEURL = "http://127.0.0.1:8000/";
+    const BASEURL = `${process.env.REACT_APP_API_URL}/`;
     const [MAXCONVERSATION, setMAXCONVERSATION] = useState(50);
 
     // timestamp -> 시분초 바꿔주는 함수
