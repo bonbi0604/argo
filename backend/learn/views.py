@@ -243,6 +243,7 @@ def comm_save(request):
                     label_coherent=labels.get("Coherent", None),
                     label_complete=labels.get("Complete", None),
                     label_courteous=labels.get("Courteous", None),
+                    label_check = item.get("check", 2),
                     timestamp=datetime.utcfromtimestamp(item.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
                 ))
 
@@ -334,7 +335,8 @@ def comm_history_detail(request, no):
                     "Complete": sentence.label_complete,
                     "Courteous": sentence.label_courteous,
                 },
-                "timestamp": sentence.timestamp
+                "timestamp": sentence.timestamp,
+                "check": sentence.label_check,
             }
             history_data.append(sentence_dict)
 

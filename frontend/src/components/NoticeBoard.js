@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
+import "./NoticeBoard.css"
 
 const NoticeBoard = () => {
     const [items, setItems] = useState([]); // 공지사항 또는 게시글 목록
@@ -80,11 +81,11 @@ const NoticeBoard = () => {
             <div className="data-table">
                 <table className="min-w-full">
                     <thead>
-                        <tr className="border-b">
-                            <th className="text-left p-4">번호</th>
-                            <th className="text-left p-4">제목</th>
-                            <th className="text-left p-4">작성자</th>
-                            <th className="text-left p-4">날짜</th>
+                        <tr>
+                            <th>번호</th>
+                            <th>제목</th>
+                            <th>작성자</th>
+                            <th>날짜</th>
                         </tr>
                     </thead>
                     <tbody>

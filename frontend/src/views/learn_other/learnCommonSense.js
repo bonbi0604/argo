@@ -13,19 +13,20 @@ import AuthContext from "../../context/AuthContext";
 // 한번에 전부 불러오는걸로
 
 const LearnCommonSense = () => {
-    const cat = "commonsense";
-    const { user } = useContext(AuthContext);
-    const [wrongList, setWrongList] = useState("");
-    const [question, setQuestion] = useState({
-        question_no: "",
-        question_content: "문제를 불러오는 중입니다.",
-        choices: "",
-        correct_answer: "",
-        is_many_choice: "",
-    });
-    const [avg, setAvg] = useState(0);
-    const [score, setScore] = useState(0);
-    const user_no = user.user_no;
+  const cat = "commonsense";
+  const { user } = useContext(AuthContext);
+  const [wrongList, setWrongList] = useState("");
+  const [question, setQuestion] = useState({
+    'question_no': '',
+    'question_content': '문제를 불러오는 중입니다.',
+    'choices': '',
+    'correct_answer': '',
+    'is_many_choice' : ''
+  });
+  const [avg, setAvg] = useState(0);
+  const [score, setScore] = useState(0);
+  const user_no = user.user_no
+  const [isstudy, setStudy] = useState(false);
 
     useEffect(() => {
         const getLearnPageData = async () => {
@@ -77,13 +78,14 @@ const LearnCommonSense = () => {
             }
         };
 
-        //함수 호출
-        getLearnPageData();
-    }, []);
+    //함수 호출
+    getLearnPageData();
+  }, [isstudy]); 
 
-    return (
-        <LearnOtherPage cat={cat} avg={avg} score={score} question={question} />
-    );
-};
+
+  return (
+    <LearnOtherPage cat={cat} avg={avg} score={score} question={question} isstudy={isstudy} setStudy={setStudy}/>
+  )
+}
 
 export default LearnCommonSense;

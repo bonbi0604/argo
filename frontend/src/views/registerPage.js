@@ -138,18 +138,17 @@ function Register() {
                 return;
             }
 
-            // 백엔드 API 호출하여 아이디 중복 여부 확인
-            const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id,
-                }),
-            });
-            console.log(id);
-            const data = await response.json();
+      // 백엔드 API 호출하여 아이디 중복 여부 확인
+      const response = await fetch(`http://127.0.0.1:8000/api/checkId/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id
+        })
+      });
+      const data = await response.json();
 
             if (response.ok) {
                 if (data.isDuplicate) {

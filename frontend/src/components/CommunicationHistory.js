@@ -118,55 +118,52 @@ const CommunicationHistory = ({
         };
         // console.log(labelAverages);
 
-        fetchData();
-    }, [historyId]);
+    fetchData();
 
-    return (
-        <div className="history_wrapper">
-            <div className="history_contents">
-                <div className="history_communicaiton_chatbot_container">
-                    <div className="history_title">
-                        <div className="history_title_inner">{`${historyDetail.history_no}: ${historyDetail.title}`}</div>
+  }, [historyId]);
+
+
+
+
+
+
+
+  return (
+    <div className="history_wrapper">
+        <div className="history_contents">
+          <div className="history_communicaiton_chatbot_container">
+            <div className="history_title">
+                <div className="history_title_inner">{`${historyDetail.history_no}: ${historyDetail.title}`}</div>
+            </div> 
+            <div className="history_chat_messages">
+              {Object.keys(historyDetail).length > 0 && historyDetail.history.map((message, index) => (
+              <div className="history_chat_messages_inner">
+                {
+                  message.speaker==="chatbot"?
+                  <div className="history_chat_messages_inner2">
+                    <div key={index} className={`history_message_${message.speaker} history_message`}>
+                      {message.sentence}
                     </div>
-                    <div className="history_chat_messages">
-                        {Object.keys(historyDetail).length > 0 &&
-                            historyDetail.history
-                                .slice(1)
-                                .map((message, index) => (
-                                    <div className="history_chat_messages_inner">
-                                        {message.speaker === "chatbot" ? (
-                                            <div className="history_chat_messages_inner2">
-                                                <div
-                                                    key={index}
-                                                    className={`history_message_${message.speaker} history_message`}
-                                                >
-                                                    {message.sentence}
-                                                </div>
-                                                <div
-                                                    className={`message_time message_time_${message.speaker}`}
-                                                >
-                                                    {convertTimestampToTime(
-                                                        message.timestamp
-                                                    )}
-                                                </div>
-                                            </div>
-                                        ) : (
-                                            <div className="history_chat_messages_inner2">
-                                                <div
-                                                    className={`message_time message_time_${message.speaker}`}
-                                                >
-                                                    {convertTimestampToTime(
-                                                        message.timestamp
-                                                    )}
-                                                </div>
-                                                <div
-                                                    key={index}
-                                                    className={`history_message_${message.speaker} history_message`}
-                                                >
-                                                    {message.sentence}
-                                                </div>
-                                            </div>
-                                        )}
+                    <div className={`message_time message_time_${message.speaker}`}>{convertTimestampToTime(message.timestamp)}</div>
+                  </div>
+                  :
+                  (message.speaker==="system"?
+                  <div className="history_chat_messages_inner2">
+                    <div key={index} className={`history_message_${message.speaker} history_message`}>
+                      {message.sentence}
+                    </div>
+                  </div>
+                  :
+                  <div className="history_chat_messages_inner2">
+                    <div className={`message_time message_time_${message.speaker}`}>{convertTimestampToTime(message.timestamp)}</div>
+                    <div key={index} className={`history_message_${message.speaker}_${message.check} history_message`}>
+                      {message.sentence}
+                    </div>
+                    
+                  </div>)
+                }
+
+                  
 
                                         <div className="sevenC_wrapper">
                                             <div className="sevenC_wrapper_inner">
