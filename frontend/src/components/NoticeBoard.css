@@ -138,3 +138,7 @@
 .board_pagination {
     margin-top: 5%;
 }
+#noticeboard_table td {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }

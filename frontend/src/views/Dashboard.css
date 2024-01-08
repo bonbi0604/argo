@@ -3,5 +3,5 @@
 }
 
 .noticeboard_div {
-    height: 100%;
+    height: calc(100%-5rem);
 }
