@@ -15,7 +15,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
     const [answer, setAnswer] = useState({});
     const [sentenceOrder, setSentenceOrder] = useState(0);
     const containerRef = useRef(null);
-    const BASEURL = "http://127.0.0.1:8000/";
+    const BASEURL = `${process.env.REACT_APP_API_URL}/`;
     const [MAXCONVERSATION, setMAXCONVERSATION] = useState(50);
 
     // timestamp -> 시분초 바꿔주는 함수
@@ -60,7 +60,6 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
         return data;
     };
 
-
     // 'Send' 버튼을 클릭하거나 엔터 키를 누를 때 실행하는 함수
     const handleSubmit = async () => {
         if (!input.trim()) return; // 입력이 비어있는 경우 메시지를 안보냄
@@ -71,38 +70,48 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
           return [...currentMessages, userMessage];
         });
 
-        const inputtemp =  input;
-        setInput(''); // 입력 필드 비우기
+        const inputtemp = input;
+        setInput(""); // 입력 필드 비우기
         setIsButtonDisabled(true); // 버튼 비활성화
-
-
 
         // 가이드 확인
         const guide_label = answer.conversation[sentenceOrder].guide;
-        const sendingData = {'sentence': inputtemp, 'guideline': guide_label};
-        const checkdata = await submit(sendingData, BASEURL+'learn/communication/study/check/');
+        const sendingData = { sentence: inputtemp, guideline: guide_label };
+        const checkdata = await submit(
+            sendingData,
+            BASEURL + "learn/communication/study/check/"
+        );
         const currentSentenceOrder = sentenceOrder;
 
-        if (checkdata.check === 1) { // 가이드 모두 충족
-          // messages 마지막 요소 check를 1로 변경
-          setMessages((currentMessages) => {
-            const lastMessageIndex = currentMessages.length - 1;
-            const newMessages = [...currentMessages];
-            newMessages[lastMessageIndex] = {
-              ...newMessages[lastMessageIndex],
-              check: 1
-            };
-            return newMessages;
-          });
-          
-          // 다음 conversation 진행 위치
-          setSentenceOrder((currSentenceOrder) => {
-            return currSentenceOrder + 1;
-          });
+        if (checkdata.check === 1) {
+            // 가이드 모두 충족
+            // messages 마지막 요소 check를 1로 변경
+            setMessages((currentMessages) => {
+                const lastMessageIndex = currentMessages.length - 1;
+                const newMessages = [...currentMessages];
+                newMessages[lastMessageIndex] = {
+                    ...newMessages[lastMessageIndex],
+                    check: 1,
+                };
+                return newMessages;
+            });
 
-          // chatbot 응답 보내기
-          const sendingData = { 'answer': answer, 'user_no':user.user_no, message: inputtemp, history: messages };
-          const data = await submit(sendingData, BASEURL+'learn/communication/study/');
+            // 다음 conversation 진행 위치
+            setSentenceOrder((currSentenceOrder) => {
+                return currSentenceOrder + 1;
+            });
+
+            // chatbot 응답 보내기
+            const sendingData = {
+                answer: answer,
+                user_no: user.user_no,
+                message: inputtemp,
+                history: messages,
+            };
+            const data = await submit(
+                sendingData,
+                BASEURL + "learn/communication/study/"
+            );
 
           // chatbot 메시지로  messages 업데이트
           setMessages((currentMessages) => { 
@@ -144,21 +153,24 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
         }
 
         // 학습 중일때만 (statecode===0) 버튼 다시 활성화
-        if(statecode===0) {
-          setIsButtonDisabled(false);
+        if (statecode === 0) {
+            setIsButtonDisabled(false);
         }
     };
 
-    // 7C's 라벨링 
-    const getLabel = async (message) => {  
-      const sendingData = {'user_no':user.user_no, message: message, history: messages};
-      const data = await submit(sendingData, BASEURL+'learn/communication/label/');
-      return data;
+    // 7C's 라벨링
+    const getLabel = async (message) => {
+        const sendingData = {
+            user_no: user.user_no,
+            message: message,
+            history: messages,
+        };
+        const data = await submit(
+            sendingData,
+            BASEURL + "learn/communication/label/"
+        );
+        return data;
     };
-
-
-
-
 
     // 첫 렌더링 시 한번만 실행/ 백엔드에 첫 시작 메시지를 보내는 로직
     useEffect(() => {
@@ -172,18 +184,21 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
           
           // console.log(user);
 
-          setIsButtonDisabled(true); // 버튼 비활성화
-          const data = await submit(sendingData, BASEURL+'learn/communication/study/first/');
+            setIsButtonDisabled(true); // 버튼 비활성화
+            const data = await submit(
+                sendingData,
+                BASEURL + "learn/communication/study/first/"
+            );
 
-          // answer 저장
-          setAnswer(data.answer);
-          setMAXCONVERSATION(data.answer.conversation.length);
+            // answer 저장
+            setAnswer(data.answer);
+            setMAXCONVERSATION(data.answer.conversation.length);
 
-          // chatbot 먼저 시작일 경우
-          if (data.answer.conversation[0].speaker === 'chatbot') {
-            setSentenceOrder((currSentenceOrder) => {
-              return currSentenceOrder + 1
-            });
+            // chatbot 먼저 시작일 경우
+            if (data.answer.conversation[0].speaker === "chatbot") {
+                setSentenceOrder((currSentenceOrder) => {
+                    return currSentenceOrder + 1;
+                });
 
             setMessages((currentMessages) => { // 받은 데이터로 메시지 목록을 업데이트
               const updatedMessages = [...currentMessages, { sentence: data.reply, speaker: 'chatbot', labels: {}, timestamp: new Date().getTime(), guide: answer.conversation[sentenceOrder].guide, label_answer:[], check: 1 }];
@@ -198,29 +213,28 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
 
     // statecode 가 0 이 아닐 때, history 저장 요청. 버튼 비활성화
     useEffect(() => {
-      if (statecode != 0) {
-        setIsButtonDisabled(true);
-        // console.log(statecode, isSaved);
-        if (!isSaved && messages.length > 1) {
-          setIsSaved(true);
-          const sendingData = {
-            'dialog_id': answer.id, 
-            'user_no':user.user_no,
-            'code': statecode,
-            'title': answer.title,
-            'timestamp': new Date().getTime(),
-            'history': messages
-          };
-          // console.log(sendingData);
-          submit(sendingData, BASEURL+"learn/communication/save/");
-        }
+        if (statecode != 0) {
+            setIsButtonDisabled(true);
+            // console.log(statecode, isSaved);
+            if (!isSaved && messages.length > 1) {
+                setIsSaved(true);
+                const sendingData = {
+                    dialog_id: answer.id,
+                    user_no: user.user_no,
+                    code: statecode,
+                    title: answer.title,
+                    timestamp: new Date().getTime(),
+                    history: messages,
+                };
+                // console.log(sendingData);
+                submit(sendingData, BASEURL + "learn/communication/save/");
+            }
 
-        setStopped(true);
-      }
-      else {
-        setIsButtonDisabled(false);
-      }
-      // console.log(statecode);
+            setStopped(true);
+        } else {
+            setIsButtonDisabled(false);
+        }
+        // console.log(statecode);
     }, [statecode]);
 
     // 중단 버튼 눌렀을 때 disabled
@@ -346,18 +360,21 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
 
         const container = containerRef.current;
 
-      // .A 클래스를 가진 하위 엘리먼트를 찾아 스크롤을 아래로 이동
-      if (container) {
-        // console.log("container selected");
-        const lastMessage = container.lastElementChild;
-        if (lastMessage) {
-          // console.log("last element selected");
-          lastMessage.scrollIntoView({ behavior: 'auto', block: 'end', inline: 'nearest' });
+        // .A 클래스를 가진 하위 엘리먼트를 찾아 스크롤을 아래로 이동
+        if (container) {
+            // console.log("container selected");
+            const lastMessage = container.lastElementChild;
+            if (lastMessage) {
+                // console.log("last element selected");
+                lastMessage.scrollIntoView({
+                    behavior: "auto",
+                    block: "end",
+                    inline: "nearest",
+                });
+            }
         }
-      }
 
-      // console.log("content changed");
-
+        // console.log("content changed");
     }, [content]);
 
     return (
