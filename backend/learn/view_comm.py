@@ -212,7 +212,7 @@ def check_guideline(request):
         return JsonResponse({'guide_label': response, "check": check})
     return JsonResponse({"error": "Method not allowed"}, status=405)
 
-
+import time
 #================================================================================
 #                       communication/study/check/
 #================================================================================
@@ -239,8 +239,13 @@ def scoring_7cs(message):
         data = client_socket.recv(1024).decode('utf-8')
         head = data[:8]
         label = list(map(int, data[8:].split(",")))
+        
         print('서버로부터 받은 응답:', label)
 
+    except Exception as e:
+        print(e)
+        label = [0, 0, 0, 0, 0, 0, 0]
+        # label = [1, 1, 1, 1, 1, 1, 1]
     finally:
         # 소켓 종료
         print('서버와의 연결이 종료되었습니다.')

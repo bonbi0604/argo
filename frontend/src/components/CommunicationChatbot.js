@@ -66,7 +66,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
         if (!input.trim()) return; // 입력이 비어있는 경우 메시지를 안보냄
 
         // 유저 메시지로  messages 업데이트
-        const userMessage = { sentence: input, speaker: 'user', labels: {}, timestamp: new Date().getTime(), guide: answer.conversation[sentenceOrder].guide, check: 2};
+        const userMessage = { sentence: input, speaker: 'user', labels: {}, timestamp: new Date().getTime(), label_answer:answer.conversation[sentenceOrder].sevenC, guide: answer.conversation[sentenceOrder].guide, check: 2};
         setMessages((currentMessages) => { 
           return [...currentMessages, userMessage];
         });
@@ -106,7 +106,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
 
           // chatbot 메시지로  messages 업데이트
           setMessages((currentMessages) => { 
-            const message = { sentence: data.reply, speaker: "chatbot", labels: {}, guide:answer.conversation[currentSentenceOrder+1].guide, timestamp: new Date().getTime(), check:1};
+            const message = { sentence: data.reply, speaker: "chatbot", labels: {}, guide:answer.conversation[currentSentenceOrder+1].guide,label_answer:[], timestamp: new Date().getTime(), check:1};
             return [...currentMessages, message];
           });
           
@@ -133,12 +133,12 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
           });
           // 유저 메시지와 시스템 메시지로  messages 업데이트
           setMessages((currentMessages) => { 
-            console.log(checkdata.guide_label, guide_label, checkdata.guide_label.filter((value, index) => value === 0));
+            // console.log(checkdata.guide_label, guide_label, checkdata.guide_label.filter((value, index) => value === 0));
             let message = "문맥과 맞지 않습니다.";
             if (checkdata.guide_label.includes(1)) {
               message = guide_label.filter((value, index) => checkdata.guide_label[index] === 0).map((value, _) => "'"+value+"'").join(', ') + " 부분이 부족합니다.";
             }
-            const updatedMessages = [...currentMessages, { sentence: message, speaker: 'system', guide:[], labels: {}, timestamp: new Date().getTime(), check:1 }];
+            const updatedMessages = [...currentMessages, { sentence: message, speaker: 'system', guide:[], labels: {},label_answer:[], timestamp: new Date().getTime(), check:1 }];
             return updatedMessages;
           });
         }
@@ -186,7 +186,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
             });
 
             setMessages((currentMessages) => { // 받은 데이터로 메시지 목록을 업데이트
-              const updatedMessages = [...currentMessages, { sentence: data.reply, speaker: 'chatbot', labels: {}, timestamp: new Date().getTime(), guide: answer.conversation[sentenceOrder].guide, check: 1 }];
+              const updatedMessages = [...currentMessages, { sentence: data.reply, speaker: 'chatbot', labels: {}, timestamp: new Date().getTime(), guide: answer.conversation[sentenceOrder].guide, label_answer:[], check: 1 }];
               return updatedMessages;
             }); 
           }
@@ -236,6 +236,16 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
     //   }
     // }, [sentenceOrder]);
 
+    const senvenC2N = {
+      0 : "Clear",
+      1 : "Concise",
+      2 : "Concrete",
+      3 : "Correct",
+      4 : "Coherent",
+      5 : "Complete",
+      6 : "Courteous",
+    }
+
     useEffect(() => {
       // 발화자가 user 인 경우 label 얻기
       const fetchData = async () => {
@@ -244,6 +254,16 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
           const last = messages[lastMessageIndex];
           if (last && last.speaker === "user" && Object.keys(last.labels).length === 0) {
             const recieveData = await getLabel(last.sentence);
+
+            const B = recieveData.labels;
+            const A = last.label_answer;
+            Object.keys(B).forEach(key => {
+              if (!A.includes(key)) {
+                B[key] = 0;
+              }
+            });
+
+            console.log(B);
             
             setMessages((prevMessages) => {
               const updatedMessages = [...prevMessages];
@@ -251,7 +271,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
               // 기존 배열의 해당 인덱스의 labels를 업데이트
               updatedMessages[lastMessageIndex] = {
                 ...updatedMessages[lastMessageIndex],
-                labels: recieveData.labels
+                labels: B
               };
     
               return updatedMessages;
