@@ -12,6 +12,7 @@ const NoticeBoard = () => {
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     // API request to retrieve data appropriate for the current page
@@ -39,6 +40,31 @@ const NoticeBoard = () => {
     fetchPosts();
   }, [currentPage, selectedTab, itemsPerPage]); // currentPage도 의존성 배열에 추가
 
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSearch = async () => {
+    const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
+    try {
+      const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}?search=${searchTerm}`);
+      if (response.status === 200 && Array.isArray(response.data)) {
+        const data = [...response.data].reverse();
+        if (selectedTab === 'notices') {
+          setItems(data);
+        } else {
+          setPosts(data);
+        }
+      } else {
+        console.error('Data is not an array', response.data);
+      }
+    } catch (error) {
+      console.error('Error retrieving data', error);
+    }
+  };
+
+
   const calculatePostNumber = (index) => {
     // 총 게시글 수에서 현재 페이지의 첫 번째 게시글 인덱스와 현재 게시글의 인덱스를 빼면 번호를 계산할 수 있습니다.
     // 예를 들어, 총 30개의 게시글이 있고, 현재 페이지가 2페이지(11~20번 게시글)이고, 현재 게시글이 15번째라면
@@ -47,6 +73,7 @@ const NoticeBoard = () => {
     return totalPosts - (indexOfFirstItem + index);
   };
 
+  
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = selectedTab === 'notices' 
@@ -61,8 +88,8 @@ const NoticeBoard = () => {
         <button onClick={() => setSelectedTab('posts')}>게시글</button>
       </div>
       <div className="search-bar">
-        <input type="text" placeholder="검색"/>
-        <button>검색</button>
+        <input type="text" placeholder="검색" value={searchTerm} onChange={handleSearchChange}/>
+        <button onClick={handleSearch}>검색</button>
       </div>
       <div className="table-container">
                 <table id="noticeboard_table">

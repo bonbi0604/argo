@@ -6,6 +6,7 @@ from .models import NoticeComment, Post, Comment, FileModel, Notice, NoticeFile
 from .serializer import NoticeCommentSerializer, PostSerializer, CommentSerializer, NoticeSerializer
 from django.http import JsonResponse
 from account.models import User
+from django.db.models import Q
 import logging
 
 @api_view(['GET'])
@@ -22,7 +23,10 @@ def notice_list_create(request):
         return Response({'detail': '관리자 권한이 필요합니다.'}, status=status.HTTP_403_FORBIDDEN)
 
     if request.method == 'GET':
+        search_query = request.query_params.get('search', None) # 검색어 가져오기
         notices = Notice.objects.all()
+        if search_query:
+            notices = notices.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
         # context 파라미터에 request를 전달하여 파일 URL 생성 시 필요한 request 정보를 제공
         serializer = NoticeSerializer(notices, many=True, context={'request': request})
         return Response(serializer.data)
@@ -40,12 +44,14 @@ def notice_list_create(request):
 @api_view(['GET', 'POST'])
 def post_list_create(request):
     if request.method == 'GET':
+        search_query = request.query_params.get('search', None) # 검색어 가져오기
         posts = Post.objects.all()
+        if search_query:
+            posts = posts.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
         serializer = PostSerializer(posts, many=True)
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data, context={'request': request})
-        print(request.data)
         if serializer.is_valid():
             post = serializer.save(user_no=request.user)
             files_data = request.FILES.getlist('file_field_name')
@@ -63,7 +69,6 @@ def post_detail(request, id):
     post = get_object_or_404(Post, pk=id)
     if request.method == 'GET':
         serializer = PostSerializer(post)
-        print("Serialized Notice Data:", serializer.data)
         return Response(serializer.data)
     elif request.method == 'PUT':
         # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)
@@ -116,7 +121,6 @@ def comments_list_create(request, id):
             return Response({'detail': '로그인이 필요합니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = CommentSerializer(data=request.data)
-        print(request.data)
         if serializer.is_valid():
             # save() 호출 시 user_no에 request.user를 전달합니다.
             serializer.save(post_id=post, user_no=request.user)
