@@ -39,6 +39,14 @@ const NoticeBoard = () => {
     fetchPosts();
   }, [currentPage, selectedTab, itemsPerPage]); // currentPage도 의존성 배열에 추가
 
+  const calculatePostNumber = (index) => {
+    // 총 게시글 수에서 현재 페이지의 첫 번째 게시글 인덱스와 현재 게시글의 인덱스를 빼면 번호를 계산할 수 있습니다.
+    // 예를 들어, 총 30개의 게시글이 있고, 현재 페이지가 2페이지(11~20번 게시글)이고, 현재 게시글이 15번째라면
+    // 30 - (10 + 5) = 15가 됩니다.
+    const totalPosts = selectedTab === 'notices' ? items.length : posts.length;
+    return totalPosts - (indexOfFirstItem + index);
+  };
+
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentItems = selectedTab === 'notices' 
@@ -67,9 +75,9 @@ const NoticeBoard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((item) => (                                
+                        {currentItems.map((item, index) => (                                
                              <tr key={item.id} onClick={() => navigate(selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`)}>
-                                <td id="board_no">{selectedTab === 'posts' ? item.post_id : item.notice_id}</td>
+                                <td id="board_no">{calculatePostNumber(index)}</td>
                                 <td className='text_left'>
                                     <Link to={selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`}>{item.title}</Link>
                                 </td>
