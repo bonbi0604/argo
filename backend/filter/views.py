@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views import View
-from .models import Result, Question
+from learn.models import Result, Question, Answer
 from account.models import User
 
 class GetAllResults(View):
