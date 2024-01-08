@@ -6,32 +6,87 @@ import { Link } from "react-router-dom";
 console.log("homepage"); // "homepage"을 콘솔에 출력합니다.
 
 const Home = () => {
-  
   useEffect(() => {
-    const loadScript = src => {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = () => resolve();
-        script.onerror = () => reject();
-        document.body.appendChild(script);
+    const smoothScrollTo = (targetY, duration) => {
+      const startY = window.scrollY;
+      const change = targetY - startY;
+      let currentTime = 0;
+
+      const animateScroll = () => {
+        currentTime += 20; // 스크롤 애니메이션 간격
+        const val = Math.easeInOutQuad(currentTime, startY, change, duration);
+        window.scrollTo(0, val);
+        if (currentTime < duration) {
+          requestAnimationFrame(animateScroll);
+        }
+      };
+
+      Math.easeInOutQuad = (t, b, c, d) => {
+        t /= d / 2;
+        if (t < 1) return c / 2 * t * t + b;
+        t--;
+        return -c / 2 * (t * (t - 2) - 1) + b;
+      };
+
+      animateScroll();
+    };
+
+    const handleScroll = (event) => {
+      event.preventDefault();
+      const targetId = event.currentTarget.getAttribute('href').substring(1);
+      const targetElement = document.getElementById(targetId);
+      if (targetElement) {
+        smoothScrollTo(targetElement.offsetTop, 1000); // 1000ms 동안 스크롤
+      }
+    };
+
+    const scrollElements = document.querySelectorAll('.scrolly');
+    scrollElements.forEach(el => {
+      el.addEventListener('click', handleScroll);
+    });
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너 제거
+    return () => {
+      scrollElements.forEach(el => {
+        el.removeEventListener('click', handleScroll);
       });
     };
-  
-    const scripts = [
-      "../../home/assets/js/jquery.min.js",
-      "../../home/assets/js/jquery.scrolly.min.js",
-      "../../home/assets/js/jquery.scrollex.min.js",
-      "../../home/assets/js/browser.min.js",
-      "../../home/assets/js/breakpoints.min.js",
-      "../../home/assets/js/util.js",
-      "../../home/assets/js/main.js",
-    ];
-  
-    scripts.reduce((prev, curr) => {
-      return prev.then(() => loadScript(curr));
-    }, Promise.resolve());
   }, []);
+
+  useEffect(() => {
+    const loadScripts = async () => {
+      const scripts = [
+        "../../home/assets/js/jquery.min.js",
+        // "../../home/assets/js/jquery.scrolly.min.js",
+        // "../../home/assets/js/jquery.scrollex.min.js",
+        "../../home/assets/js/browser.min.js",
+        "../../home/assets/js/breakpoints.min.js",
+        "../../home/assets/js/util.js",
+        "../../home/assets/js/main.js",
+      ];
+
+      for (const src of scripts) {
+        try {
+          await loadScript(src);
+          console.log(`Loaded script: ${src}`);
+        } catch (error) {
+          console.error(`Error loading script: ${src}`);
+        }
+      }
+    };
+
+    loadScripts();
+  }, []);
+
+  const loadScript = (src) => {
+    return new Promise((resolve, reject) => {
+      const script = document.createElement('script');
+      script.src = src;
+      script.onload = () => resolve();
+      script.onerror = () => reject();
+      document.body.appendChild(script);
+    });
+  };
 
   return (
     <div>
