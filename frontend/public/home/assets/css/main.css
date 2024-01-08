@@ -2532,8 +2532,8 @@ input, select, textarea {
 		button:active,
 		.button:hover,
 		.button:active {
-			box-shadow: inset 0 0 0 2px rgb(97, 97, 97);
-			color: rgb(97, 97, 97);
+			box-shadow: inset 0 0 0 2px #315279;
+			color: #315279;
 		}
 
 		input[type="submit"]:active,
@@ -2543,7 +2543,7 @@ input, select, textarea {
 		.button:active {
 			background-color: rgba(155, 241, 255, 0.1);
 			/* box-shadow: inset 0 0 0 2px #53e3fb; */
-			color: rgb(97, 97, 97);
+			color: #315279;
 		}
 
 		input[type="submit"].icon:before,
@@ -2628,7 +2628,7 @@ input, select, textarea {
 			input[type="button"].next:after,
 			button.next:after,
 			.button.next:after {
-				background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='36px' height='24px' viewBox='0 0 36 24' zoomAndPan='disable'%3E%3Cstyle%3Eline %7B stroke: %23616161%3B stroke-width: 2px%3B %7D%3C/style%3E%3Cline x1='0' y1='12' x2='34' y2='12' /%3E%3Cline x1='25' y1='4' x2='34' y2='12.5' /%3E%3Cline x1='25' y1='20' x2='34' y2='11.5' /%3E%3C/svg%3E");
+				background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='36px' height='24px' viewBox='0 0 36 24' zoomAndPan='disable'%3E%3Cstyle%3Eline %7B stroke: %23325179%3B stroke-width: 2px%3B %7D%3C/style%3E%3Cline x1='0' y1='12' x2='34' y2='12' /%3E%3Cline x1='25' y1='4' x2='34' y2='12.5' /%3E%3Cline x1='25' y1='20' x2='34' y2='11.5' /%3E%3C/svg%3E");
 				opacity: 0;
 				z-index: 1;
 			}
@@ -2664,7 +2664,7 @@ input, select, textarea {
 		.button.primary {
 			background-color: #ffffff;
 			box-shadow: none;
-			color: #242943;
+			color: #315279;
 		}
 
 			input[type="submit"].primary:hover, input[type="submit"].primary:active,
@@ -2676,8 +2676,8 @@ input, select, textarea {
 			button.primary:active,
 			.button.primary:hover,
 			.button.primary:active {
-				background-color: rgb(97, 97, 97);
-				color: #242943 !important;
+				background-color: #315279;
+				color: #ffffff !important;
 			}
 
 			input[type="submit"].primary:active,

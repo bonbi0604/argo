@@ -60,37 +60,37 @@ const Home = () => {
           <section id="one" className="tiles">
             <article>
               <span className="image">
-                <img src="../../home/images/feedback.jpg" alt />
+                <img src="../../home/images/feedback.jpg" alt="feedback" />
               </span>
               <header className="major">
-                <h3><a href="../../home/landing.html" className="link">피드백</a></h3>
+                <h3><Link to="/result" className="link">피드백</Link></h3>
                 <p>Ipsum dolor sit amet</p>
               </header>
             </article>
             <article>
               <span className="image">
-                <img src="../../home/images/development.jpg" alt />
+                <img src="../../home/images/development.jpg" alt="development" />
               </span>
               <header className="major">
-                <h3><a href="../..l/home/landing.htm" className="link">역량 개발</a></h3>
+                <h3><Link to="/learn" className="link">역량개발</Link></h3>
                 <p>feugiat amet tempus</p>
               </header>
             </article>
             <article>
               <span className="image">
-                <img src="../../home/images/chatbot.jpg" alt />
+                <img src="../../home/images/chatbot.jpg" alt="chatbot" />
               </span>
               <header className="major">
-                <h3><a href="../../home/landing.html" className="link">사내규정 도우미</a></h3>
+                <h3><Link to="/chat" className="link">사내규정 도우미</Link></h3>
                 <p>Lorem etiam nullam</p>
               </header>
             </article>
             <article>
               <span className="image">
-                <img src="../../home/images/notice.jpg" alt />
+                <img src="../../home/images/notice.jpg" alt="notice" />
               </span>
               <header className="major">
-                <h3><a href="../../home/landing.html" className="link">게시판</a></h3>
+                <h3><Link to="/DashBoard" className="link">게시판</Link></h3>
                 <p>Nisl sed aliquam</p>
               </header>
             </article>
@@ -103,7 +103,7 @@ const Home = () => {
               </header>
               <p>Nullam eue condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.</p>
               <ul className="actions">
-                <li><a href="./home/landing.html" className="button next">Get Started</a></li>
+                <li><a href = '#one' className="button next scrolly">Get Started</a></li>
               </ul>
             </div>
           </section>
