@@ -1,18 +1,42 @@
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
 import './myPage.css'; 
 import React, { useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const MyPage = ({cat}) => {
-  const { user, requestPasswordReset } = useContext(AuthContext);
+  const { user,  logoutUser } = useContext(AuthContext);
+  const navigate = useNavigate();
+  const api = useAxios(); // useAxios 훅 사용
+
 
   if (!user){
-    return (<Navigate to='/login'  />)
+    return (<navigate to='/login'  />)
   }
 
   const handlePasswordResetRequest = () => {
-    requestPasswordReset(user.email);
+    // requestPasswordReset(user.email);
+    navigate(`/profile/changePassword`);
+  };
+
+  // 회원 탈퇴 처리 함수
+  const handleUserDeletion = async () => {
+    if (window.confirm("정말로 회원 탈퇴를 원하시나요?")) {
+      try {
+        // useAxios 훅을 통해 delete 메소드 호출
+        const response = await api.delete(`http://127.0.0.1:8000/api/users/${user.user_no}/`);
+
+        if (response.status === 200) {
+          // 로그아웃 처리 및 로그인 페이지로 이동
+          // logout(); // 로그아웃 함수를 호출
+          logoutUser(); // 회원 탈퇴 후 로그아웃 처리
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('회원 탈퇴 처리 중 오류가 발생했습니다.', error);
+      }
+    }
   };
   
   return (
@@ -26,7 +50,10 @@ const MyPage = ({cat}) => {
               </div> */}
             </div>
             <div id="myCard">
-              <div id="myName">{user.name}</div>
+              <span id="myName">{user.name}</span>
+              <button onClick={handleUserDeletion} className="delete-account-button">
+                  회원 탈퇴
+              </button>
               <div id="myLine"/>
               <div id="myProfile">
 
@@ -53,9 +80,10 @@ const MyPage = ({cat}) => {
 
                 <div className="myProfileDiv">
                   <span>Dept</span>
-                  <span className="myData">{user.dept}</span>
+                  <span className="myData">
+                    {user.dept === 1 ? '개발부' : user.dept === 2 ? '인사부' : user.dept === 3 ? '기획부' : '기타'}
+                  </span>
                 </div>
-
               </div>
             </div>
           </div>

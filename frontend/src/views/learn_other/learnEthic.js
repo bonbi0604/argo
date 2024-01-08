@@ -13,43 +13,52 @@ import AuthContext from "../../context/AuthContext";
 // 한번에 전부 불러오는걸로
 
 const LearnCommonSense = () => {
-    const cat = "ethic";
-    const { user } = useContext(AuthContext);
-    const [wrongList, setWrongList] = useState("");
-    const [question, setQuestion] = useState({
-        question_no: "",
-        question_content: "문제를 불러오는 중입니다.",
-        choices: "",
-        correct_answer: "",
-        is_many_choice: "",
-    });
-    const [avg, setAvg] = useState(0);
-    const [score, setScore] = useState(0);
-    const user_no = user.user_no;
+  const cat = "ethic";
+  const { user } = useContext(AuthContext);
+  const [wrongList, setWrongList] = useState("");
+  const [question, setQuestion] = useState({
+    'question_no': '',
+    'question_content': '문제를 불러오는 중입니다.',
+    'choices': '',
+    'correct_answer': '',
+    'is_many_choice' : ''
+  });
+  const [avg, setAvg] = useState(0);
+  const [score, setScore] = useState(0);
+  const user_no = user.user_no
+  const [isstudy, setStudy] = useState(false);
 
-    useEffect(() => {
-        const getLearnPageData = async () => {
-            try {
-                //풀 문제
-                const response1 = await fetch(
-                    `http://127.0.0.1:8000/learn/getQuestion/`,
-                    {
-                        method: "POST",
-                        headers: {
-                            "Content-Type": "application/json",
-                        },
-                        body: JSON.stringify({
-                            cat,
-                        }),
-                    }
-                );
-                const data1 = await response1.json();
+  useEffect(() => {
+    const getLearnPageData = async () => {
+      try {
+        //풀 문제
+        const response1 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({cat})
+        });
+        const data1 = await response1.json();
+        console.log("서버 응답:", data1); // 로깅 추가
 
-                if (response1.ok) {
-                    setQuestion(data1.wrong_question);
-                } else {
-                    console.error("풀 문제 오류");
-                } //풀 문제 끝
+        if (response1.ok) {
+          const wrongQuestion = data1.wrong_question;
+          setQuestion(wrongQuestion)
+          // 한글 번역 존재 여부 확인
+          // if (wrongQuestion.korean===null) {
+          //   // 한글 번역이 있는 경우, 영어 문제와 결합하여 표시
+          //   setQuestion(wrongQuestion);
+            
+          // } else {
+          //   setQuestion({
+          //     ...wrongQuestion,
+          //     question_content: `${wrongQuestion.question_content}\n\n${wrongQuestion.korean}`
+          //   });
+          // }
+        } else {
+          console.error("풀 문제 오류");
+        }
 
                 //avg, score
                 const response2 = await fetch(
@@ -77,13 +86,14 @@ const LearnCommonSense = () => {
             }
         };
 
-        //함수 호출
-        getLearnPageData();
-    }, []);
+    //함수 호출
+    getLearnPageData();
+  }, [cat, isstudy]);
 
-    return (
-        <LearnOtherPage cat={cat} avg={avg} score={score} question={question} />
-    );
-};
+
+  return (
+    <LearnOtherPage cat={cat} avg={avg} score={score} question={question} isstudy={isstudy} setStudy={setStudy}/>
+  )
+}
 
 export default LearnCommonSense;

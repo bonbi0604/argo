@@ -44,7 +44,7 @@
   transition: background-color 0.3s;
   align-self: center;
   height: 100%;
-  font-size: 1.2rem;
+  font-size: 1em;
   font-weight: bold;
 }
 
@@ -78,7 +78,7 @@
 
 .delete-icon {
   width: auto;
-  height: 100%;
+  height: 65%;
 }
 
 .create-new-chat-button {

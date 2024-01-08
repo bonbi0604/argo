@@ -118,19 +118,19 @@ export const AuthProvider = ({ children }) => {
                 }
             );
 
-            if (response.status === 200) {
-                alert("비밀번호가 성공적으로 변경되었습니다.");
-                // navigate("../profile");
-            } else if (response.status === 400) {
-                const data = await response.json();
-                alert(`비밀번호 변경 실패: ${data.detail}`);
-            } else {
-                alert("비밀번호가 일치하지 않습니다.");
-            }
-        } catch (error) {
-            console.error("비밀번호 변경 중 오류:", error);
-        }
-    };
+      if (response.status === 200) {
+        alert("비밀번호가 성공적으로 변경되었습니다.");
+        navigate("../profile");
+      } else if (response.status === 400) {
+        const data = await response.json();
+        alert(`비밀번호 변경 실패: ${data.detail}`);
+      } else {
+        alert("비밀번호가 일치하지 않습니다.");
+      }
+    } catch (error) {
+      console.error("비밀번호 변경 중 오류:", error);
+    }
+  };
 
     const requestPasswordReset = async (email) => {
         try {

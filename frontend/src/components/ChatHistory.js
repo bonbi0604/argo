@@ -51,67 +51,55 @@ const ChatHistory = forwardRef(
                 }
                 const data = await response.json();
 
-                if (onSessionSelect) {
-                    onSessionSelect(
-                        data.id,
-                        data.chat_content,
-                        data.session_title
-                    );
-                }
-            } catch (error) {
-                console.error("Error fetching session data:", error);
-            }
-            setTimeout(() => {
-                fetchSessions();
-            }, 100);
-        };
-        const handleDeleteSession = async (sessionId) => {
-            if (
-                window.confirm("Are you sure you want to delete this session?")
-            ) {
-                try {
-                    const response = await fetch(
-                        `http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionId}/`,
-                        {
-                            method: "DELETE",
-                        }
-                    );
-                    if (!response.ok) {
-                        throw new Error("Failed to delete session");
-                    }
-                    fetchSessions();
-                    if (
-                        sessionId === selectedSessionId &&
-                        chatbotRef &&
-                        chatbotRef.current
-                    ) {
-                        chatbotRef.current.resetChat();
-                    }
-                } catch (error) {
-                    console.error("Error deleting session:", error);
-                }
-            }
-        };
-        const handleCreateNewChatDebounced = _.debounce(() => {
-            handleCreateNewChat();
-        }, 500);
-        const handleCreateNewChat = async () => {
-            if (creatingNewChat) return;
+      if (onSessionSelect) {
+        onSessionSelect(data.id, data.chat_content,data.session_title);
+      }
+    } catch (error) {
+      console.error('Error fetching session data:', error);
+    }
+    setTimeout(() => {
+      fetchSessions();
+    }, 100);
+  };
+  const handleDeleteSession = async (sessionId) => {
+    if (window.confirm("채팅방을 삭제하시겠습니까?")) {
+      try {
+        const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionId}/`, {
+          method: 'DELETE',
+        });
+        if (!response.ok) {
+          throw new Error('Failed to delete session');
+        }
+        fetchSessions();
+        if (sessionId === selectedSessionId && chatbotRef && chatbotRef.current) {
+          chatbotRef.current.resetChat();
+        }
+      } catch (error) {
+        console.error('Error deleting session:', error);
+      }
+    }
+  };
+  const handleCreateNewChatDebounced = _.debounce(() => {
+    handleCreateNewChat();
+  }, 500);
+  const handleCreateNewChat = async () => {
+  if (creatingNewChat) return;
+  
+  if (ref && ref.current) {
+    await ref.current.saveChatSession();
+  }
+  setCreatingNewChat(true);
+  onCreateNewChat();
+  
+  setTimeout(() => {
+    fetchSessions();
+    setCreatingNewChat(false);
+    if (onSessionSelect) {
+      onSessionSelect(null, null, null); 
+    }
+  }, 500);
+};
 
-            if (ref && ref.current) {
-                await ref.current.saveChatSession();
-            }
-            setCreatingNewChat(true);
-            onCreateNewChat();
-
-            setTimeout(() => {
-                fetchSessions();
-                setCreatingNewChat(false);
-                if (onSessionSelect) {
-                    onSessionSelect(null, null, null);
-                }
-            }, 500);
-        };
 
         return (
             <div className="session-list">

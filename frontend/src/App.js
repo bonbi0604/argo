@@ -65,11 +65,10 @@ function App() {
             <Route path="/UpdateNotice/:id/" element={<UpdateNotice />} />
             <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
             <Route path="/chat" element={<Chat />} />
-
+            <Route path="/" element={<Home />} />
             {/* #챗봇이 들어가는 페이지 */}
-            <Route path="/" element={<><Home /><Chatbot /></>} />
-            <Route path="/dashboard" element={<><Dashboard /><Chatbot /></>} />
-            <Route path="/NoticeDetail/:id/" element={<><NoticeDetail /><Chatbot /></>} />
+            <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
 
           </Routes>
           <Footer />
