@@ -22,7 +22,7 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 
 from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
-
+import random
 
 ########################################################################
 #                      learn/communication/study/                      #
