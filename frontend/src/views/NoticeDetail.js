@@ -170,7 +170,7 @@ const NoticeDetail = () => {
         </div>
 
       {/* 댓글 작성 폼 */}
-      {/* {user && (
+       {user && (
         <form onSubmit={handleCommentSubmit} className="comment-form" >
           <textarea
             value={newComment}
@@ -210,7 +210,7 @@ const NoticeDetail = () => {
           </div>
               )}
           </div>
-          ))} */}
+          ))} 
         <div>
         </div>
       </div>

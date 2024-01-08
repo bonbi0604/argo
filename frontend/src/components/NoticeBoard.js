@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
 import "./NoticeBoard.css"
-
+ 
 const NoticeBoard = () => {
   const [items, setItems] = useState([]); // 공지사항 또는 게시글 목록
   const [posts, setPosts] = useState([]); // 게시물 상태
@@ -13,11 +13,11 @@ const NoticeBoard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
   const [searchTerm, setSearchTerm] = useState('');
-
-    useEffect(() => {
-        // API request to retrieve data appropriate for the current page
-        const offset = (currentPage - 1) * itemsPerPage;
-
+ 
+  useEffect(() => {
+    // API request to retrieve data appropriate for the current page
+    const offset = (currentPage - 1) * itemsPerPage;
+ 
     const fetchPosts = async () => {
       const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
       try {
@@ -36,15 +36,15 @@ const NoticeBoard = () => {
         console.error('Error retrieving data', error);
       }
     };
-  
+ 
     fetchPosts();
   }, [currentPage, selectedTab, itemsPerPage]); // currentPage도 의존성 배열에 추가
-
-
+ 
+ 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
-
+ 
   const handleSearch = async () => {
     const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
     try {
@@ -63,8 +63,8 @@ const NoticeBoard = () => {
       console.error('Error retrieving data', error);
     }
   };
-
-
+ 
+ 
   const calculatePostNumber = (index) => {
     // 총 게시글 수에서 현재 페이지의 첫 번째 게시글 인덱스와 현재 게시글의 인덱스를 빼면 번호를 계산할 수 있습니다.
     // 예를 들어, 총 30개의 게시글이 있고, 현재 페이지가 2페이지(11~20번 게시글)이고, 현재 게시글이 15번째라면
@@ -72,24 +72,24 @@ const NoticeBoard = () => {
     const totalPosts = selectedTab === 'notices' ? items.length : posts.length;
     return totalPosts - (indexOfFirstItem + index);
   };
-
-  
+ 
+ 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = selectedTab === 'notices' 
+  const currentItems = selectedTab === 'notices'
   ? items.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) // 공지사항에 대한 페이지네이션 적용
   : posts.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage); // 일반 게시물에 대한 페이지네이션 적용
-
+ 
   return (
     <div id="noticeboard">
       {/* 탭 버튼들 */}
       <div className="tab-buttons">
-        <button 
+        <button
         onClick={() => setSelectedTab('notices')}
         style={{ textDecoration: selectedTab === 'notices' ? 'underline' : 'none' }}>
           공지사항
         </button>
-        <button 
+        <button
         onClick={() => setSelectedTab('posts')}
         style={{ textDecoration: selectedTab === 'posts' ? 'underline' : 'none' }}>
           게시글
@@ -122,18 +122,22 @@ const NoticeBoard = () => {
                         ))}
                     </tbody>
                 </table>
-            </div>
-            {/* 페이지네이션 */}
-            <Pagination
-                totalItems={
-                    selectedTab === "notices" ? items.length : posts.length
-                }
-                itemsPerPage={itemsPerPage}
-                currentPage={currentPage}
-                setCurrentPage={setCurrentPage}
-            />
-        </div>
-    );
+      </div>
+      {/* '글쓰기' 버튼 */}
+      <div className="write-button">
+        <Link to="/writepost">글쓰기</Link>
+      </div>
+      {/* 페이지네이션 */}
+      <div className='board_pagination'>
+        <Pagination
+          totalItems={selectedTab === 'notices' ? items.length : posts.length}
+          itemsPerPage={itemsPerPage}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
+    </div>
+  );
 };
-
+ 
 export default NoticeBoard;

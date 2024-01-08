@@ -1,6 +1,8 @@
 from .views import post_list_create, post_detail, delete_post, comments_list_create, user_detail, delete_comment, update_comment, notice_list_create, notice_detail, notice_comments_list_create  # post_detail 뷰 함수를 임포트합니다.
 from django.urls import path, include
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 
 urlpatterns = [
@@ -20,5 +22,9 @@ urlpatterns = [
     path('', views.getRoutes),
     path('password_reset/', include('django.contrib.auth.urls')),  # 패스워드 재설정
 
+
 ]
 
+# 기존의 urlpatterns 리스트가 있다면, 그 아래에 이 코드를 추가하세요.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
