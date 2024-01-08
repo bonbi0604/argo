@@ -16,8 +16,14 @@ class GetAllQuestions(View):
         questions = Question.objects.all().values()
         return JsonResponse(list(questions), safe=False)
 
+class GetAllAnswers(View):
+    def get(self, request):
+        # Retrieve all answers from the database
+        questions = Answer.objects.all().values()
+        return JsonResponse(list(questions), safe=False)
+
 class GetUserData(View):
     def get(self, request):
         # Retrieve user data with specific columns from the database
-        users = User.objects.values('user_no', 'name', 'email')
+        users = User.objects.values('user_no', 'id', 'email')
         return JsonResponse(list(users), safe=False)
