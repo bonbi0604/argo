@@ -167,7 +167,10 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
         const handleFirstSubmit = async () => { 
           // 초기 <START> 메시지는 저장하지 않음.
           // const userMessage = { sentence: "<START>", speaker: 'user', labels: {}, timestamp: new Date().getTime() };
-          const sendingData = {'user_no':user.user_no, message: "<START>"};
+          const user_name = user.name? user.name: "NAME";
+          const sendingData = {'user_no':user.user_no, 'user_name':user_name, message: "<START>"};
+          
+          // console.log(user);
 
           setIsButtonDisabled(true); // 버튼 비활성화
           const data = await submit(sendingData, BASEURL+'learn/communication/study/first/');
@@ -327,36 +330,42 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
     }, [content]);
 
     return (
-      <div className="communicaiton_chatbot_container">
-        <div className="communicaiton_chatbot_contents">
-          <div className="communicaiton_chatbot_contents_inner">
-            <div className="communicaiton_title">
-                <div className="communicaiton_title_inner">{answer.title}</div>
+      <div className="communication_container">
+        <div className="communicaiton_chatbot_container">
+          <div className="communicaiton_chatbot_contents">
+            <div className="communicaiton_chatbot_contents_inner">
+              <div className="communicaiton_title">
+                  <div className="communicaiton_title_inner">{answer.title}</div>
+              </div>
+              <hr />
+              {content}
             </div>
-            <hr />
-            {content}
-          </div>
 
-          
+            
+          </div>
+          <div className="chat-input-guideline">
+            {(answer && Object.keys(answer).length !== 0 && sentenceOrder < answer.conversation.length &&  answer.conversation[sentenceOrder].speaker === "user") ? answer.conversation[sentenceOrder].guide_user.join(', ') : (sentenceOrder >= MAXCONVERSATION ? "학습을 완료하였습니다." : "응답을 생성중입니다.")}
+            {/* {console.log(sentenceOrder, MAXCONVERSATION)} */}
+          </div>
+          <div className="chat-input-container">
+            <input
+              type="text"
+              className="chat-input"
+              value={input}
+              onChange={handleInputChange}
+              placeholder="질문을 입력하세요"
+              onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
+            />
+            <button className="chat-submit" onClick={handleSubmit} disabled={isButtonDisabled}>
+              Send
+            </button>
+          </div>
         </div>
-        <div className="chat-input-guideline">
-          {(answer && Object.keys(answer).length !== 0 && sentenceOrder < answer.conversation.length &&  answer.conversation[sentenceOrder].speaker === "user") ? answer.conversation[sentenceOrder].guide_user.join(', ') : (sentenceOrder >= MAXCONVERSATION ? "학습을 완료하였습니다." : "응답을 생성중입니다.")}
-          {/* {console.log(sentenceOrder, MAXCONVERSATION)} */}
-        </div>
-        <div className="chat-input-container">
-          <input
-            type="text"
-            className="chat-input"
-            value={input}
-            onChange={handleInputChange}
-            placeholder="질문을 입력하세요"
-            onKeyDown={(e) => e.key === 'Enter' && handleSubmit()}
-          />
-          <button className="chat-submit" onClick={handleSubmit} disabled={isButtonDisabled}>
-            Send
-          </button>
+        <div className="communication_situation">
+          {answer? answer.situation : ""}
         </div>
       </div>
+
     );
 };
 

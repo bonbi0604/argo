@@ -7,6 +7,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 import socket
+import copy
 
 template = """
 이전 대화 내역 <history>와 정보 <information> 기반으로 사용자 입력 <input>에 대한 응답을 생성해주십시오. 
@@ -16,7 +17,6 @@ template = """
 <information>
 {information}
 </information>
-
 
 <history>
 {history}
@@ -91,9 +91,22 @@ def chatbot_response1_first(request):
         data = json.loads(request.body)
 
         # 나중에 user에게 문제 추천
-        
+        print(data)
         dialog_id = 0
-        answer = dialog_data[dialog_id]
+        user_name = data["user_name"]
+        answer = copy.deepcopy(dialog_data[dialog_id])
+
+        answer["user_role"]["<Name:U>"] = user_name
+
+        for key, value in (answer["user_role"] | answer["chatbot_role"]).items():
+            answer["situation"] = answer["situation"].replace(key, value)
+            answer["goal"] = answer["goal"].replace(key, value)
+            answer["system_message"] = answer["system_message"].replace(key, value)
+            for turn in answer["conversation"]:
+                turn["sentence"] = turn["sentence"].replace(key, value)
+                for index in range(len(turn["guide"])):
+                    turn["guide"][index] = turn["guide"][index].replace(key, value)
+            
         reply = ""
         if dialog_data[dialog_id]["conversation"][0]["speaker"] == "user":
             reply = "<START>"
