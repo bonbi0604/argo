@@ -212,10 +212,6 @@ SESSION_COOKIE_NAME = 'my_chat_session'
 
 
 
-
-
-
-
 # CORS 관련 설정
 ALLOWED_HOSTS = [
                  '127.0.0.1',
@@ -235,6 +231,16 @@ CORS_ALLOWED_ORIGINS = [
                         'http://argo12.duckdns.org:3000',
                         'https://www.argo12.duckdns.org',
 ]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]
+
 
 CORS_ALLOW_METHODS = [
     "GET",
