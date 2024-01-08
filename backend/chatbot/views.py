@@ -19,12 +19,14 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
+from account.models import User
+from openai import OpenAI
 
 # ChatSessionViewSet 정의
 class ChatSessionViewSet(viewsets.ModelViewSet):
     queryset = ChatSession.objects.all()
     serializer_class = ChatSessionSerializer
-
+        
     def perform_create(self, serializer):
         user_id_str = self.request.data.get('user_no')
         session_title = self.request.data.get('session_title')
@@ -35,7 +37,7 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
 
         serializer.save(session_title=session_title, chat_content=chat_content)
-
+    
     def get_queryset(self):
         user_no = self.request.query_params.get('user_no')
         if user_no is not None:
@@ -53,10 +55,10 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
-
+    
 os.environ["OPENAI_API_KEY"] = "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"
 persist_directory = str(settings.BASE_DIR)
 
@@ -65,14 +67,28 @@ vectordb = Chroma(
     persist_directory=persist_directory,
     embedding_function=embedding)
 retriever = vectordb.as_retriever(search_type="similarity")
-template = """You are an assitant for new employee. If you don't know, just say you don't know.You must speak in Korean. Answer the question based only on the following context:
-{context}
+template = """
+context: {context}
+question: {question}
 
-Question: {question}
+Variables:
+1. context is what you are going to refer to answer for question
+2. question is what User wants to know about 
+
+Rules:
+1. Our company's internal regulations are the same as those of the 한국데이터산업진흥원, 공무원
+so when referring to the article in context, think of the 한국데이터산업진흥원, 공무원 as Argo's internal regulations.
+2. Answer by referring to the context, but if it is a question about general knowledge, use your knowledge to answer.
+3. If the question is in context, answer using the context and your information as much as possible.
+
+IMPORTANT RULE:
+1. ONLY USER KOREAN.
+2. Argo is our company. You are a company's internal regulations 도우미 for new employees at Argo.
 """
+
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI(temperature=0.1,
-                    max_tokens=4000,
+model = ChatOpenAI(temperature=0,
+                    max_tokens=3000,
                     model_name='gpt-3.5-turbo-1106',)
 output_parser = StrOutputParser()
 setup_and_retrieval = RunnableParallel(
@@ -88,10 +104,32 @@ def chatbot_response(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         user_message = data['message']
+        
+        if 'is_first_message' in data and data['is_first_message']:
+            session_title = generate_session_title(user_message)
+        else:
+            session_title = None
+            
         chatbot_response = generate_response(user_message)
-        return JsonResponse({'reply': chatbot_response})
+        response_data = {'reply': chatbot_response}
+        if session_title:
+            response_data['session_title'] = session_title
+        return JsonResponse(response_data)
 
 def generate_response(message):
-    # return chain.invoke(message)
-    return "안녕 수리중이야~"
+    return chain.invoke(message)
+
+def generate_session_title(user_message):
+    client = OpenAI()
+    user_message = user_message
+    chat_title = client.chat.completions.create(
+    messages=[
+        {
+            "role": "user",
+            "content": f"user only Korean. Create a concise, simple, polite and clear session title based on the following user input: {user_message}",
+        }
+    ],
+    model="gpt-3.5-turbo-1106",
+    )       
+    return chat_title.choices[0].message.content
 

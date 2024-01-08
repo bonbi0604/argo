@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import "./Pagination.css"
 
 const Pagination = ({ totalItems, itemsPerPage, currentPage, setCurrentPage }) => {
     const pageCount = Math.ceil(totalItems / itemsPerPage);
@@ -17,20 +18,20 @@ const Pagination = ({ totalItems, itemsPerPage, currentPage, setCurrentPage }) =
 
 
     return (
-        <div className="flex justify-between items-center mt-4">
-            <div className="flex gap-1">
+        <div className="pagination_container">
+            <div className="pagination">
                 {/* 첫 페이지로 이동 */}
-                <a onClick={() => goToPage(1)} className="pagination-link">«</a>
+                <a onClick={() => goToPage(1)} className="pagination-link pagination_arrow">«</a>
                 {/* 이전 페이지로 이동 */}
-                <a onClick={() => goToPage(Math.max(1, currentPage - 1))} className="pagination-link">‹</a>
+                <a onClick={() => goToPage(Math.max(1, currentPage - 1))} className="pagination-link pagination_arrow">‹</a>
                 {/* 페이지 번호들 */}
                 {pageNumbers.map(number => (
-                    <a key={number} onClick={() => goToPage(number)} className={`pagination-link ${currentPage === number ? 'bg-blue-500 text-white' : ''}`}>{number}</a>
+                    <a key={number} onClick={() => goToPage(number)} className={`pagination-link ${currentPage === number ? 'currunt_page' : ''}`}>{number}</a>
                 ))}
                 {/* 다음 페이지로 이동 */}
-                <a onClick={() => goToPage(Math.min(pageCount, currentPage + 1))} className="pagination-link">›</a>
+                <a onClick={() => goToPage(Math.min(pageCount, currentPage + 1))} className="pagination-link pagination_arrow">›</a>
                 {/* 마지막 페이지로 이동 */}
-                <a onClick={() => goToPage(pageCount)} className="pagination-link">»</a>
+                <a onClick={() => goToPage(pageCount)} className="pagination-link pagination_arrow">»</a>
             </div>
         </div>
     );

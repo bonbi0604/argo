@@ -1,38 +1,28 @@
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
-from django.utils import timezone
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404
-from django.db import models
-from django.db.models import Max, Count, F
-import random
 import json
 import os
-from random import shuffle
-# from langchain.vectorstores import Chroma
+from datetime import datetime
+from operator import itemgetter
+from random import shuffle, random
+
+from django.conf import settings
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import Max, Count, F
+from django.http import JsonResponse, HttpResponse
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
+from django.views.decorators.csrf import csrf_exempt
+
+from rest_framework.response import Response
+
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-from operator import itemgetter
 
-from django.conf import settings
-import random, json
-from django.http import JsonResponse, HttpResponse
-from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
-from django.core.serializers import serialize
-from account.models import User
-
-### learn-communication
-from rest_framework.response import Response
-from django.db.models import Count
-from datetime import datetime
-from django.utils import timezone
-from random import shuffle
+from .models import Question, Answer, Category, Result, Comm_History, Comm_History_Sentence
+import random
 
 ########################################################################
 #                      learn/communication/study/                      #
@@ -253,6 +243,7 @@ def comm_save(request):
                     label_coherent=labels.get("Coherent", None),
                     label_complete=labels.get("Complete", None),
                     label_courteous=labels.get("Courteous", None),
+                    label_check = item.get("check", 2),
                     timestamp=datetime.utcfromtimestamp(item.get("timestamp")/ 1000).strftime('%Y-%m-%d %H:%M:%S.%f')[:-3]
                 ))
 
@@ -344,7 +335,8 @@ def comm_history_detail(request, no):
                     "Complete": sentence.label_complete,
                     "Courteous": sentence.label_courteous,
                 },
-                "timestamp": sentence.timestamp
+                "timestamp": sentence.timestamp,
+                "check": sentence.label_check,
             }
             history_data.append(sentence_dict)
 
@@ -582,7 +574,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
     #틀린 문제 종류별 n개씩 추출
     content_list = list(value.filter(question_no__category_no=filter_no))[:min(count, len(value.filter(question_no__category_no=filter_no)))]
     question = []
-    
+   
     for content in content_list:
         # 틀린 문제에 대한 정답률 추출
         question_number = content.question_no.question_no
@@ -590,10 +582,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
         question_total = question_query.count()
         question_correct_num =question_query.filter(is_correct = 1).count()
         answer_ration = round((question_correct_num / question_total) * 100,2)
-        if content.question_no.content[:15] =='다음 문장을 해석하세요 : ':
-           content_value = content.question_no.content[15:29]
-        else:
-            content_value= content.question_no.content[:15]
+        content_value= content.question_no.content[:15]
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
@@ -601,7 +590,9 @@ def get_wrong_question_list(filter_no, count, user_no=None):
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
                 'answer_ratio' : answer_ration,
-                }
+                'answer_no' : content.answer_no.answer_no,
+                'korean' : content.question_no.korean,
+        }
         question.append(dic)
     return question
 
@@ -635,8 +626,6 @@ def search_list(request):
         value = Result.objects.filter(is_correct=0)
         content_list = value.filter(question_no__content__icontains=keyword).values('question_no__content', 'question_no')
         for content in content_list:
-            if content['question_no__content'][:15]=='다음 문장을 해석하세요 : ':
-                content['question_no__content'] = content['question_no__content'][15:28]
             dic = {
                 'question_no' : content['question_no'],
                 'content' : content['question_no__content'][:15]
@@ -659,7 +648,7 @@ def give_question(request):
         number = 5
     elif cat =='ethic':
         number = 6
-    
+   
     # question = Question.objects.filter(category_no = number).order_by('?').first()
     question = Question.objects.filter(category_no = number)
     question = list(question)
@@ -667,10 +656,12 @@ def give_question(request):
     question = question[0]
     choice = Answer.objects.filter(question_no = question.question_no)
     choice_list = []
-    
-    
-    
-    # 주관식이면 0 
+   
+    kor = ''
+    if number == 1:
+        kor = question.korean
+   
+    # 주관식이면 0
     # 객관식이면 1
     is_many_choice = None
     for item in choice:
@@ -679,25 +670,25 @@ def give_question(request):
             'answer_no': item.answer_no
         }
         choice_list.append(tmp_dic)
-        
+       
         if item.is_correct ==1:
             answer = item.content
     if len(choice_list) ==1:
         is_many_choice = 0
     else:
         is_many_choice = 1
-
-    
+       
+       
     data = {
-        'question_no': question.question_no,
-        'question_content': question.content,
-        'choices': choice_list,
-        'correct_answer': answer,
-        'is_many_choice' : is_many_choice
-    }
+            'question_no': question.question_no,
+            'question_content': question.content,
+            'choices': choice_list,
+            'correct_answer': answer,
+            'is_many_choice' : is_many_choice,
+            'korean' : kor
+        }
+       
     return JsonResponse({'wrong_question' : data })
-
-
 # 푼 문제 저장
 @csrf_exempt
 def insertResult(request):
@@ -734,28 +725,35 @@ def insertResult(request):
 @csrf_exempt
 def get_wrong_question(request):
     data = json.loads(request.body)
-    user_number = data.get('user_no')
-    question_number = data.get('question_no')
-    instance =Result.objects.get(user_no = user_number, question_no = question_number)
+    result_no = data.get('result_no')
+    instance =Result.objects.get(result_no = result_no)
     if instance.content != '':
         user = instance.content
     else:
         user =instance.answer_no.content
-    question = Question.objects.get(question_no = question_number).content
-    answer = Answer.objects.get(question_no = question_number, is_correct = 1).content
-    
+    # 문제 내용 뽑기
+    question = Question.objects.get(question_no = instance.question_no.question_no).content
+    kor = Question.objects.get(question_no = instance.question_no.question_no).korean
+    answer = Answer.objects.filter(question_no = instance.question_no.question_no, is_correct = 1)
+    answer = answer.first().content
+    question_number = instance.question_no.question_no
+   
+   
+    # 정답률
     question_number = instance.question_no.question_no
     question_query = Result.objects.filter(question_no = question_number)
     question_total = question_query.count()
     question_correct_num =question_query.filter(is_correct = 1).count()
     answer_ration = round((question_correct_num / question_total) * 100,2)
-    
-    
+   
+   
     result = {
         'user_content' : user,
         'question_content' : question,
         'answer_content' : answer,
-        'answer_ratio' : answer_ration
+        'answer_ratio' : answer_ration,
+        'question_no' : question_number,
+        'korean' : kor,
     }
     return JsonResponse({'content':result})
 
@@ -764,6 +762,10 @@ def get_avg_score(request):
     data = json.loads(request.body)
     user_no = data.get('user_no')
     cat = data.get('cat')
+    dic = {
+        'total_avg' : 0,
+        'user_avg' : 0
+    }
     if cat == 'occupation':
         number = 4
     elif cat=='commonsense':

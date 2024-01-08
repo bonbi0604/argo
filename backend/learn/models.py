@@ -11,10 +11,11 @@ from django.conf import settings
 
 
 class Question(models.Model):
-    content = models.TextField(blank=True, null=True)
-    question_no = models.AutoField(primary_key=True)
+    content = models.CharField(max_length=500, db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+    question_no = models.IntegerField(primary_key=True)
     category_no = models.ForeignKey('Category', models.DO_NOTHING, db_column='category_no', blank=True, null=True)
-
+    korean = models.CharField(max_length=255, db_collation='utf8mb4_unicode_ci', blank=True, null=True)
+ 
     class Meta:
         managed = False
         db_table = 'Question'
@@ -80,6 +81,7 @@ class Comm_History_Sentence(models.Model):
     label_complete = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_complete')
     label_courteous = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_courteous')
     timestamp = models.DateTimeField(blank=True, null=True, db_column='timestamp')
+    label_check = models.PositiveSmallIntegerField(blank=True, null=True, default=2, db_column='label_check')
 
     class Meta:
         managed = False

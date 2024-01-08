@@ -19,9 +19,8 @@ import LearnDown1 from "../components/LearnDown_1";
 
 // 한번에 전부 불러오는걸로
 
-const LearnOtherPage = ({cat, avg, score, question}) => {
+const LearnOtherPage = ({cat, avg, score, question, isstudy, setStudy}) => {
   const { user } = useContext(AuthContext);
-  const [isstudy, setStudy] = useState(false);
 
   if (!user){
     return (<Navigate to='/login'  />)
@@ -37,7 +36,7 @@ const LearnOtherPage = ({cat, avg, score, question}) => {
               <LearnUpLeft cat={cat} avg={avg} score={score} isstudy={isstudy} setStudy={setStudy}/>
             </div>
             <div id="learn_down">
-                {isstudy? <SolveQuestion cat={cat} question={question}/> : <LearnDown1 cat={cat}/>}
+                {isstudy? <SolveQuestion cat={cat} question={question}/> : <LearnDown1 cat={cat} isstudy={isstudy}/>}
             </div>
           </div>
         </div>
