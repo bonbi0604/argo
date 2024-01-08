@@ -19,7 +19,7 @@ const CommunicationHistoryList = ({
     const [currentPageWindow, setCurrentPageWindow] = useState(1);
     // const [historys, setHistorys] = useState([]);
     const [historyList, setHistoryList] = useState([]);
-    const BASEURL = "http://127.0.0.1:8000/";
+    const BASEURL = "https://be.argo12.duckdns.org/";
 
     const tempMax = 100;
 

@@ -25,7 +25,7 @@ const MyPage = ({cat}) => {
     if (window.confirm("정말로 회원 탈퇴를 원하시나요?")) {
       try {
         // useAxios 훅을 통해 delete 메소드 호출
-        const response = await api.delete(`http://127.0.0.1:8000/api/users/${user.user_no}/`);
+        const response = await api.delete(`https://be.argo12.duckdns.org/api/users/${user.user_no}/`);
 
         if (response.status === 200) {
           // 로그아웃 처리 및 로그인 페이지로 이동

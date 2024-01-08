@@ -36,7 +36,7 @@ const WritePost = () => {
                 const endpoint = isNotice ? "/notices/" : "/posts/";
                 try {
                     const response = await api.post(
-                        `http://127.0.0.1:8000/noticeboard${endpoint}`,
+                        `https://be.argo12.duckdns.org/noticeboard${endpoint}`,
                         formData,
                         {
                             headers: {
@@ -53,7 +53,7 @@ const WritePost = () => {
             } else {
                 try {
                     const response = await api.post(
-                        `http://127.0.0.1:8000/noticeboard/posts/`,
+                        `https://be.argo12.duckdns.org/noticeboard/posts/`,
                         formData,
                         {
                             headers: {

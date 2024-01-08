@@ -13,7 +13,7 @@ const WrongAnswers = ({ historyId }) => {
     useEffect(() => {
         const WrongAnswers = async () => {
             const response = await fetch(
-                `http://127.0.0.1:8000/learn/wrongQuestion/`,
+                `https://be.argo12.duckdns.org/learn/wrongQuestion/`,
                 {
                     method: "POST",
                     headers: {

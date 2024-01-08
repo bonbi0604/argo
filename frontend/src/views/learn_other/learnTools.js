@@ -32,7 +32,7 @@ const LearnCommonSense = () => {
     const getLearnPageData = async () => {
       try {
         //풀 문제
-        const response1 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
+        const response1 = await fetch(`https://be.argo12.duckdns.org/learn/getQuestion/`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -62,7 +62,7 @@ const LearnCommonSense = () => {
 
                 //avg, score
                 const response2 = await fetch(
-                    `http://127.0.0.1:8000/learn/getAvgScore/`,
+                    `https://be.argo12.duckdns.org/learn/getAvgScore/`,
                     {
                         method: "POST",
                         headers: {

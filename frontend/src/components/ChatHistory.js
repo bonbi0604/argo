@@ -15,7 +15,7 @@ const ChatHistory = forwardRef(
         const fetchSessions = async () => {
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:8000/chatbot/api/chat-sessions/?user_no=${user.user_no}`
+                    `https://be.argo12.duckdns.org/chatbot/api/chat-sessions/?user_no=${user.user_no}`
                 );
                 if (!response.ok) {
                     throw new Error("Failed to fetch sessions");
@@ -44,7 +44,7 @@ const ChatHistory = forwardRef(
             }
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:8000/chatbot/api/chat-sessions/${id}/`
+                    `https://be.argo12.duckdns.org/chatbot/api/chat-sessions/${id}/`
                 );
                 if (!response.ok) {
                     throw new Error("Failed to fetch session data");
@@ -64,7 +64,7 @@ const ChatHistory = forwardRef(
   const handleDeleteSession = async (sessionId) => {
     if (window.confirm("채팅방을 삭제하시겠습니까?")) {
       try {
-        const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionId}/`, {
+        const response = await fetch(`https://be.argo12.duckdns.org/chatbot/api/chat-sessions/${sessionId}/`, {
           method: 'DELETE',
         });
         if (!response.ok) {

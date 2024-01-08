@@ -72,7 +72,7 @@ const Chatbot = () => {
         setInput("");
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/chatbot/",
+                "https://be.argo12.duckdns.org/chatbot/",
                 {
                     method: "POST",
                     headers: {
@@ -98,7 +98,7 @@ const Chatbot = () => {
         const chatContent = JSON.stringify(messages);
         try {
             await fetch(
-                "http://127.0.0.1:8000/chatbot/api/chat-sessions/",
+                "https://be.argo12.duckdns.org/chatbot/api/chat-sessions/",
                 {
                     method: "POST",
                     headers: {

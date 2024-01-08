@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
 
     const loginUser = async (id, password) => {
         const response = await fetch(
-            "http://127.0.0.1:8000/api/token/",
+            "https://be.argo12.duckdns.org/api/token/",
             {
                 method: "POST",
                 headers: {
@@ -63,7 +63,7 @@ export const AuthProvider = ({ children }) => {
         id
     ) => {
         const response = await fetch(
-            "http://127.0.0.1:8000/api/register/",
+            "https://be.argo12.duckdns.org/api/register/",
             {
                 method: "POST",
                 headers: {
@@ -103,7 +103,7 @@ export const AuthProvider = ({ children }) => {
     const changePassword = async (oldPassword, newPassword, newPassword2) => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/password_change/",
+                "https://be.argo12.duckdns.org/api/password_change/",
                 {
                     method: "POST",
                     headers: {
@@ -135,7 +135,7 @@ export const AuthProvider = ({ children }) => {
     const requestPasswordReset = async (email) => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/password_reset/",
+                "https://be.argo12.duckdns.org/api/password_reset/",
                 {
                     method: "POST",
                     headers: {

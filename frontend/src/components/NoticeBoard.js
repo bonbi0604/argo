@@ -21,7 +21,7 @@ const NoticeBoard = () => {
     const fetchPosts = async () => {
       const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
       try {
-        const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`);
+        const response = await api.get(`https://be.argo12.duckdns.org/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`);
         if (response.status === 200 && Array.isArray(response.data)) {
           const data = [...response.data].reverse();
           if (selectedTab === 'notices') {
@@ -48,7 +48,7 @@ const NoticeBoard = () => {
   const handleSearch = async () => {
     const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
     try {
-      const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}?search=${searchTerm}`);
+      const response = await api.get(`https://be.argo12.duckdns.org/noticeboard${endpoint}?search=${searchTerm}`);
       if (response.status === 200 && Array.isArray(response.data)) {
         const data = [...response.data].reverse();
         if (selectedTab === 'notices') {

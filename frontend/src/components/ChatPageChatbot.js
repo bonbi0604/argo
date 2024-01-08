@@ -44,7 +44,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
         if (!localSessionTitle || messages.length === 0) return;
         const chatContent = JSON.stringify(messages);
         let endpoint =
-            "http://127.0.0.1:8000/chatbot/api/chat-sessions/";
+            "https://be.argo12.duckdns.org/chatbot/api/chat-sessions/";
         let method = "POST";
 
     if (id) {
@@ -136,7 +136,7 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
     setInput('');
  
     try {
-      const response = await fetch('http://127.0.0.1:8000/chatbot/', {
+      const response = await fetch('https://be.argo12.duckdns.org/chatbot/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
