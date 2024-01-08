@@ -1,7 +1,7 @@
 // import "./CommunicationHistoryList.css"
 import React, { useState, useContext, useEffect } from 'react';
 import AuthContext from "../context/AuthContext";
-import Pagination from './Pagination2';
+import Pagination from './Pagination';
 import useAxios from "../utils/useAxios";
 
 const CommunicationHistoryList = ({stopped, stateN, setStateN, setStopped, historyId, setHistoryId, currentPage, setCurrentPage}) => {
