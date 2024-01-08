@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-gvb5@_39dz)mu(%a_c35)r39$h4!yet)_+8!179@)-_wl(i-%g'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -49,9 +52,9 @@ AUTH_USER_MODEL = 'account.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'sy.hong9001@gmail.com' # env('NODEMAILER_USER')  # 이메일을 보낼 G-mail 계정
-EMAIL_HOST_PASSWORD = 'jyxf ygmh qtba qxpz' # env('NODEMAILER_PASS')  # 설정한 앱 비밀번호
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') # env('NODEMAILER_USER')  # 이메일을 보낼 G-mail 계정
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # env('NODEMAILER_PASS')  # 설정한 앱 비밀번호
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -109,11 +112,11 @@ WSGI_APPLICATION = 'argo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'aivle_big',
-        'USER': 'aivle0412',
-        'PASSWORD': 'aivle20230412',
-        'HOST': 'db.aivle0412.duckdns.org',
-        'PORT': '10622',
+        'NAME': os.getenv('DB_NAME'), 
+        'USER': os.getenv('DB_ID'), 
+        'PASSWORD': os.getenv('DB_PW'), 
+        'HOST': os.getenv('DB_HOST'), 
+        'PORT': os.getenv('DB_PORT'), 
     }
 }
 
@@ -177,7 +180,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
-    'ALGORITHM': 'HS256',
+    'ALGORITHM': os.getenv('JWT_ALGORITHM'),
 
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
@@ -231,16 +234,6 @@ CORS_ALLOWED_ORIGINS = [
                         'http://argo12.duckdns.org:3000',
                         'https://www.argo12.duckdns.org',
 ]
-
-CORS_ALLOW_METHODS = [
-    "GET",
-    "POST",
-    "PUT",
-    "PATCH",
-    "DELETE",
-    "OPTIONS",
-]
-
 
 CORS_ALLOW_METHODS = [
     "GET",
