@@ -19,7 +19,7 @@ const CommunicationHistoryList = ({
     const [currentPageWindow, setCurrentPageWindow] = useState(1);
     // const [historys, setHistorys] = useState([]);
     const [historyList, setHistoryList] = useState([]);
-    const BASEURL = "http://127.0.0.1:8000/";
+    const BASEURL = `${process.env.REACT_APP_API_URL}/`;
 
     const tempMax = 100;
 
@@ -66,33 +66,43 @@ const CommunicationHistoryList = ({
         fetchHistoryList();
     }, []);
 
-  const currentItems = historyList? historyList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage) : [];
+    const currentItems = historyList
+        ? historyList.slice(
+              (currentPage - 1) * itemsPerPage,
+              currentPage * itemsPerPage
+          )
+        : [];
 
     useEffect(() => {
         // console.log(currentPage)
     }, [currentPage]);
 
-  const goToHistory = (history_id) => {
-    setStateN(1);
-    setHistoryId(history_id);
-    // console.log("Clicked goToHistory");
-  };
+    const goToHistory = (history_id) => {
+        setStateN(1);
+        setHistoryId(history_id);
+        // console.log("Clicked goToHistory");
+    };
 
-
-  return (
-    <div className='comm_history_wrapper'>
-      {currentItems.map(({ history_no, title, code }) => (
-        <div className='comm_history_element' key={history_no}><a onClick={() => {goToHistory(history_no)}}>{`${history_no}: ${title}`}</a></div>
-      ))}
-      <Pagination
-        totalItems={historyList? historyList.length: 0}
-        itemsPerPage={itemsPerPage}
-        pagesToShow = {pagesToShow}
-        currentPage={currentPage}
-        setCurrentPage={setCurrentPage}
-      />
-    </div>
-  );
+    return (
+        <div className="comm_history_wrapper">
+            {currentItems.map(({ history_no, title, code }) => (
+                <div className="comm_history_element" key={history_no}>
+                    <a
+                        onClick={() => {
+                            goToHistory(history_no);
+                        }}
+                    >{`${history_no}: ${title}`}</a>
+                </div>
+            ))}
+            <Pagination
+                totalItems={historyList ? historyList.length : 0}
+                itemsPerPage={itemsPerPage}
+                pagesToShow={pagesToShow}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+            />
+        </div>
+    );
 };
 
 export default CommunicationHistoryList;
