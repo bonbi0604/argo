@@ -57,7 +57,9 @@ const MyPage = ({cat}) => {
 
                 <div className="myProfileDiv">
                   <span>Dept</span>
-                  <span className="myData">{user.dept}</span>
+                  <span className="myData">
+                    {user.dept === 1 ? '인사부' : user.dept === 2 ? '개발부' : user.dept === 3 ? '영업부' : '기타'}
+                  </span>
                 </div>
 
               </div>
