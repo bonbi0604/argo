@@ -241,16 +241,27 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
       // 발화자가 user 인 경우 label 얻기
       const fetchData = async () => {
         if (messages.length > 0) {
-          const last = messages[messages.length - 1];
-          if (last && last.speaker === "user") {
+          const lastMessageIndex = messages.length - 1;
+          const last = messages[lastMessageIndex];
+          if (last && last.speaker === "user" && Object.keys(last.labels).length === 0) {
             const recieveData = await getLabel(last.sentence);
-            last.labels = recieveData.labels;
+            
+            setMessages((prevMessages) => {
+              const updatedMessages = [...prevMessages];
+
+              // 기존 배열의 해당 인덱스의 labels를 업데이트
+              updatedMessages[lastMessageIndex] = {
+                ...updatedMessages[lastMessageIndex],
+                labels: recieveData.labels
+              };
+    
+              return updatedMessages;
+            });
           }
         }
       };
 
       fetchData();
-      console.log(messages);
     }, [messages]);
 
     const content = (
@@ -287,7 +298,7 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
                   
                   <div className="sevenC_wrapper" >
                     <div className="sevenC_wrapper_inner">
-                      {Object.entries(message.labels).map(([key, value]) =>
+                      {message && message.labels && Object.entries(message.labels).map(([key, value]) =>
                         <div className={`sevenC${value} sevenC_inner`} style={{width: `${value!==0? key.length * 0.6 : 0}em`}}>{value!==0?`${key}`:null}</div>
                       )}
                       

@@ -181,34 +181,34 @@ def chatbot_response(request):
 ########################################################################
 #                      learn/communication/label/                      #
 ########################################################################
-def scoring_7cs(message):
-    # 모델 써야함 밑은 예시
-    score_clear = random.choices([0, 1, 2, 3])[0]
-    score_concise = random.choices([0, 1, 2, 3])[0]
-    score_concrete = random.choices([0, 1, 2, 3])[0]
-    score_correct = random.choices([0, 1, 2, 3])[0]
-    score_coherent = random.choices([0, 1, 2, 3])[0]
-    score_complete = random.choices([0, 1, 2, 3])[0]
-    score_courteous = random.choices([0, 1, 2, 3])[0]
-    return score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous
+# def scoring_7cs(message):
+#     # 모델 써야함 밑은 예시
+#     score_clear = random.choices([0, 1, 2, 3])[0]
+#     score_concise = random.choices([0, 1, 2, 3])[0]
+#     score_concrete = random.choices([0, 1, 2, 3])[0]
+#     score_correct = random.choices([0, 1, 2, 3])[0]
+#     score_coherent = random.choices([0, 1, 2, 3])[0]
+#     score_complete = random.choices([0, 1, 2, 3])[0]
+#     score_courteous = random.choices([0, 1, 2, 3])[0]
+#     return score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous
 
-@csrf_exempt
-def labeling_7cs(request):
-    if request.method == 'POST':
-        data = json.loads(request.body.decode('utf-8'))
-        message = data.get("message", "")    # "message" 필드 추출
-        # history = data.get("history", [])    # "history" 필드 추출
-        score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous = scoring_7cs(message)
-        print("labeling complete")
-    return JsonResponse({'labels': {
-        'Clear': score_clear,
-        'Concise': score_concise,
-        'Concrete': score_concrete,
-        'Correct': score_correct,
-        'Coherent': score_coherent,
-        'Complete': score_complete,
-        'Courteous': score_courteous
-    }})
+# @csrf_exempt
+# def labeling_7cs(request):
+#     if request.method == 'POST':
+#         data = json.loads(request.body.decode('utf-8'))
+#         message = data.get("message", "")    # "message" 필드 추출
+#         # history = data.get("history", [])    # "history" 필드 추출
+#         score_clear, score_concise, score_concrete, score_correct, score_coherent, score_complete, score_courteous = scoring_7cs(message)
+#         print("labeling complete")
+#     return JsonResponse({'labels': {
+#         'Clear': score_clear,
+#         'Concise': score_concise,
+#         'Concrete': score_concrete,
+#         'Correct': score_correct,
+#         'Coherent': score_coherent,
+#         'Complete': score_complete,
+#         'Courteous': score_courteous
+#     }})
 
 
 
