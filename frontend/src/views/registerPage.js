@@ -26,6 +26,7 @@ function Register() {
   const [pwdMsg, setPwdMsg] = useState(''); // 비밀번호 유효성 메시지
   const [emailMsg, setEmailMsg] = useState(""); // 이메일 유효성 메시지
   const [idMsg, setIdMsg] = useState("") // 아이디 중복 메세지
+  const [phongMsg, setPhoneMsg] = useState("") //폰번호 유효성 메세지
 
   // warning 색
   const [idMsgColor, setIdMsgColor] = useState("red"); // 초기값을 빨강으로 설정
@@ -108,6 +109,18 @@ function Register() {
     }
   }, []);
 
+  // 폰번호 변경 핸들러
+  const onChangePhone = (currphone) => {
+    setPhone(currphone)
+
+    if (!validatePhone(currphone)) {
+      setPhoneMsg("번호 형식이 올바르지 않습니다.");
+    } else {
+      setPhoneMsg("올바른 형식입니다.");
+      // setPhoneMsg("")
+    }
+  }
+
   // 비밀번호 유효성 검사 함수
   const validatePwd = (password) => {
     return password
@@ -120,6 +133,13 @@ function Register() {
     return email
       .toLowerCase()
       .match(/^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}(?:\.[A-Za-z]{2,})?$/);
+  };
+
+  // 전화번호 유효성 검사 함수
+  const validatePhone = (phone) => {
+    return phone
+      .toLowerCase()
+      .match(/^([0-9]{11})$/);
   };
 
   // 아이디 중복체크
@@ -263,9 +283,10 @@ function Register() {
   const isDeptValid = validateDept(dept);
   // const isDuId = checkDuplicateId(id);
   // const isDuEmail = checkDuplicateEmail(email);
+  const isPhoneValid = validatePhone(phone)
 
   // 검사를 묶기
-  const isAllValid = idIsCuplicate && emailIsDuplicate && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked;
+  const isAllValid = idIsCuplicate && emailIsDuplicate && isPwdValid && isConfirmPwd && isCodeValid && isDeptValid && isTermsChecked && isPhoneValid;
 
   // 회원가입 양식 제출 핸들러
   const handleSubmit = async (e) => {
@@ -350,10 +371,11 @@ function Register() {
               <input
                 type="text"
                 id="phone"
-                onChange={(e) => setPhone(e.target.value)}
+                onChange={(e) => onChangePhone(e.target.value)}
                 placeholder="폰 번호  ex) 01012345678"
                 required
               />
+              <p style={{ color: validatePhone(phone) ? 'green' : 'red' }}>{phongMsg}</p>
             </div>
             <div className="regContent">
               <select name="dept" id="dept" onChange={(e) => setDept(e.target.value)} value={dept}>

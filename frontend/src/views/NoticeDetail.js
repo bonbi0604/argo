@@ -6,7 +6,9 @@ import "./NoticeDetail.css"
 
 const NoticeDetail = () => {
     const { id } = useParams();
-    const [Notice, setNotice] = useState({});
+    const [Notice, setNotice] = useState({
+      "notice_files": ""
+    });
     const [comments, setComments] = useState([]); // 댓글 목록 상태
     const [newComment, setNewComment] = useState(''); // 새 댓글 입력 상태
     const { user } = useContext(AuthContext);
@@ -131,20 +133,19 @@ const NoticeDetail = () => {
           <div className="board_name">공지사항</div>
           <span className="title">{Notice.title}</span>
           <div className='data'>
-          <span className='color_gray'>{new Date(Notice.timestamp).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
-            {/* 파일 다운로드 링크 추가 */}
-            {Notice.notice_files? 
-              <span className='noticepost_file'>
-                  {Notice.notice_files && Notice.notice_files.map((file, index) => (
-                      <span key={index}>
-                          <a className="file-link" href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
-                      </span>
-                  ))}
-              </span>
-              :
-              <span></span>
-            }
+            <span className='color_gray'>{new Date(Notice.timestamp).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
+            
           </div>
+          {/* 파일 다운로드 링크 추가 */}
+          {Notice.notice_files.length!==0 &&
+            <span className='noticepost_file'>
+                {Notice.notice_files && Notice.notice_files.map((file, index) => (
+                    <div key={index}>
+                        <a className="file-link" href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                    </div>
+                ))}
+            </span>
+          }
           <p className="content">{Notice.content}</p>
         </div>
 

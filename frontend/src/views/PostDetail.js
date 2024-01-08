@@ -6,7 +6,9 @@ import "./PostDetail.css"
 
 const PostDetail = () => {
     const { id } = useParams();
-    const [post, setPost] = useState({});
+    const [post, setPost] = useState({
+      "files": ""
+    });
     const [comments, setComments] = useState([]); // 댓글 목록 상태
     const [newComment, setNewComment] = useState(''); // 새 댓글 입력 상태
     const { user } = useContext(AuthContext);
@@ -137,8 +139,9 @@ const PostDetail = () => {
             <span>아이디</span>
             <span className='board_line'>|</span>
             <span className='color_gray'>{new Date(post.timestamp).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
-            {/* 파일 다운로드 링크 추가 */}
-            {post.files? 
+          </div>
+          {/* 파일 다운로드 링크 추가 */}
+          {post.files.length!==0? 
               <span className='post_file'>
                 {post.files && post.files.map((file, index) => (
                   <span key={index}>
@@ -149,7 +152,6 @@ const PostDetail = () => {
             :
               <span></span>
             }
-          </div>
           <p className="content">{post.content}</p>
         </div>
 
