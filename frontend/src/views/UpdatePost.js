@@ -1,49 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import "./UpdatePost.css"
 
 const UpdatePost = () => {
-  const { id } = useParams();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const navigate = useNavigate();
-  const api = useAxios();
+    const { id } = useParams();
+    const [title, setTitle] = useState("");
+    const [content, setContent] = useState("");
+    const navigate = useNavigate();
+    const api = useAxios();
 
-  useEffect(() => {
-    const fetchPost = async () => {
-      try {
-        const response = await api.get(`http://127.0.0.1:8000/noticeboard/posts/${id}/`);
-        if (response.status === 200 && response.data) {
-          setTitle(response.data.title);
-          setContent(response.data.content);
+    useEffect(() => {
+        const fetchPost = async () => {
+            try {
+                const response = await api.get(
+                    `http://127.0.0.1:8000/noticeboard/posts/${id}/`
+                );
+                if (response.status === 200 && response.data) {
+                    setTitle(response.data.title);
+                    setContent(response.data.content);
+                }
+            } catch (error) {
+                console.error("게시물 정보를 불러오는 중 오류 발생", error);
+            }
+        };
+
+        fetchPost();
+    }, []);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        try {
+            const updatedPost = {
+                title,
+                content,
+            };
+
+            const response = await api.put(
+                `http://127.0.0.1:8000/noticeboard/posts/${id}/`,
+                updatedPost
+            );
+
+            if (response.status === 200) {
+                navigate(`/PostDetail/${id}`);
+            }
+        } catch (error) {
+            console.error("게시물 수정 중 오류 발생", error);
         }
-      } catch (error) {
-        console.error('게시물 정보를 불러오는 중 오류 발생', error);
-      }
     };
-
-    fetchPost();
-  }, []);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    try {
-      const updatedPost = {
-        title,
-        content,
-      };
-
-      const response = await api.put(`http://127.0.0.1:8000/noticeboard/posts/${id}/`, updatedPost);
-
-      if (response.status === 200) {
-        navigate(`/PostDetail/${id}`);
-      }
-    } catch (error) {
-      console.error('게시물 수정 중 오류 발생', error);
-    }
-  };
 
   return (
     <section>

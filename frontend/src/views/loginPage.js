@@ -1,6 +1,5 @@
 import { useContext } from "react"; // 리액트에서 useContext 모듈을 가져옵니다.
 import AuthContext from "../context/AuthContext"; // 커스텀 인증 컨텍스트를 가져옵니다.
-import { Link } from "react-router-dom";
 import "./loginPage.css"
 
 const LoginPage = () => {

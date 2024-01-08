@@ -1,14 +1,21 @@
-import React, { useState, useEffect, useRef, useContext, forwardRef, useImperativeHandle } from 'react';
-import './ChatPageChatbot.css';
+import React, {
+    useState,
+    useEffect,
+    useRef,
+    useContext,
+    forwardRef,
+    useImperativeHandle,
+} from "react";
+import "./ChatPageChatbot.css";
 import AuthContext from "../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
-  const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [localSessionTitle, setLocalSessionTitle] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const chatMessagesRef = useRef(null);
+    const [input, setInput] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [localSessionTitle, setLocalSessionTitle] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const chatMessagesRef = useRef(null);
 
   const { user } = useContext(AuthContext);
 
@@ -23,21 +30,22 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
     }
   }, [messages]);
 
-  useEffect(() => {
-    if (chatContent) {
-      try {
-        const loadedMessages = JSON.parse(chatContent);
-        setMessages(loadedMessages);
-      } catch (error) {
-        console.error('Error parsing chat session:', error);
-      }
-    }
-  }, [chatContent, id]);
-  const saveChatSession = async () => {
-    if (!localSessionTitle || messages.length === 0) return;
-    const chatContent = JSON.stringify(messages);
-    let endpoint = 'http://127.0.0.1:8000/chatbot/api/chat-sessions/';
-    let method = 'POST';
+    useEffect(() => {
+        if (chatContent) {
+            try {
+                const loadedMessages = JSON.parse(chatContent);
+                setMessages(loadedMessages);
+            } catch (error) {
+                console.error("Error parsing chat session:", error);
+            }
+        }
+    }, [chatContent, id]);
+    const saveChatSession = async () => {
+        if (!localSessionTitle || messages.length === 0) return;
+        const chatContent = JSON.stringify(messages);
+        let endpoint =
+            "http://127.0.0.1:8000/chatbot/api/chat-sessions/";
+        let method = "POST";
 
     if (id) {
       endpoint += `${id}/`;
@@ -177,5 +185,5 @@ const ChatPageChatbot = forwardRef(({ chatContent, id, sessionTitle }, ref) => {
     </div>
   );
 });
- 
+
 export default ChatPageChatbot;

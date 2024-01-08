@@ -25,12 +25,11 @@ SECRET_KEY = 'django-insecure-gvb5@_39dz)mu(%a_c35)r39$h4!yet)_+8!179@)-_wl(i-%g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
-
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -66,6 +65,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,7 +73,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # 추가
 ]
 
 ROOT_URLCONF = 'argo.urls'
@@ -204,11 +203,29 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
-
 # 세션 백엔드 설정
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # 세션 저장소 설정
 SESSION_COOKIE_NAME = 'my_chat_session'
 # SESSION_SAVE_EVERY_REQUEST = True
+
+
+
+
+
+
+
+# CORS 관련 설정
+
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '43.200.52.223', 'argo12.duckdns.org', 'www.argo12.duckdns.org']
+
+CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOWED_ORIGINS = [
+    'http://127.0.0.1:3000',
+    'http://localhost:3000',
+    'http://43.200.52.223:3000',
+    'http://argo12.duckdns.org:3000',
+    'https://www.argo12.duckdns.org',
+]

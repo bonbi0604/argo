@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
 import "./NoticeBoard.css"
@@ -14,9 +14,9 @@ const NoticeBoard = () => {
   const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
   const [searchTerm, setSearchTerm] = useState('');
 
-  useEffect(() => {
-    // API request to retrieve data appropriate for the current page
-    const offset = (currentPage - 1) * itemsPerPage;
+    useEffect(() => {
+        // API request to retrieve data appropriate for the current page
+        const offset = (currentPage - 1) * itemsPerPage;
 
     const fetchPosts = async () => {
       const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
@@ -122,22 +122,18 @@ const NoticeBoard = () => {
                         ))}
                     </tbody>
                 </table>
-      </div>
-      {/* '글쓰기' 버튼 */}
-      <div className="write-button">
-        <Link to="/writepost">글쓰기</Link>
-      </div>
-      {/* 페이지네이션 */}
-      <div className='board_pagination'>
-        <Pagination
-          totalItems={selectedTab === 'notices' ? items.length : posts.length}
-          itemsPerPage={itemsPerPage}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-        />
-      </div>
-    </div>
-  );
+            </div>
+            {/* 페이지네이션 */}
+            <Pagination
+                totalItems={
+                    selectedTab === "notices" ? items.length : posts.length
+                }
+                itemsPerPage={itemsPerPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+            />
+        </div>
+    );
 };
 
 export default NoticeBoard;

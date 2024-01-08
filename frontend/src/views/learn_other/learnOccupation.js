@@ -60,29 +60,31 @@ const LearnCommonSense = () => {
           console.error("풀 문제 오류");
         }
 
-        //avg, score
-        const response2 = await fetch(`http://127.0.0.1:8000/learn/getAvgScore/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cat,
-            user_no
-          })
-        });
-        const data2 = await response2.json();
+                //avg, score
+                const response2 = await fetch(
+                    `http://127.0.0.1:8000/learn/getAvgScore/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            cat,
+                            user_no,
+                        }),
+                    }
+                );
+                const data2 = await response2.json();
 
-        if (response2.ok) {
-          setAvg(data2.score.total_avg)
-          setScore(data2.score.user_avg)
-        } else {
-        }
-
-      } catch (error) {
-        console.error('learn-other 오류', error);
-      }
-    };
+                if (response2.ok) {
+                    setAvg(data2.score.total_avg);
+                    setScore(data2.score.user_avg);
+                } else {
+                }
+            } catch (error) {
+                console.error("learn-other 오류", error);
+            }
+        };
 
     //함수 호출
     getLearnPageData();

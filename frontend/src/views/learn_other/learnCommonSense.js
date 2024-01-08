@@ -28,65 +28,59 @@ const LearnCommonSense = () => {
   const user_no = user.user_no
   const [isstudy, setStudy] = useState(false);
 
-  useEffect(() => {
-    const getLearnPageData = async () => {
-      try {
-        //풀 문제
-        const response1 = await fetch(`http://127.0.0.1:8000/learn/getQuestion/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({cat})
-        });
-        const data1 = await response1.json();
-        console.log("서버 응답:", data1); // 로깅 추가
+    useEffect(() => {
+        const getLearnPageData = async () => {
+            try {
+                //풀 문제
+                const response1 = await fetch(
+                    `http://127.0.0.1:8000/learn/getQuestion/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            cat,
+                        }),
+                    }
+                );
+                const data1 = await response1.json();
 
-        if (response1.ok) {
-          const wrongQuestion = data1.wrong_question;
-          setQuestion(wrongQuestion)
-          // 한글 번역 존재 여부 확인
-          // if (wrongQuestion.korean===null) {
-          //   // 한글 번역이 있는 경우, 영어 문제와 결합하여 표시
-          //   setQuestion(wrongQuestion);
-            
-          // } else {
-          //   setQuestion({
-          //     ...wrongQuestion,
-          //     question_content: `${wrongQuestion.question_content}\n\n${wrongQuestion.korean}`
-          //   });
-          // }
-        } else {
-          console.error("풀 문제 오류");
-        }
+                if (response1.ok) {
+                    setQuestion(data1.wrong_question);
+                } else {
+                    console.error("풀 문제 오류");
+                } //풀 문제 끝
 
-        //avg, score
-        const response2 = await fetch(`http://127.0.0.1:8000/learn/getAvgScore/`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            cat,
-            user_no
-          })
-        });
-        const data2 = await response2.json();
+                //avg, score
+                const response2 = await fetch(
+                    `http://127.0.0.1:8000/learn/getAvgScore/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({
+                            cat,
+                            user_no,
+                        }),
+                    }
+                );
+                const data2 = await response2.json();
 
-        if (response2.ok) {
-          setAvg(data2.score.total_avg)
-          setScore(data2.score.user_avg)
-        } else {
-        }
-
-      } catch (error) {
-        console.error('learn-other 오류', error);
-      }
-    };
+                if (response2.ok) {
+                    setAvg(data2.score.total_avg);
+                    setScore(data2.score.user_avg);
+                } else {
+                }
+            } catch (error) {
+                console.error("learn-other 오류", error);
+            }
+        };
 
     //함수 호출
     getLearnPageData();
-  }, [cat, isstudy]);
+  }, [isstudy]); 
 
 
   return (
