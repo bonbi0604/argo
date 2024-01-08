@@ -50,7 +50,10 @@ const MyPage = ({cat}) => {
               </div> */}
             </div>
             <div id="myCard">
-              <div id="myName">{user.name}</div>
+              <span id="myName">{user.name}</span>
+              <button onClick={handleUserDeletion} className="delete-account-button">
+                  회원 탈퇴
+              </button>
               <div id="myLine"/>
               <div id="myProfile">
 
@@ -81,10 +84,6 @@ const MyPage = ({cat}) => {
                     {user.dept === 1 ? '개발부' : user.dept === 2 ? '인사부' : user.dept === 3 ? '기획부' : '기타'}
                   </span>
                 </div>
-                <button onClick={handleUserDeletion} className="delete-account-button">
-                  회원 탈퇴
-                </button>
-
               </div>
             </div>
           </div>
