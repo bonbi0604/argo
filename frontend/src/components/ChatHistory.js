@@ -54,7 +54,7 @@ const ChatHistory = forwardRef(({ onSessionSelect, onCreateNewChat, selectedSess
     }, 100);
   };
   const handleDeleteSession = async (sessionId) => {
-    if (window.confirm("Are you sure you want to delete this session?")) {
+    if (window.confirm("채팅방을 삭제하시겠습니까?")) {
       try {
         const response = await fetch(`http://127.0.0.1:8000/chatbot/api/chat-sessions/${sessionId}/`, {
           method: 'DELETE',

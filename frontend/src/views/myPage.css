@@ -102,3 +102,15 @@
     cursor: pointer;
     text-decoration: none;
 }
+
+.delete-account-button {
+    /* float: right; */
+    padding: 5px 14px;
+    font-size: 0.8em;
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 70%;
+}

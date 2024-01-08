@@ -84,8 +84,16 @@ const NoticeBoard = () => {
     <div id="noticeboard">
       {/* 탭 버튼들 */}
       <div className="tab-buttons">
-        <button onClick={() => setSelectedTab('notices')}>공지사항</button>
-        <button onClick={() => setSelectedTab('posts')}>게시글</button>
+        <button 
+        onClick={() => setSelectedTab('notices')}
+        style={{ textDecoration: selectedTab === 'notices' ? 'underline' : 'none' }}>
+          공지사항
+        </button>
+        <button 
+        onClick={() => setSelectedTab('posts')}
+        style={{ textDecoration: selectedTab === 'posts' ? 'underline' : 'none' }}>
+          게시글
+        </button>
       </div>
       <div className="search-bar">
         <input type="text" placeholder="검색" value={searchTerm} onChange={handleSearchChange}/>

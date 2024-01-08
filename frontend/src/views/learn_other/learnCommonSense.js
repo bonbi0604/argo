@@ -44,17 +44,18 @@ const LearnCommonSense = () => {
 
         if (response1.ok) {
           const wrongQuestion = data1.wrong_question;
+          setQuestion(wrongQuestion)
           // 한글 번역 존재 여부 확인
-          if (wrongQuestion.korean===null) {
-            // 한글 번역이 있는 경우, 영어 문제와 결합하여 표시
-            setQuestion(wrongQuestion);
+          // if (wrongQuestion.korean===null) {
+          //   // 한글 번역이 있는 경우, 영어 문제와 결합하여 표시
+          //   setQuestion(wrongQuestion);
             
-          } else {
-            setQuestion({
-              ...wrongQuestion,
-              question_content: `${wrongQuestion.question_content}\n\n${wrongQuestion.korean}`
-            });
-          }
+          // } else {
+          //   setQuestion({
+          //     ...wrongQuestion,
+          //     question_content: `${wrongQuestion.question_content}\n\n${wrongQuestion.korean}`
+          //   });
+          // }
         } else {
           console.error("풀 문제 오류");
         }
