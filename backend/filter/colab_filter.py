@@ -18,7 +18,7 @@ _summary_
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
-from sklearn.decomposition import PCA
+from sklearn.decomposition import TruncatedSVD
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
 from surprise import Dataset, Reader
@@ -45,31 +45,41 @@ class ProblemRecommender:
         Returns:
             pandas.DataFrame: A DataFrame containing the similarity matrix between problems.
         """
-        problem_features_sparse = csr_matrix(self.data.pivot_table(index='problem_id', columns='user_id', values='solved').fillna(0))
-        similarity_matrix = cosine_similarity(problem_features_sparse)
+        # Create the pivot table and fill NA values
+        pivot_table = self.data.pivot_table(index='problem_id', columns='user_id', values='solved').fillna(0)
+
+        # Convert the pivot table to a sparse matrix
+        self.problem_features_sparse = csr_matrix(pivot_table)
+
+        # Calculate the cosine similarity
+        similarity_matrix = cosine_similarity(self.problem_features_sparse)
+
+        # Create the DataFrame using the indices from the pivot table
         similarity_df = pd.DataFrame(
             similarity_matrix,
-            index=self.problem_features_sparse.index,
-            columns=self.problem_features_sparse.index
+            index=pivot_table.index,
+            columns=pivot_table.index
         )
         return similarity_df
 
 
     def create_embeddings(self, n_components=2):
         """
-        This method creates embeddings for problems using Principal Component Analysis (PCA).
-        PCA is used to reduce the dimensions of the problem features to 2 (for easier visualization or further processing).
-
+        This method creates embeddings for problems using Truncated Singular Value Decomposition (SVD).
+        TruncatedSVD is used to reduce the dimensions of the problem features to 2 (for easier visualization or further processing).
 
         Args:
-            n_components (int, optional): Allow key parameters to be adjustable. Defaults to 2.
+            n_components (int, optional): Number of components for SVD. Defaults to 2.
 
         Returns:
-            pandas.DataFrame: The resulting embeddings are stored in self.embedding_df and returned.
+            pandas.DataFrame: The resulting embeddings stored in self.embedding_df.
         """
-        pca = PCA(n_components=n_components)
-        problem_embedding = pca.fit_transform(self.problem_features_sparse.T)
-        self.embedding_df = pd.DataFrame(problem_embedding, index=self.problem_features_sparse.columns)
+        if self.problem_features_sparse is None:
+            raise ValueError("Sparse problem features not found. Please run calculate_similarity first.")
+
+        svd = TruncatedSVD(n_components=n_components)
+        problem_embedding = svd.fit_transform(self.problem_features_sparse)
+        self.embedding_df = pd.DataFrame(problem_embedding, index=self.problem_features_sparse.index)
         return self.embedding_df
 
     def predict_solving_probability(self, classifier=RandomForestClassifier(n_estimators=100, random_state=42)):
@@ -79,7 +89,6 @@ class ProblemRecommender:
         The data is first split into training and test sets.
         The method trains the classifier (RandomForestClassifier by default) on the training data
         and then predicts the probabilities on the test data.
-
 
         Args:
             classifier (_type_, optional):  allow different machine learning models and parameters to be used.
@@ -108,7 +117,6 @@ class ProblemRecommender:
         In case of any exception (like a zero-division error, which can happen with small sample sizes),
         the exception is caught and printed.
 
-
         Returns:
             _type_: The predictions are returned.
         """
@@ -133,6 +141,7 @@ class ProblemRecommender:
         y = self.data['solved']
         scores = cross_val_score(classifier, X, y, cv=5)
         return scores.mean(), scores.std()
+
 
 # TODO: 피드백 반영 시스템 구현
     def collect_feedback(self, user_id, problem_id, feedback):
@@ -190,7 +199,7 @@ class ProblemRecommender:
 
 
 
-# 데이터셋
+# 테스트용 데이터셋
 data = {
     'user_id': ['User1', 'User2', 'User1', 'User3', 'User1','User4', 'User5', 'User1'],
     'problem_id': ['Prob1', 'Prob1', 'Prob2', 'Prob2', 'Prob3','Prob1', 'Prob1', 'Prob4'],
