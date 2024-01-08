@@ -60,6 +60,7 @@ const SolveQuestion = ({ cat, question }) => {
         <div id="learn_down">
             <LearnDown_2 chooseAnswer={chooseAnswer} question={now_question} user_content={user_content} setUserContent={setUserContent}/>
         </div>
+    </div>
     );
 };
 

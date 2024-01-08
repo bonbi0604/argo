@@ -127,7 +127,6 @@ const CommunicationHistory = ({
 
 
 
-
   return (
     <div className="history_wrapper">
         <div className="history_contents">

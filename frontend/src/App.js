@@ -66,7 +66,6 @@ function App() {
             <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/" element={<Home />} />
-            {/* #챗봇이 들어가는 페이지 */}
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/NoticeDetail/:id/" element={<NoticeDetail />} />
 

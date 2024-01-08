@@ -7,7 +7,6 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
     const { user } = useContext(AuthContext);
     const [input, setInput] = useState(""); // 사용자 입력을 저장
     const [messages, setMessages] = useState([]); // 메시지 목록을 저장
-    
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [statecode, setStatecode] = useState(0); // 학습 상태를 나타냄. 0: 학습중, 1: chatbot 정상 종료, 2: chat 비정상 종료, 3: 사용자 종료(중단하기 눌렀을 때)
     const [isSaved, setIsSaved] = useState(false);
@@ -121,17 +120,16 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
             setStatecode(data.code);
           }
         }
-        else {
-
+        else{
           // messages 마지막 요소 check를 0로 변경
           setMessages((currentMessages) => {
-            const lastMessageIndex = currentMessages.length - 1;
-            const newMessages = [...currentMessages];
-            newMessages[lastMessageIndex] = {
-              ...newMessages[lastMessageIndex],
-              check: 0
-            };
-            return newMessages;
+          const lastMessageIndex = currentMessages.length - 1;
+          const newMessages = [...currentMessages];
+          newMessages[lastMessageIndex] = {
+            ...newMessages[lastMessageIndex],
+            check: 0
+          };
+          return newMessages;
           });
           // 유저 메시지와 시스템 메시지로  messages 업데이트
           setMessages((currentMessages) => { 
