@@ -1,13 +1,12 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
-import './CommunicationChatbot.css';
-import './CommunicationHistory.css';
-import AuthContext from '../context/AuthContext';
+import React, { useState, useEffect, useContext, useRef } from "react";
+import "./CommunicationChatbot.css";
+import "./CommunicationHistory.css";
+import AuthContext from "../context/AuthContext";
 
-const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
+const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
     const { user } = useContext(AuthContext);
-    const [input, setInput] = useState(''); // 사용자 입력을 저장
+    const [input, setInput] = useState(""); // 사용자 입력을 저장
     const [messages, setMessages] = useState([]); // 메시지 목록을 저장
-    
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [statecode, setStatecode] = useState(0); // 학습 상태를 나타냄. 0: 학습중, 1: chatbot 정상 종료, 2: chat 비정상 종료, 3: 사용자 종료(중단하기 눌렀을 때)
     const [isSaved, setIsSaved] = useState(false);
@@ -21,48 +20,49 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
 
     // timestamp -> 시분초 바꿔주는 함수
     const convertTimestampToTime = (timestamp) => {
-      const date = new Date(timestamp);
-      
-      const hours = date.getHours();
-      const minutes = date.getMinutes();
-      const seconds = date.getSeconds();
-    
-      // 시, 분, 초를 문자열로 반환
-      const formattedTime = `${hours} : ${minutes} : ${seconds}`;
-    
-      return formattedTime;
-    }
+        const date = new Date(timestamp);
 
-    const handleInputChange = (event) => { // 입력 필드가 변경될 때마다 실행되는 함수
-      setInput(event.target.value);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+
+        // 시, 분, 초를 문자열로 반환
+        const formattedTime = `${hours} : ${minutes} : ${seconds}`;
+
+        return formattedTime;
+    };
+
+    const handleInputChange = (event) => {
+        // 입력 필드가 변경될 때마다 실행되는 함수
+        setInput(event.target.value);
     };
 
     // data 를 url 로 보내는 함수
-    const submit = async (dataSend, url) => { 
-      let data;
-      try {
-        const response = await fetch(url, { // 백엔드 서버에 메시지를 POST 요청
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dataSend),
-          });
+    const submit = async (dataSend, url) => {
+        let data;
+        try {
+            const response = await fetch(url, {
+                // 백엔드 서버에 메시지를 POST 요청
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(dataSend),
+            });
 
-        data = await response.json(); // 백엔드로부터의 응답 받기
+            data = await response.json(); // 백엔드로부터의 응답 받기
+        } catch (error) {
+            data = null;
+            console.error("Error sending message to the chatbot API:", error);
+        } finally {
+            //
+        }
+        return data;
+    };
 
-      } catch (error) {
-        data = null;
-        console.error("Error sending message to the chatbot API:", error);
-      } finally {
-        //
-      }
-      return data;
-    }
 
-  
     // 'Send' 버튼을 클릭하거나 엔터 키를 누를 때 실행하는 함수
-    const handleSubmit = async () => {  
+    const handleSubmit = async () => {
         if (!input.trim()) return; // 입력이 비어있는 경우 메시지를 안보냄
 
         // 유저 메시지로  messages 업데이트
@@ -120,17 +120,16 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
             setStatecode(data.code);
           }
         }
-        else {
-
+        else{
           // messages 마지막 요소 check를 0로 변경
           setMessages((currentMessages) => {
-            const lastMessageIndex = currentMessages.length - 1;
-            const newMessages = [...currentMessages];
-            newMessages[lastMessageIndex] = {
-              ...newMessages[lastMessageIndex],
-              check: 0
-            };
-            return newMessages;
+          const lastMessageIndex = currentMessages.length - 1;
+          const newMessages = [...currentMessages];
+          newMessages[lastMessageIndex] = {
+            ...newMessages[lastMessageIndex],
+            check: 0
+          };
+          return newMessages;
           });
           // 유저 메시지와 시스템 메시지로  messages 업데이트
           setMessages((currentMessages) => { 
@@ -192,9 +191,7 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
         }
 
         handleFirstSubmit(); // 초기 메시지 보내기
-        
     }, []);
-    
 
     // statecode 가 0 이 아닐 때, history 저장 요청. 버튼 비활성화
     useEffect(() => {
@@ -223,12 +220,11 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
       // console.log(statecode);
     }, [statecode]);
 
-
     // 중단 버튼 눌렀을 때 disabled
     useEffect(() => {
-      if (stopped) {
-        setStatecode(3);
-      }
+        if (stopped) {
+            setStatecode(3);
+        }
     }, [stopped]);
 
     // useEffect(() => {
@@ -310,11 +306,11 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
     )
 
     useEffect(() => {
-      // 컴포넌트가 업데이트될 때마다 스크롤을 아래로 이동
-      // const container = containerRef.current;
-      // container.scrollTop = container.scrollHeight;
+        // 컴포넌트가 업데이트될 때마다 스크롤을 아래로 이동
+        // const container = containerRef.current;
+        // container.scrollTop = container.scrollHeight;
 
-      const container = containerRef.current;
+        const container = containerRef.current;
 
       // .A 클래스를 가진 하위 엘리먼트를 찾아 스크롤을 아래로 이동
       if (container) {
@@ -362,7 +358,6 @@ const CommunicationChatbot = ({stopped, stateN, setStateN, setStopped}) => {
         </div>
       </div>
     );
-  };
-  
-  export default CommunicationChatbot;
+};
 
+export default CommunicationChatbot;

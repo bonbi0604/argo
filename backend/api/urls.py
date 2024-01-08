@@ -18,6 +18,8 @@ urlpatterns = [
     path('checkEmail/', checkEmail, name='checkEmail'),
     path('mailSend/', mailSend, name='mailSend'),
     path('', views.getRoutes),
-    path('password_change/', csrf_exempt(PasswordChangeView.as_view()), name='password_change'),
+    # path('password_change/', csrf_exempt(PasswordChangeView.as_view()), name='password_change'),
     path('password_reset/', csrf_exempt(PasswordResetView.as_view()), name='password_reset'), # 비번 재설정 이메일 요청
+    path('password_change/', views.change_password, name='password_change'),
+    path('users/<int:pk>/', views.delete_user, name='delete_user'),
 ]
