@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
-import "./NoticeDetail.css"
+import "./NoticeDetail.css";
 
 const NoticeDetail = () => {
     const { id } = useParams();
@@ -134,9 +134,9 @@ const NoticeDetail = () => {
         }
     };
 
-      const handleBoard = () => {
-        navigate("../DashBoard")
-      }
+    const handleBoard = () => {
+        navigate("../DashBoard");
+    };
 
   return (
     <section id="postdetail_section">
@@ -158,7 +158,8 @@ const NoticeDetail = () => {
               <span className='noticepost_file'>
                   {Notice.notice_files && Notice.notice_files.map((file, index) => (
                       <span key={index}>
-                          <a className="file-link" href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                          <a className="file-link" href={`http://127.0.0.1:8000/noticeboard${file.src}`} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                          <div>{`${file.src}`}</div>
                       </span>
                   ))}
               </span>
@@ -169,8 +170,8 @@ const NoticeDetail = () => {
           <p className="content">{Notice.content}</p>
         </div>
 
-      {/* 댓글 작성 폼 */}
-      {/* {user && (
+                {/* 댓글 작성 폼 */}
+                {/* {user && (
         <form onSubmit={handleCommentSubmit} className="comment-form" >
           <textarea
             value={newComment}
@@ -211,11 +212,10 @@ const NoticeDetail = () => {
               )}
           </div>
           ))} */}
-        <div>
-        </div>
-      </div>
-    </section>
-  );
+                <div></div>
+            </div>
+        </section>
+    );
 };
 
 export default NoticeDetail;

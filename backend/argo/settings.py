@@ -240,3 +240,13 @@ CORS_ALLOW_METHODS = [
     "DELETE",
     "OPTIONS",
 ]
+
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]

@@ -133,17 +133,17 @@ const LearningPage = () => {
                     }
                 );
 
-        if (response.ok) {
-          const data = await response.json();
-          setScoreData(data.result? data.result:{});
-          // console.log(data.result);
-        } else {
-          console.error('Failed to fetch score data');
-        }
-      } catch (error) {
-        console.error('Error fetching score data', error);
-      }
-    };
+                if (response.ok) {
+                    const data = await response.json();
+                    setScoreData(data.result ? data.result : {});
+                    // console.log(data.result);
+                } else {
+                    console.error("Failed to fetch score data");
+                }
+            } catch (error) {
+                console.error("Error fetching score data", error);
+            }
+        };
 
         if (user) {
             fetchScore();
