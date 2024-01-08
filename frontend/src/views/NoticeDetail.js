@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
-import "./NoticeDetail.css"
+import "./NoticeDetail.css";
 
 const NoticeDetail = () => {
     const { id } = useParams();
@@ -134,43 +134,68 @@ const NoticeDetail = () => {
         }
     };
 
-      const handleBoard = () => {
-        navigate("../DashBoard")
-      }
+    const handleBoard = () => {
+        navigate("../DashBoard");
+    };
 
-  return (
-    <section id="postdetail_section">
-      <div className="post-container">
-        <button className="delete-btn" onClick={handleBoard}>목록</button>
-        {(user.user_no === Notice.user_no || user.is_admin) && (
-        <button className="delete-btn" onClick={handleDelete}>삭제</button>
-        )}
-        {user.user_no === Notice.user_no && (
-        <button className="edit-btn" onClick={handleEdit}>수정</button>
-        )}
-        <div className='post_content_div'>
-          <div className="board_name">공지사항</div>
-          <span className="title">{Notice.title}</span>
-          <div className='data'>
-          <span className='color_gray'>{new Date(Notice.timestamp).toLocaleString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
-            {/* 파일 다운로드 링크 추가 */}
-            {Notice.notice_files? 
-              <span className='noticepost_file'>
-                  {Notice.notice_files && Notice.notice_files.map((file, index) => (
-                      <span key={index}>
-                          <a className="file-link" href={file.src} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
-                      </span>
-                  ))}
-              </span>
-              :
-              <span></span>
-            }
-          </div>
-          <p className="content">{Notice.content}</p>
-        </div>
+    return (
+        <section id="postdetail_section">
+            <div className="post-container">
+                <button className="delete-btn" onClick={handleBoard}>
+                    목록
+                </button>
+                {(user.user_no === Notice.user_no || user.is_admin) && (
+                    <button className="delete-btn" onClick={handleDelete}>
+                        삭제
+                    </button>
+                )}
+                {user.user_no === Notice.user_no && (
+                    <button className="edit-btn" onClick={handleEdit}>
+                        수정
+                    </button>
+                )}
+                <div className="post_content_div">
+                    <div className="board_name">공지사항</div>
+                    <span className="title">{Notice.title}</span>
+                    <div className="data">
+                        <span className="color_gray">
+                            {new Date(Notice.timestamp).toLocaleString(
+                                "ko-KR",
+                                {
+                                    year: "numeric",
+                                    month: "2-digit",
+                                    day: "2-digit",
+                                    hour: "2-digit",
+                                    minute: "2-digit",
+                                }
+                            )}
+                        </span>
+                        {/* 파일 다운로드 링크 추가 */}
+                        {Notice.notice_files ? (
+                            <span className="noticepost_file">
+                                {Notice.notice_files &&
+                                    Notice.notice_files.map((file, index) => (
+                                        <span key={index}>
+                                            <a
+                                                className="file-link"
+                                                href={file.src}
+                                                download
+                                            >
+                                                {file.name}
+                                            </a>{" "}
+                                            {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                                        </span>
+                                    ))}
+                            </span>
+                        ) : (
+                            <span></span>
+                        )}
+                    </div>
+                    <p className="content">{Notice.content}</p>
+                </div>
 
-      {/* 댓글 작성 폼 */}
-      {/* {user && (
+                {/* 댓글 작성 폼 */}
+                {/* {user && (
         <form onSubmit={handleCommentSubmit} className="comment-form" >
           <textarea
             value={newComment}
@@ -211,11 +236,10 @@ const NoticeDetail = () => {
               )}
           </div>
           ))} */}
-        <div>
-        </div>
-      </div>
-    </section>
-  );
+                <div></div>
+            </div>
+        </section>
+    );
 };
 
 export default NoticeDetail;

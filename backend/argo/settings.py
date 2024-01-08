@@ -217,15 +217,30 @@ SESSION_COOKIE_NAME = 'my_chat_session'
 
 
 # CORS 관련 설정
+ALLOWED_HOSTS = [
+                 '127.0.0.1',
+                 'localhost',
+                 '43.200.52.223', 
+                 'argo12.duckdns.org',
+                 'www.argo12.duckdns.org',
+                 'be.argo12.duckdns.org',
+                ]
 
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '43.200.52.223', 'argo12.duckdns.org', 'www.argo12.duckdns.org']
-
-CORS_ALLOW_ALL_ORIGINS = True
-
+# CORS_ALLOW_ALL_ORIGINS = True
+# 아래 사이트에서만 backend 접근 가능.
 CORS_ALLOWED_ORIGINS = [
-    'http://127.0.0.1:3000',
-    'http://localhost:3000',
-    'http://43.200.52.223:3000',
-    'http://argo12.duckdns.org:3000',
-    'https://www.argo12.duckdns.org',
+                        'http://127.0.0.1:3000',
+                        'http://localhost:3000',
+                        'http://43.200.52.223:3000',
+                        'http://argo12.duckdns.org:3000',
+                        'https://www.argo12.duckdns.org',
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
 ]

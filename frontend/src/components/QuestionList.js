@@ -61,8 +61,10 @@ const QuestionList = ({ cat, historyId, setHistoryId, isstudy }) => {
             const data1 = await response1.json();
 
             if (response1.ok) {
-                const sortedQuestionList = data1.wrong_question_list.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        setWrongList(sortedQuestionList);
+                const sortedQuestionList = data1.wrong_question_list.sort(
+                    (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+                );
+                setWrongList(sortedQuestionList);
             } else {
             } //틀린문제 리스트 끝
         };
