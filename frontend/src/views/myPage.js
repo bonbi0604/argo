@@ -6,8 +6,9 @@ import React, { useState, useContext, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 const MyPage = ({cat}) => {
-  const { user, requestPasswordReset } = useContext(AuthContext);
+  const { user,  logoutUser } = useContext(AuthContext);
   const navigate = useNavigate();
+  const api = useAxios(); // useAxios 훅 사용
 
 
   if (!user){
@@ -17,6 +18,25 @@ const MyPage = ({cat}) => {
   const handlePasswordResetRequest = () => {
     // requestPasswordReset(user.email);
     navigate(`/profile/changePassword`);
+  };
+
+  // 회원 탈퇴 처리 함수
+  const handleUserDeletion = async () => {
+    if (window.confirm("정말로 회원 탈퇴를 원하시나요?")) {
+      try {
+        // useAxios 훅을 통해 delete 메소드 호출
+        const response = await api.delete(`http://127.0.0.1:8000/api/users/${user.user_no}/`);
+
+        if (response.status === 200) {
+          // 로그아웃 처리 및 로그인 페이지로 이동
+          // logout(); // 로그아웃 함수를 호출
+          logoutUser(); // 회원 탈퇴 후 로그아웃 처리
+          navigate('/login');
+        }
+      } catch (error) {
+        console.error('회원 탈퇴 처리 중 오류가 발생했습니다.', error);
+      }
+    }
   };
   
   return (
@@ -57,8 +77,13 @@ const MyPage = ({cat}) => {
 
                 <div className="myProfileDiv">
                   <span>Dept</span>
-                  <span className="myData">{user.dept}</span>
+                  <span className="myData">
+                    {user.dept === 1 ? '인사부' : user.dept === 2 ? '개발부' : user.dept === 3 ? '영업부' : '기타'}
+                  </span>
                 </div>
+                <button onClick={handleUserDeletion} className="delete-account-button">
+                  회원 탈퇴
+                </button>
 
               </div>
             </div>

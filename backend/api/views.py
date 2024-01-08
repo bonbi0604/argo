@@ -142,3 +142,16 @@ def change_password(request):
     user.set_password(new_password)
     user.save()
     return JsonResponse({'success': '비밀번호가 변경되었습니다.'}, status=200)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_user(request, pk):
+    try:
+        user = User.objects.get(pk=pk)
+        if request.user == user:
+            user.delete()
+            return Response({'message': '회원 탈퇴가 완료되었습니다.'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': '권한이 없습니다.'}, status=status.HTTP_403_FORBIDDEN)
+    except User.DoesNotExist:
+        return Response({'error': '사용자가 존재하지 않습니다.'}, status=status.HTTP_404_NOT_FOUND)
