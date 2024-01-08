@@ -169,7 +169,3 @@ cython_debug/
 dfas
 frontend/nohup.out
 backend/nohup.out
-
-
-# chroma db 쓰레기통
-.bin
