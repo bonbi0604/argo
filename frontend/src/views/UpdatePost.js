@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
-import "./UpdatePost.css"
+import "./UpdatePost.css";
 
 const UpdatePost = () => {
     const { id } = useParams();
@@ -14,7 +14,7 @@ const UpdatePost = () => {
         const fetchPost = async () => {
             try {
                 const response = await api.get(
-                    `http://127.0.0.1:8000/noticeboard/posts/${id}/`
+                    `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/`
                 );
                 if (response.status === 200 && response.data) {
                     setTitle(response.data.title);
@@ -38,7 +38,7 @@ const UpdatePost = () => {
             };
 
             const response = await api.put(
-                `http://127.0.0.1:8000/noticeboard/posts/${id}/`,
+                `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/`,
                 updatedPost
             );
 
@@ -50,40 +50,48 @@ const UpdatePost = () => {
         }
     };
 
-  return (
-    <section>
-      <div className="write-post-page-background">
-        <div className="write-post-container">
-          <div className="write-post-form-container">
-            <h2 className="write-post-heading">게시물 수정</h2>
-            <form onSubmit={handleSubmit} className="write-post-form">
-              <div className="write-post-input-group">
-                <label className="write-post-label">제목</label>
-                <input
-                  type="text"
-                  value={title}
-                  className="write-post-title-input"
-                  onChange={(e) => setTitle(e.target.value)}
-                />
-              </div>
-              <div className="write-post-input-group">
-                <label className="write-post-label">내용</label>
-                <textarea
-                  rows="5"
-                  value={content}
-                  className="write-post-content-input"
-                  onChange={(e) => setContent(e.target.value)}
-                ></textarea>
-              </div>
-              <div className="write-post-submit-group">
-                <button type="submit" className="write-post-submit-button">수정 완료</button>
-              </div>
-            </form>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
+    return (
+        <section>
+            <div className="write-post-page-background">
+                <div className="write-post-container">
+                    <div className="write-post-form-container">
+                        <h2 className="write-post-heading">게시물 수정</h2>
+                        <form
+                            onSubmit={handleSubmit}
+                            className="write-post-form"
+                        >
+                            <div className="write-post-input-group">
+                                <label className="write-post-label">제목</label>
+                                <input
+                                    type="text"
+                                    value={title}
+                                    className="write-post-title-input"
+                                    onChange={(e) => setTitle(e.target.value)}
+                                />
+                            </div>
+                            <div className="write-post-input-group">
+                                <label className="write-post-label">내용</label>
+                                <textarea
+                                    rows="5"
+                                    value={content}
+                                    className="write-post-content-input"
+                                    onChange={(e) => setContent(e.target.value)}
+                                ></textarea>
+                            </div>
+                            <div className="write-post-submit-group">
+                                <button
+                                    type="submit"
+                                    className="write-post-submit-button"
+                                >
+                                    수정 완료
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
 };
 
 export default UpdatePost;

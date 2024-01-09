@@ -34,6 +34,9 @@ from datetime import datetime
 from django.utils import timezone
 from random import shuffle
 
+from dotenv import load_dotenv
+load_dotenv()
+
 ########################################################################
 #                      learn/communication/study/                      #
 ########################################################################
@@ -92,7 +95,7 @@ IMPORTANT RULE:
 1. The conversation subject must be "BUSINESS".
 2. ONLY USER KOREAN.
 """
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
 persist_directory = settings.BASE_DIR
 embedding = OpenAIEmbeddings()
 

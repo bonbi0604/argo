@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
-import "./WritePost.css"
+import "./WritePost.css";
 
 const WritePost = () => {
     const { user } = useContext(AuthContext); // 현재 로그인한 사용자 정보를 가져옵니다.
@@ -36,7 +36,7 @@ const WritePost = () => {
                 const endpoint = isNotice ? "/notices/" : "/posts/";
                 try {
                     const response = await api.post(
-                        `http://127.0.0.1:8000/noticeboard${endpoint}`,
+                        `${process.env.REACT_APP_API_URL}/noticeboard${endpoint}`,
                         formData,
                         {
                             headers: {
@@ -53,7 +53,7 @@ const WritePost = () => {
             } else {
                 try {
                     const response = await api.post(
-                        `http://127.0.0.1:8000/noticeboard/posts/`,
+                        `${process.env.REACT_APP_API_URL}/noticeboard/posts/`,
                         formData,
                         {
                             headers: {
@@ -83,9 +83,15 @@ const WritePost = () => {
                 <div className="write-post-container">
                     <div className="write-post-form-container">
                         <h2 className="write-post-heading">새 게시물 작성</h2>
-                        <form onSubmit={handleSubmit} className="write-post-form">
+                        <form
+                            onSubmit={handleSubmit}
+                            className="write-post-form"
+                        >
                             <div className="write-post-input-group">
-                                <label htmlFor="postTitle" className="write-post-label">
+                                <label
+                                    htmlFor="postTitle"
+                                    className="write-post-label"
+                                >
                                     제목
                                 </label>
                                 <input
@@ -98,9 +104,11 @@ const WritePost = () => {
                                 />
                             </div>
 
-
                             <div className="write-post-input-group">
-                                <label htmlFor="postContent" className="write-post-label">
+                                <label
+                                    htmlFor="postContent"
+                                    className="write-post-label"
+                                >
                                     내용
                                 </label>
                                 <textarea
@@ -110,11 +118,14 @@ const WritePost = () => {
                                     rows="10"
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
-                                    />
+                                />
                             </div>
 
                             <div className="write-post-input-group">
-                                <label htmlFor="postFile" className="write-post-label">
+                                <label
+                                    htmlFor="postFile"
+                                    className="write-post-label"
+                                >
                                     파일
                                 </label>
                                 <input
@@ -133,7 +144,9 @@ const WritePost = () => {
                                     <input
                                         type="checkbox"
                                         checked={isNotice}
-                                        onChange={(e) => setIsNotice(e.target.checked)}
+                                        onChange={(e) =>
+                                            setIsNotice(e.target.checked)
+                                        }
                                     />
                                     공지사항 작성
                                 </label>

@@ -18,7 +18,7 @@ const SolveQuestion = ({ cat, question }) => {
             // setAnswerNo(choose);
 
             //Result 저장
-            await fetch(`http://127.0.0.1:8000/learn/insertResult/`, {
+            await fetch(`${process.env.REACT_APP_API_URL}/learn/insertResult/`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,7 +33,7 @@ const SolveQuestion = ({ cat, question }) => {
 
             //문제 불러오기
             const response2 = await fetch(
-                `http://127.0.0.1:8000/learn/getQuestion/`,
+                `${process.env.REACT_APP_API_URL}/learn/getQuestion/`,
                 {
                     method: "POST",
                     headers: {
@@ -55,12 +55,17 @@ const SolveQuestion = ({ cat, question }) => {
         setUserContent("");
     };
 
-  return (
-    <div id="solve_question">
-        <div id="learn_down">
-            <LearnDown_2 chooseAnswer={chooseAnswer} question={now_question} user_content={user_content} setUserContent={setUserContent}/>
+    return (
+        <div id="solve_question">
+            <div id="learn_down">
+                <LearnDown_2
+                    chooseAnswer={chooseAnswer}
+                    question={now_question}
+                    user_content={user_content}
+                    setUserContent={setUserContent}
+                />
+            </div>
         </div>
-    </div>
     );
 };
 

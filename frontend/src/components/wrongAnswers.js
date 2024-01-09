@@ -13,7 +13,7 @@ const WrongAnswers = ({ historyId }) => {
     useEffect(() => {
         const WrongAnswers = async () => {
             const response = await fetch(
-                `http://127.0.0.1:8000/learn/wrongQuestion/`,
+                `${process.env.REACT_APP_API_URL}/learn/wrongQuestion/`,
                 {
                     method: "POST",
                     headers: {
@@ -34,21 +34,23 @@ const WrongAnswers = ({ historyId }) => {
         WrongAnswers();
     }, [historyId]); //historyId가 바뀔 때마다 실행되게
 
-  return (
-    <div id="q_div">
-        <p>오답노트</p>
-        <div id="wrongDiv">
-          <p>{wrong_q.question_no}. {wrong_q.question_content}</p>
-          {wrong_q.korean && <p>해석: {wrong_q.korean}</p>}
-          <div className="line"></div>
-          <div id="wrAnswerDiv">
-            <div>정답: {wrong_q.answer_content}</div>
-            <div>입력: {wrong_q.user_content}</div>
-            <div id="ansPer">정답률: {wrong_q.answer_ratio}%</div> 
-          </div>
+    return (
+        <div id="q_div">
+            <p>오답노트</p>
+            <div id="wrongDiv">
+                <p>
+                    {wrong_q.question_no}. {wrong_q.question_content}
+                </p>
+                {wrong_q.korean && <p>해석: {wrong_q.korean}</p>}
+                <div className="line"></div>
+                <div id="wrAnswerDiv">
+                    <div>정답: {wrong_q.answer_content}</div>
+                    <div>입력: {wrong_q.user_content}</div>
+                    <div id="ansPer">정답률: {wrong_q.answer_ratio}%</div>
+                </div>
+            </div>
         </div>
-    </div>
-  )
-}
+    );
+};
 
 export default WrongAnswers;

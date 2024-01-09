@@ -19,7 +19,7 @@ const QuestionList = ({ cat, historyId, setHistoryId, isstudy }) => {
     const searchWrongQuestion = async () => {
         try {
             const response = await fetch(
-                `http://127.0.0.1:8000/learn/searchList/`,
+                `${process.env.REACT_APP_API_URL}/learn/searchList/`,
                 {
                     method: "POST",
                     headers: {
@@ -46,7 +46,7 @@ const QuestionList = ({ cat, historyId, setHistoryId, isstudy }) => {
             //틀린문제 리스트
             // currPage 보내주기
             const response1 = await fetch(
-                `http://127.0.0.1:8000/learn/wronglist/`,
+                `${process.env.REACT_APP_API_URL}/learn/wronglist/`,
                 {
                     method: "POST",
                     headers: {
@@ -61,8 +61,10 @@ const QuestionList = ({ cat, historyId, setHistoryId, isstudy }) => {
             const data1 = await response1.json();
 
             if (response1.ok) {
-                const sortedQuestionList = data1.wrong_question_list.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        setWrongList(sortedQuestionList);
+                const sortedQuestionList = data1.wrong_question_list.sort(
+                    (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
+                );
+                setWrongList(sortedQuestionList);
             } else {
             } //틀린문제 리스트 끝
         };

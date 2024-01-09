@@ -79,7 +79,7 @@ const ResultPage = () => {
         const fetchScore = async () => {
             try {
                 const response = await fetch(
-                    `http://127.0.0.1:8000/learn/score/`,
+                    `${process.env.REACT_APP_API_URL}/learn/score/`,
                     {
                         // 백엔드 서버에 메시지를 POST 요청
                         method: "POST",
@@ -90,13 +90,13 @@ const ResultPage = () => {
                     }
                 );
 
-            if (response.ok) {
-                const data = await response.json();
-                setScoreData(data.result? data.result : {});
-                // console.log(data.result);
-            } else {
-                console.error('Failed to fetch score data');
-            }
+                if (response.ok) {
+                    const data = await response.json();
+                    setScoreData(data.result ? data.result : {});
+                    // console.log(data.result);
+                } else {
+                    console.error("Failed to fetch score data");
+                }
             } catch (error) {
                 console.error("Error fetching score data", error);
             }
