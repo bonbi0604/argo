@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from account.models import User
 from django.db.models import Q
 import logging
+import json
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -41,6 +42,8 @@ def notice_list_create(request):
             print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['GET', 'POST'])
 def post_list_create(request):
     if request.method == 'GET':
@@ -49,6 +52,7 @@ def post_list_create(request):
         if search_query:
             posts = posts.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
         serializer = PostSerializer(posts, many=True)
+        
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data, context={'request': request})
