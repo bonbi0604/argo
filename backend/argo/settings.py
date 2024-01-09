@@ -217,22 +217,27 @@ SESSION_COOKIE_NAME = 'my_chat_session'
 
 # CORS 관련 설정
 ALLOWED_HOSTS = [
-                 '127.0.0.1',
-                 'localhost',
-                 '43.200.52.223', 
-                 'argo12.duckdns.org',
-                 'www.argo12.duckdns.org',
-                 'be.argo12.duckdns.org',
+                 '127.0.0.1',    # internal
+                 'localhost',    # internal
+                 '43.200.52.223',     # internal
+                 'argo12.duckdns.org',    # AWS
+                 'www.argo12.duckdns.org',    # AWS
+                 'be.argo12.duckdns.org',    # AWS
+                 'aivle0412.duckdns.org',    # Pi
+                 'argo.aivle0412.duckdns.org',    # Pi
+                 'be.aivle0412.duckdns.org',    # Pi
                 ]
 
 # CORS_ALLOW_ALL_ORIGINS = True
 # 아래 사이트에서만 backend 접근 가능.
 CORS_ALLOWED_ORIGINS = [
-                        'http://127.0.0.1:3000',
-                        'http://localhost:3000',
-                        'http://43.200.52.223:3000',
-                        'http://argo12.duckdns.org:3000',
-                        'https://www.argo12.duckdns.org',
+                        'http://127.0.0.1:3000',    # internal
+                        'http://localhost:3000',    # internal
+                        'http://43.200.52.223:3000',    # AWS
+                        'http://argo12.duckdns.org:3000',    # AWS
+                        'https://www.argo12.duckdns.org',    # AWS
+                        'http://argo.aivle0412.duckdns.org:3000',    # Pi
+                        'https://argo.aivle0412.duckdns.org',    # Pi
 ]
 
 CORS_ALLOW_METHODS = [
