@@ -104,7 +104,7 @@
 }
 
 .delete-account-button {
-    /* float: right; */
+    float: right;
     padding: 5px 14px;
     font-size: 0.8em;
     background-color: gray;
@@ -112,5 +112,5 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    margin-left: 70%;
+    /* margin-left: 70%; */
 }
