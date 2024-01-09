@@ -6,7 +6,9 @@ import "./PostDetail.css";
 
 const PostDetail = () => {
     const { id } = useParams();
-    const [post, setPost] = useState({});
+    const [post, setPost] = useState({
+      "files": ""
+    });
     const [comments, setComments] = useState([]); // 댓글 목록 상태
     const [newComment, setNewComment] = useState(""); // 새 댓글 입력 상태
     const { user } = useContext(AuthContext);
