@@ -10,8 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 from datetime import timedelta
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,17 +23,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-gvb5@_39dz)mu(%a_c35)r39$h4!yet)_+8!179@)-_wl(i-%g'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = []
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'corsheaders',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,9 +52,9 @@ AUTH_USER_MODEL = 'account.User'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = '587'
-EMAIL_HOST_USER = 'sy.hong9001@gmail.com' # env('NODEMAILER_USER')  # 이메일을 보낼 G-mail 계정
-EMAIL_HOST_PASSWORD = 'jyxf ygmh qtba qxpz' # env('NODEMAILER_PASS')  # 설정한 앱 비밀번호
+EMAIL_PORT = os.getenv('EMAIL_PORT')
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER') # env('NODEMAILER_USER')  # 이메일을 보낼 G-mail 계정
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD') # env('NODEMAILER_PASS')  # 설정한 앱 비밀번호
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
@@ -66,6 +68,7 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -73,7 +76,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware', # 추가
 ]
 
 ROOT_URLCONF = 'argo.urls'
@@ -110,11 +112,11 @@ WSGI_APPLICATION = 'argo.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'aivle_big',
-        'USER': 'aivle0412',
-        'PASSWORD': 'aivle20230412',
-        'HOST': 'db.aivle0412.duckdns.org',
-        'PORT': '10622',
+        'NAME': os.getenv('DB_NAME'), 
+        'USER': os.getenv('DB_ID'), 
+        'PASSWORD': os.getenv('DB_PW'), 
+        'HOST': os.getenv('DB_HOST'), 
+        'PORT': os.getenv('DB_PORT'), 
     }
 }
 
@@ -178,7 +180,7 @@ SIMPLE_JWT = {
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
 
-    'ALGORITHM': 'HS256',
+    'ALGORITHM': os.getenv('JWT_ALGORITHM'),
 
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
@@ -204,11 +206,45 @@ SIMPLE_JWT = {
 }
 
 
-CORS_ALLOW_ALL_ORIGINS = True
-
 # 세션 백엔드 설정
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 
 # 세션 저장소 설정
 SESSION_COOKIE_NAME = 'my_chat_session'
 # SESSION_SAVE_EVERY_REQUEST = True
+
+
+
+# CORS 관련 설정
+ALLOWED_HOSTS = [
+                 '127.0.0.1',    # internal
+                 'localhost',    # internal
+                 '43.200.52.223',     # internal
+                 'argo12.duckdns.org',    # AWS
+                 'www.argo12.duckdns.org',    # AWS
+                 'be.argo12.duckdns.org',    # AWS
+                 'aivle0412.duckdns.org',    # Pi
+                 'argo.aivle0412.duckdns.org',    # Pi
+                 'be.aivle0412.duckdns.org',    # Pi
+                ]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+# 아래 사이트에서만 backend 접근 가능.
+CORS_ALLOWED_ORIGINS = [
+                        'http://127.0.0.1:3000',    # internal
+                        'http://localhost:3000',    # internal
+                        'http://43.200.52.223:3000',    # AWS
+                        'http://argo12.duckdns.org:3000',    # AWS
+                        'https://www.argo12.duckdns.org',    # AWS
+                        'http://argo.aivle0412.duckdns.org:3000',    # Pi
+                        'https://argo.aivle0412.duckdns.org',    # Pi
+]
+
+CORS_ALLOW_METHODS = [
+    "GET",
+    "POST",
+    "PUT",
+    "PATCH",
+    "DELETE",
+    "OPTIONS",
+]

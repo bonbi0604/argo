@@ -1,4 +1,11 @@
-#body {
-    /* background-color: #9DC2ED; */
-    /* width: 100vh; */
+body {
+  font-family: 'WantedSansVariable', sans-serif !important;
+  font-size: 12pt;
+  font-weight: bold;
+  letter-spacing: 0.025em;
+  line-height: 1.65;
+}
+
+.link {
+  text-decoration: none;
 }

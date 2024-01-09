@@ -14,24 +14,16 @@
     margin-bottom: 2%;
   }
   .chatpage-chatbot-input:focus {
-    border: 1px solid #ccc;
+    /* outline: none; */
+    outline-width: thin;
     outline-color: #c4dcfa;
     background-color: #c4dcfa;
 }
-  .chatpage-chatbot-messages {
-      flex-grow: 1;
-      overflow-y: auto;
-      scroll-behavior: smooth;
-      height: 100%;
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-      opacity: 0.5;
-    }
   
  .chatpage-chatbot-input-container {
       display: flex;
       padding: 10px;
-      height: 8%;
+      height: 12%;
     }
   
 .chatpage-chatbot-input::placeholder {
@@ -48,6 +40,9 @@
       overflow: hidden; /* Prevent scrollbar */
       resize: none;
       background-color: #D3E3F7;
+      font-size: 1em;
+      font-weight: bold;
+      margin-left: 2%;
     }
     
 .chatpage-chatbot-submit {
@@ -59,37 +54,52 @@
       cursor: pointer;
       width: 60px;
       text-align: center;
+      font-weight: bold;
+      margin-right: 2%;
     }
 
 .chatpage-chatbot-submit:hover {
       background-color: #c4dcfa;
     }
-  
-.chatpage-chatbot-message {
-      padding: 0px;
-      margin: 5px;
-      border-radius: 10px;
+    .chatpage-chatbot-messages {
+      flex-grow: 1;
+      overflow-y: auto;
+      scroll-behavior: smooth;
+      height: 100%;
+      -ms-overflow-style: none;
+      scrollbar-width: none;
       width: 100%;
-      word-break: break-word;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
+    }
+.chatpage-chatbot-message {
+      padding: 0.5%;
+      margin: 5px;
+      border-radius: 10px;
+      word-break: break-word;
+      display: inline-block;
+      flex-direction: column;
+      align-items: flex-start;
       margin-top: 1%;
-      max-width: 50%;
+      max-width: 45%;
+      text-align: left;
     }
     
 .chatpage-chatbot-message.user {
       background-color: white;
-      color: black;
+      color: #315279;
       align-self: flex-end;
       margin-left: auto;
+      margin-right: 3%;
     }
   
 .chatpage-chatbot-message.bot {
-      background-color: #007bff;
-      color: white;
+      background-color: #D3E3F7;
+      color: #315279;
       align-self: flex-start;
       margin-right: auto;
+      margin-left: 3%;
     }
 
 .chatpage-chatbot-messages::-webkit-scrollbar {
