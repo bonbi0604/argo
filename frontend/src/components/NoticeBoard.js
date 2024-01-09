@@ -152,10 +152,6 @@ const NoticeBoard = () => {
       <div className="write-button">
         <Link to="/writepost">글쓰기</Link>
       </div>
-            {/* '글쓰기' 버튼 */}
-            <div className="write-button">
-                <Link to="/writepost">글쓰기</Link>
-            </div>
       {/* 페이지네이션 */}
       <div className='board_pagination'>
         <Pagination
