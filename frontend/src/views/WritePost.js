@@ -36,7 +36,7 @@ const WritePost = () => {
                 const endpoint = isNotice ? "/notices/" : "/posts/";
                 try {
                     const response = await api.post(
-                        `${process.env.REACT_APP_API_URL}/noticeboard${endpoint}`,
+                        `http://127.0.0.1:8000/noticeboard${endpoint}`,
                         formData,
                         {
                             headers: {
@@ -53,7 +53,7 @@ const WritePost = () => {
             } else {
                 try {
                     const response = await api.post(
-                        `${process.env.REACT_APP_API_URL}/noticeboard/posts/`,
+                        `http://127.0.0.1:8000/noticeboard/posts/`,
                         formData,
                         {
                             headers: {
