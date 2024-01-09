@@ -121,7 +121,7 @@ const WritePost = () => {
                                     type="file"
                                     id="postFile"
                                     className="write-post-file-input"
-                                    accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt" // 허용할 파일 형식 지정
+                                    accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt, .txt" // 허용할 파일 형식 지정
                                     onChange={handleFileChange} // 파일 선택 핸들러 연결
                                     multiple
                                 />
