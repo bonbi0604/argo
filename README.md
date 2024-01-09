@@ -19,22 +19,23 @@ pip install -r requirements.txt
 
 프론트엔드 환경  
 // node, npm 버전 확인하기  
+node --version
+npm --version
 // yarn 설치  
 npm install -g yarn  
 // frontend 이동  
 yarn install
 
 ## db 생성
-//backend
 cd backend
 python manage.py makemigrations
 python manage.py migrate
 
-## 실행
-// backend
+## BE 실행 (Gunicorn)
 conda activate {env_name}
-python manage.py runserver
+python manage.py runserver // 윈도우
+python gunicorn_start.py // 리눅스
 
-// frontend
+## FE 실행 (React)
 cd ../frontend  
 yarn start

@@ -56,7 +56,6 @@ function App() {
 
             <Route path="/profile" element={<MyPage />} />
             <Route path="/profile/changePassword" element={<ChangePassword />} />
-
             <Route path="result" element={<ResultPage />} />
             <Route path="/chat" element={<Chat />} />
             <Route path="/writepost" element={<WritePost />} />
