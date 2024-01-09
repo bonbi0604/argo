@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
 import "./NoticeBoard.css";
+import AuthContext from "../context/AuthContext";
 
 const NoticeBoard = () => {
     const [items, setItems] = useState([]); // 공지사항 또는 게시글 목록
@@ -13,6 +14,7 @@ const NoticeBoard = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
     const [searchTerm, setSearchTerm] = useState("");
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         // API request to retrieve data appropriate for the current page
@@ -169,6 +171,10 @@ const NoticeBoard = () => {
                     </tbody>
                 </table>
             </div>
+            {/* 글쓰기 */}
+            {user.is_admin && (<div className="write-button">
+                <Link to="/writepost">글쓰기</Link>
+            </div>)}
             {/* 페이지네이션 */}
             <Pagination
                 totalItems={
