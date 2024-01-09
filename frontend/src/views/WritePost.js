@@ -26,7 +26,7 @@ const WritePost = () => {
                 // 파일이 있을 때만 파일 데이터를 추가
                 for (let i = 0; i < files.length; i++) {
                     formData.append("file_field_name", files[i]);
-                    formData.append("file_name", files[i].name);
+                    formData.append("file_name", encodeURIComponent(files[i].name));
                 }
             }
             for (let key of formData.keys()) {

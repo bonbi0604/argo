@@ -1,11 +1,13 @@
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.conf import settings
+from urllib.parse import unquote
 import os
 
 
 def download_file_view(request, file_name):
-    file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', file_name)
+    decoded_file_name = unquote(file_name)  # 파일명 디코딩
+    file_path = os.path.join(settings.MEDIA_ROOT, 'uploads', decoded_file_name)
     print(f"Download file path: {file_path}")  # 파일 경로 출력
 
     if os.path.exists(file_path):
@@ -18,7 +20,8 @@ def download_file_view(request, file_name):
         return HttpResponse(status=404)
 
 def download_notice_file(request, file_name):
-    file_path = os.path.join(settings.MEDIA_ROOT, 'notice_uploads', file_name)
+    decoded_file_name = unquote(file_name)  # 파일명 디코딩
+    file_path = os.path.join(settings.MEDIA_ROOT, 'notice_uploads', decoded_file_name)
     print(f"Download notice file path: {file_path}")  # 파일 경로 출력
 
     if os.path.exists(file_path):

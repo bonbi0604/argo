@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from .models import NoticeComment, Post, Comment, FileModel, Notice, NoticeFile
 from .serializer import NoticeCommentSerializer, PostSerializer, CommentSerializer, NoticeSerializer
 from django.http import JsonResponse
+from urllib.parse import quote
 from account.models import User
 from django.db.models import Q
 import logging
@@ -60,8 +61,9 @@ def post_list_create(request):
             post = serializer.save(user_no=request.user)
             files_data = request.FILES.getlist('file_field_name')
             files_names = request.data.getlist('file_name')
-            # for file_data, file_name in zip(files_data, files_names):
-            #     FileModel.objects.create(post_id=post, src=file_data, name=file_name)
+            for file_data, file_name in zip(files_data, files_names):
+                encoded_file_name = quote(file_name)  # 파일명 인코딩
+                FileModel.objects.create(post_id=post, src=file_data, name=encoded_file_name)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
