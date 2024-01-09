@@ -6,7 +6,9 @@ import "./NoticeDetail.css";
 
 const NoticeDetail = () => {
     const { id } = useParams();
-    const [Notice, setNotice] = useState({});
+    const [Notice, setNotice] = useState({
+      "notice_files": ""
+    });
     const [comments, setComments] = useState([]); // 댓글 목록 상태
     const [newComment, setNewComment] = useState(""); // 새 댓글 입력 상태
     const { user } = useContext(AuthContext);
@@ -159,7 +161,7 @@ const NoticeDetail = () => {
                   {Notice.notice_files && Notice.notice_files.map((file, index) => (
                       <span key={index}>
                           <a className="file-link" href={`${process.env.REACT_APP_API_URL}/noticeboard${file.src}`} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
-                          <div>{`${file.src}`}</div>
+                          {/* <div>{`${file.src}`}</div> */}
                       </span>
                   ))}
               </span>

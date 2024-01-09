@@ -98,10 +98,11 @@ button:hover {
 
 .post_file {
     display: inline-block;
-    padding: 0.6%;
+    padding: 1%;
     font-size: 0.8em;
-    text-align: right;
-    width: 67%;
+    /* text-align: right; */
+    width: 98%;
+    border-bottom: 1px solid rgb(216, 216, 216);
 }
 
 .post_file span {
