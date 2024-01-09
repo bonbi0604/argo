@@ -73,6 +73,7 @@ def post_detail(request, id):
     post = get_object_or_404(Post, pk=id)
     if request.method == 'GET':
         serializer = PostSerializer(post)
+        print(serializer.data)
         return Response(serializer.data)
     elif request.method == 'PUT':
         # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)
