@@ -668,6 +668,7 @@ def give_question(request):
     question = list(question)
     shuffle(question)
     question = question[0]
+    kor = question.korean
     choice = Answer.objects.filter(question_no = question.question_no)
     kor = question.korean
     choice_list = []
@@ -698,7 +699,7 @@ def give_question(request):
         'choices': choice_list,
         'correct_answer': answer,
         'is_many_choice' : is_many_choice,
-        'korean' : kor
+        'korean' : kor,
     }
     return JsonResponse({'wrong_question' : data })
 
