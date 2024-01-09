@@ -28,15 +28,19 @@ const LoginPage = () => {
     }, []);
 
     //비밀번호 확인
-    const onChangeConfirmPwd = useCallback((e) => {
-        const currConfirmPwd = e.target.value;
-        setNewPassword2(currConfirmPwd);
-        if (currConfirmPwd !== newPassword) {
-            setConfirmPwdMsg("비밀번호가 일치하지 않습니다.")
-        } else {
-            setConfirmPwdMsg("올바른 비밀번호입니다.")
-        }
-    }, [setNewPassword])
+    const onChangeConfirmPwd = useCallback(
+        (e) => {
+            const currConfirmPwd = e.target.value;
+            setNewPassword2(currConfirmPwd);
+
+            if (currConfirmPwd !== newPassword) {
+                setConfirmPwdMsg("비밀번호가 일치하지 않습니다.");
+            } else {
+                setConfirmPwdMsg("비밀번호가 일치합니다.");
+            }
+        },
+        [newPassword]
+    );
 
     const handleSubmit = e => {
         e.preventDefault();
