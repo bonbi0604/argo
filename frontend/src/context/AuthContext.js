@@ -27,19 +27,16 @@ export const AuthProvider = ({ children }) => {
     const navigate = useNavigate(); // react router dom 6버전 이상부터는 useHistory대신 useNavigate 사용
 
     const loginUser = async (id, password) => {
-        const response = await fetch(
-            "http://127.0.0.1:8000/api/token/",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    id,
-                    password,
-                }),
-            }
-        );
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/token/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id,
+                password,
+            }),
+        });
         const data = await response.json();
 
         // 로그인에 성공했을 경우 홈으로 이동
@@ -62,24 +59,21 @@ export const AuthProvider = ({ children }) => {
         phone,
         id
     ) => {
-        const response = await fetch(
-            "http://127.0.0.1:8000/api/register/",
-            {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    name,
-                    password,
-                    password2,
-                    email,
-                    dept,
-                    phone,
-                    id,
-                }),
-            }
-        );
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/register/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                name,
+                password,
+                password2,
+                email,
+                dept,
+                phone,
+                id,
+            }),
+        });
         if (response.status === 201) {
             navigate("/login");
         } else if (response.status === 400) {
@@ -103,7 +97,7 @@ export const AuthProvider = ({ children }) => {
     const changePassword = async (oldPassword, newPassword, newPassword2) => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/password_change/",
+                `${process.env.REACT_APP_API_URL}/api/password_change/`,
                 {
                     method: "POST",
                     headers: {
@@ -118,24 +112,24 @@ export const AuthProvider = ({ children }) => {
                 }
             );
 
-      if (response.status === 200) {
-        alert("비밀번호가 성공적으로 변경되었습니다.");
-        navigate("../profile");
-      } else if (response.status === 400) {
-        const data = await response.json();
-        alert(`비밀번호 변경 실패: ${data.detail}`);
-      } else {
-        alert("비밀번호가 일치하지 않습니다.");
-      }
-    } catch (error) {
-      console.error("비밀번호 변경 중 오류:", error);
-    }
-  };
+            if (response.status === 200) {
+                alert("비밀번호가 성공적으로 변경되었습니다.");
+                navigate("../profile");
+            } else if (response.status === 400) {
+                const data = await response.json();
+                alert(`비밀번호 변경 실패: ${data.detail}`);
+            } else {
+                alert("비밀번호가 일치하지 않습니다.");
+            }
+        } catch (error) {
+            console.error("비밀번호 변경 중 오류:", error);
+        }
+    };
 
     const requestPasswordReset = async (email) => {
         try {
             const response = await fetch(
-                "http://127.0.0.1:8000/api/password_reset/",
+                `${process.env.REACT_APP_API_URL}/api/password_reset/`,
                 {
                     method: "POST",
                     headers: {

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
-import "./PostDetail.css"
+import "./PostDetail.css";
 
 const PostDetail = () => {
     const { id } = useParams();
@@ -18,7 +18,7 @@ const PostDetail = () => {
         const fetchPostAndComments = async () => {
             try {
                 const response = await api.get(
-                    `http://127.0.0.1:8000/noticeboard/posts/${id}/`
+                    `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/`
                 );
                 if (response.status === 200 && response.data) {
                     setPost(response.data);
@@ -28,7 +28,7 @@ const PostDetail = () => {
                 }
 
                 const commentsResponse = await api.get(
-                    `http://127.0.0.1:8000/noticeboard/posts/${id}/comments/`
+                    `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/comments/`
                 );
                 if (commentsResponse.status === 200 && commentsResponse.data) {
                     setComments(commentsResponse.data);
@@ -45,7 +45,7 @@ const PostDetail = () => {
         try {
             // Axios를 사용하여 DELETE 요청을 보냅니다.
             const response = await api.delete(
-                `http://127.0.0.1:8000/noticeboard/posts/${id}/delete/`
+                `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/delete/`
             );
 
             // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
@@ -72,7 +72,7 @@ const PostDetail = () => {
 
             // 댓글 생성 API 엔드포인트를 호출합니다.
             const response = await api.post(
-                `http://127.0.0.1:8000/noticeboard/posts/${id}/comments/`,
+                `${process.env.REACT_APP_API_URL}/noticeboard/posts/${id}/comments/`,
                 commentData
             );
             if (response.status === 201) {
@@ -95,7 +95,7 @@ const PostDetail = () => {
     const handleDeleteComment = async (commentId) => {
         try {
             const response = await api.delete(
-                `http://127.0.0.1:8000/noticeboard/comments/${commentId}/delete/`
+                `${process.env.REACT_APP_API_URL}/noticeboard/comments/${commentId}/delete/`
             );
             if (response.status === 200 || response.status === 204) {
                 setComments(
@@ -115,7 +115,7 @@ const PostDetail = () => {
     const handleUpdateComment = async (commentId, content) => {
         try {
             const response = await api.put(
-                `http://127.0.0.1:8000/noticeboard/comments/${commentId}/update/`,
+                `${process.env.REACT_APP_API_URL}/noticeboard/comments/${commentId}/update/`,
                 { content }
             );
             if (response.status === 200) {
@@ -136,9 +136,9 @@ const PostDetail = () => {
         }
     };
 
-      const handleBoard = () => {
-        navigate("../DashBoard")
-      }
+    const handleBoard = () => {
+        navigate("../DashBoard");
+    };
 
   return (
     <section id="postdetail_section">
@@ -163,7 +163,7 @@ const PostDetail = () => {
               <span className='post_file'>
                 {post.files && post.files.map((file, index) => (
                   <span key={index}>
-                      <a href={`http://127.0.0.1:8000/media/uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
+                      <a href={`${process.env.REACT_APP_API_URL}/media/uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
                       {/* <div>{`${file.src}`}</div> */}
                   </span>
                 ))}
@@ -175,50 +175,104 @@ const PostDetail = () => {
           <p className="content">{post.content}</p>
         </div>
 
-        <div className='comm_container_div'>
-          {/* 댓글 작성 폼 */}
-          {user && (
-            <form onSubmit={handleCommentSubmit} className="comment-form">
-              <textarea
-                className='postdetail_textarea'
-                placeholder='댓글을 입력하세요'
-                value={newComment}
-                onChange={(e) => setNewComment(e.target.value)}
-              ></textarea><br/>
-              <div className='comm_submit_div'><button className="submit-comment-btn" type="submit">댓글 작성</button></div>
-            </form>
-          )}
-          <div className='comment_container_div'>
-          {comments.map((comment) => (
-          <div key={comment.comm_no} className="comment-container">
-              {editingComment && editingComment.id === comment.comm_no ? (
-              // 수정 모드 활성화
-              <div>
-                <input
-                type="text"
-                className='comment-edit-input'
-                value={editingComment.content}
-                onChange={(e) => setEditingComment({ ...editingComment, content: e.target.value })}
-                />
-                <button className='comp_edit_btn' onClick={() => handleUpdateComment(editingComment.id, editingComment.content)}>수정 완료</button>
-              </div>
-              ) : (
-              // 기본 댓글 표시
-              <div className="comment-content">
-                <div className='comm_cont_id_div'>
-                  <img src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAIVBMVEXY2Njz8/Pq6urv7+/h4eHb29vo6Oje3t7j4+Pt7e3p6ekmc3lwAAADMElEQVR4nO2bC3KDMAxEMeab+x+4JZQBEkhBlq2NZt8JvGOtPkZUFSGEEEIIIYQQQgghhBBCCCEEnXbo6hjDLzHW3dBan0dEO9ThjfrrxDQHKv60NNZnu0ETz2Q8w+xbpPQfZTyl9NZnvEB7GlS7AIP3SnNFxgR4fHVXdYTQWZ/1A+14XUcII2x4tf+6fE8EVXJXB6qS+zpAldzyx8Jofep3buSrLXC563L9eAWsnrRSHSFg2eRSX3JMbX32Lb1cRwhIHaQg865E69OviJ0+g+P3pAsBupLEC8G5koSUNQOSuBJqyAJGLRnShQzWGp4kRxZKbKXrCMFaw4SCRTBMomARDJMIB5E9CGOJgtcx3J7Yn8wgdCluhGjogMi/FEIhmXBjdjdC3BRENy2Km6bRTRvvZrDyM+q6eXxw8xzk5oHOz5Opm0dsP58V3Hzo8fPpzc3HUD+fp90sDPhZ4fCzVONnzcnN4pmfVUA/y5mVm3XZys8Cs5+V8srNkv+Ek98uJpz8CDPh5NekGRc/ixFCCCHky2mb4TGO8cLkHuM4PoYGsGfph1r0Ih/rAWc2Oexz74DRE59PHre0GE8pvcoiykxnF2O96Ln3nNFGSqMs4ymlfIT9/1Qio/ADS6vojVe6gilMZUXrnFKbKfeeqiWUed5OXti4QgHTZ3THltxv9fnDaiFveOVKukfkTMRJmxr3yaakiM23ZLJ8cR2ZlBjoyKKksD8W1H1ipENdiWQ/QwflrYJidfAd1b2bQn3JMYrdiknCWlFLXSo/VqSgZRNDg8wo2STzPHgFlZnRPLAmNILLNGMtKGQus5K+J73Am5X0PckL9MYlZCW1mJin3oXEFAzikIk0l8BcSOKVAF1I2pVA1JCFlFpiffY9ch0wuXdGnoFVvnPqIf6JCaJd3CJtHQH69z3Sbh4ssuSxZX3ud2Q6oKrhjKwmwllEahI4i0hNAjJSbZGNV9anPkKiA64cTkhKIlijNSNptwCTlixtPawPfcRDIARoyl2RzLtuhACWEVkhcSPE+szHUAgaFIIGhaBBIWhQCBoUggaFoEEhaFAIGhSCBoWgQSFoUAgap8f9Ac1KQOtCVp1TAAAAAElFTkSuQmCC'/>
-                  <span>{user.user_id}</span>
-                </div>
-                <div className='comm_cont_div'>
-                  <span className='comment_content_content'>{comment.content}</span>
-                  {user.user_no === comment.user_no && (
-                    <button onClick={() => handleEditComment(comment)} className="comm_btn">수정</button>
-                  )}
-                  {(user.user_no === comment.user_no || user.is_admin) && (
-                    <button onClick={() => handleDeleteComment(comment.comm_no)} className='comm_btn'>삭제</button>
-                  )}
-                </div>
-                <div className='color_gray comm_timestamp'>
+                <div className="comm_container_div">
+                    {/* 댓글 작성 폼 */}
+                    {user && (
+                        <form
+                            onSubmit={handleCommentSubmit}
+                            className="comment-form"
+                        >
+                            <textarea
+                                className="postdetail_textarea"
+                                placeholder="댓글을 입력하세요"
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                            ></textarea>
+                            <br />
+                            <div className="comm_submit_div">
+                                <button
+                                    className="submit-comment-btn"
+                                    type="submit"
+                                >
+                                    댓글 작성
+                                </button>
+                            </div>
+                        </form>
+                    )}
+                    <div className="comment_container_div">
+                        {comments.map((comment) => (
+                            <div
+                                key={comment.comm_no}
+                                className="comment-container"
+                            >
+                                {editingComment &&
+                                editingComment.id === comment.comm_no ? (
+                                    // 수정 모드 활성화
+                                    <div>
+                                        <input
+                                            type="text"
+                                            className="comment-edit-input"
+                                            value={editingComment.content}
+                                            onChange={(e) =>
+                                                setEditingComment({
+                                                    ...editingComment,
+                                                    content: e.target.value,
+                                                })
+                                            }
+                                        />
+                                        <button
+                                            className="comp_edit_btn"
+                                            onClick={() =>
+                                                handleUpdateComment(
+                                                    editingComment.id,
+                                                    editingComment.content
+                                                )
+                                            }
+                                        >
+                                            수정 완료
+                                        </button>
+                                    </div>
+                                ) : (
+                                    // 기본 댓글 표시
+                                    <div className="comment-content">
+                                        <div className="comm_cont_id_div">
+                                            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAIVBMVEXY2Njz8/Pq6urv7+/h4eHb29vo6Oje3t7j4+Pt7e3p6ekmc3lwAAADMElEQVR4nO2bC3KDMAxEMeab+x+4JZQBEkhBlq2NZt8JvGOtPkZUFSGEEEIIIYQQQgghhBBCCCEEnXbo6hjDLzHW3dBan0dEO9ThjfrrxDQHKv60NNZnu0ETz2Q8w+xbpPQfZTyl9NZnvEB7GlS7AIP3SnNFxgR4fHVXdYTQWZ/1A+14XUcII2x4tf+6fE8EVXJXB6qS+zpAldzyx8Jofep3buSrLXC563L9eAWsnrRSHSFg2eRSX3JMbX32Lb1cRwhIHaQg865E69OviJ0+g+P3pAsBupLEC8G5koSUNQOSuBJqyAJGLRnShQzWGp4kRxZKbKXrCMFaw4SCRTBMomARDJMIB5E9CGOJgtcx3J7Yn8wgdCluhGjogMi/FEIhmXBjdjdC3BRENy2Km6bRTRvvZrDyM+q6eXxw8xzk5oHOz5Opm0dsP58V3Hzo8fPpzc3HUD+fp90sDPhZ4fCzVONnzcnN4pmfVUA/y5mVm3XZys8Cs5+V8srNkv+Ek98uJpz8CDPh5NekGRc/ixFCCCHky2mb4TGO8cLkHuM4PoYGsGfph1r0Ih/rAWc2Oexz74DRE59PHre0GE8pvcoiykxnF2O96Ln3nNFGSqMs4ymlfIT9/1Qio/ADS6vojVe6gilMZUXrnFKbKfeeqiWUed5OXti4QgHTZ3THltxv9fnDaiFveOVKukfkTMRJmxr3yaakiM23ZLJ8cR2ZlBjoyKKksD8W1H1ipENdiWQ/QwflrYJidfAd1b2bQn3JMYrdiknCWlFLXSo/VqSgZRNDg8wo2STzPHgFlZnRPLAmNILLNGMtKGQus5K+J73Am5X0PckL9MYlZCW1mJin3oXEFAzikIk0l8BcSOKVAF1I2pVA1JCFlFpiffY9ch0wuXdGnoFVvnPqIf6JCaJd3CJtHQH69z3Sbh4ssuSxZX3ud2Q6oKrhjKwmwllEahI4i0hNAjJSbZGNV9anPkKiA64cTkhKIlijNSNptwCTlixtPawPfcRDIARoyl2RzLtuhACWEVkhcSPE+szHUAgaFIIGhaBBIWhQCBoUggaFoEEhaFAIGhSCBoWgQSFoUAgap8f9Ac1KQOtCVp1TAAAAAElFTkSuQmCC" />
+                                            <span>{user.user_id}</span>
+                                        </div>
+                                        <div className="comm_cont_div">
+                                            <span className="comment_content_content">
+                                                {comment.content}
+                                            </span>
+                                            {user.user_no ===
+                                                comment.user_no && (
+                                                <button
+                                                    onClick={() =>
+                                                        handleEditComment(
+                                                            comment
+                                                        )
+                                                    }
+                                                    className="comm_btn"
+                                                >
+                                                    수정
+                                                </button>
+                                            )}
+                                            {(user.user_no ===
+                                                comment.user_no ||
+                                                user.is_admin) && (
+                                                <button
+                                                    onClick={() =>
+                                                        handleDeleteComment(
+                                                            comment.comm_no
+                                                        )
+                                                    }
+                                                    className="comm_btn"
+                                                >
+                                                    삭제
+                                                </button>
+                                            )}
+                                        </div>
+                                        <div className="color_gray comm_timestamp">
+                                            
                   {new Date(comment.timestamp).toLocaleString('ko-KR', {
                     year: 'numeric', 
                     month: '2-digit', 
@@ -226,18 +280,18 @@ const PostDetail = () => {
                     hour: '2-digit', 
                     minute: '2-digit'
                   })}
+                
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-              </div>
-              )}
+                <div></div>
             </div>
-          ))}
-          </div>
-          </div>
-          <div>
-        </div>
-      </div>
-    </section>
-  );
+        </section>
+    );
 };
 
 export default PostDetail;

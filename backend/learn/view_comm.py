@@ -7,6 +7,7 @@ from django.http import JsonResponse
 import json
 from django.views.decorators.csrf import csrf_exempt
 import socket
+import copy
 
 template = """
 이전 대화 내역 <history>와 정보 <information> 기반으로 사용자 입력 <input>에 대한 응답을 생성해주십시오. 
@@ -16,7 +17,6 @@ template = """
 <information>
 {information}
 </information>
-
 
 <history>
 {history}
@@ -91,9 +91,22 @@ def chatbot_response1_first(request):
         data = json.loads(request.body)
 
         # 나중에 user에게 문제 추천
-        
+        print(data)
         dialog_id = 0
-        answer = dialog_data[dialog_id]
+        user_name = data["user_name"]
+        answer = copy.deepcopy(dialog_data[dialog_id])
+
+        answer["user_role"]["<Name:U>"] = user_name
+
+        for key, value in (answer["user_role"] | answer["chatbot_role"]).items():
+            answer["situation"] = answer["situation"].replace(key, value)
+            answer["goal"] = answer["goal"].replace(key, value)
+            answer["system_message"] = answer["system_message"].replace(key, value)
+            for turn in answer["conversation"]:
+                turn["sentence"] = turn["sentence"].replace(key, value)
+                for index in range(len(turn["guide"])):
+                    turn["guide"][index] = turn["guide"][index].replace(key, value)
+            
         reply = ""
         if dialog_data[dialog_id]["conversation"][0]["speaker"] == "user":
             reply = "<START>"
@@ -199,7 +212,7 @@ def check_guideline(request):
         return JsonResponse({'guide_label': response, "check": check})
     return JsonResponse({"error": "Method not allowed"}, status=405)
 
-
+import time
 #================================================================================
 #                       communication/study/check/
 #================================================================================
@@ -226,8 +239,13 @@ def scoring_7cs(message):
         data = client_socket.recv(1024).decode('utf-8')
         head = data[:8]
         label = list(map(int, data[8:].split(",")))
+        
         print('서버로부터 받은 응답:', label)
 
+    except Exception as e:
+        print(e)
+        label = [0, 0, 0, 0, 0, 0, 0]
+        # label = [1, 1, 1, 1, 1, 1, 1]
     finally:
         # 소켓 종료
         print('서버와의 연결이 종료되었습니다.')

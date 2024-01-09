@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
+import "./NoticeBoard.css";
+
 import "./NoticeBoard.css"
  
 const NoticeBoard = () => {
@@ -21,7 +23,7 @@ const NoticeBoard = () => {
     const fetchPosts = async () => {
       const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
       try {
-        const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`);
+        const response = await api.get(`${process.env.REACT_APP_API_URL}/noticeboard${endpoint}?limit=${itemsPerPage}&offset=${offset}`);
         if (response.status === 200 && Array.isArray(response.data)) {
           const data = [...response.data].reverse();
           if (selectedTab === 'notices') {
@@ -48,7 +50,7 @@ const NoticeBoard = () => {
   const handleSearch = async () => {
     const endpoint = selectedTab === 'notices' ? '/notices/' : '/posts/';
     try {
-      const response = await api.get(`http://127.0.0.1:8000/noticeboard${endpoint}?search=${searchTerm}`);
+      const response = await api.get(`${process.env.REACT_APP_API_URL}/noticeboard${endpoint}?search=${searchTerm}`);
       if (response.status === 200 && Array.isArray(response.data)) {
         const data = [...response.data].reverse();
         if (selectedTab === 'notices') {
@@ -110,14 +112,37 @@ const NoticeBoard = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {currentItems.map((item, index) => (                                
-                             <tr key={item.id} onClick={() => navigate(selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`)}>
-                                <td id="board_no">{calculatePostNumber(index)}</td>
-                                <td className='text_left'>
-                                    <Link to={selectedTab === 'posts' ? `/PostDetail/${item.post_id}/` : `/NoticeDetail/${item.notice_id}`}>{item.title}</Link>
+                        {currentItems.map((item, index) => (
+                            <tr
+                                key={item.id}
+                                onClick={() =>
+                                    navigate(
+                                        selectedTab === "posts"
+                                            ? `/PostDetail/${item.post_id}/`
+                                            : `/NoticeDetail/${item.notice_id}`
+                                    )
+                                }
+                            >
+                                <td id="board_no">
+                                    {calculatePostNumber(index)}
+                                </td>
+                                <td className="text_left">
+                                    <Link
+                                        to={
+                                            selectedTab === "posts"
+                                                ? `/PostDetail/${item.post_id}/`
+                                                : `/NoticeDetail/${item.notice_id}`
+                                        }
+                                    >
+                                        {item.title}
+                                    </Link>
                                 </td>
                                 <td>{item.user_id}</td>
-                                <td id="board_date">{new Date(item.timestamp).toLocaleDateString()}</td>
+                                <td id="board_date">
+                                    {new Date(
+                                        item.timestamp
+                                    ).toLocaleDateString()}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

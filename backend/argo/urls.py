@@ -25,6 +25,7 @@ urlpatterns = [
     path('chatbot/', include("chatbot.urls")),
     path('noticeboard/', include("noticeboard.urls")),
     path('learn/', include("learn.urls")),
+    path('filter/', include("filter.urls")),
 ]
 
 if settings.DEBUG:

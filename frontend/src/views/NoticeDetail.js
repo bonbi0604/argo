@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
-import "./NoticeDetail.css"
+import "./NoticeDetail.css";
 
 const NoticeDetail = () => {
     const { id } = useParams();
@@ -18,7 +18,7 @@ const NoticeDetail = () => {
         const fetchPostAndComments = async () => {
             try {
                 const response = await api.get(
-                    `http://127.0.0.1:8000/noticeboard/notices/${id}/`
+                    `${process.env.REACT_APP_API_URL}/noticeboard/notices/${id}/`
                 );
                 if (response.status === 200 && response.data) {
                     setNotice(response.data);
@@ -29,7 +29,7 @@ const NoticeDetail = () => {
 
                 // 공지사항 댓글 데이터를 불러오는 요청으로 수정
                 const commentsResponse = await api.get(
-                    `http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`
+                    `${process.env.REACT_APP_API_URL}/noticeboard/notices/${id}/comments/`
                 );
                 if (commentsResponse.status === 200 && commentsResponse.data) {
                     setComments(commentsResponse.data);
@@ -45,7 +45,7 @@ const NoticeDetail = () => {
         try {
             // Axios를 사용하여 DELETE 요청을 보냅니다.
             const response = await api.delete(
-                `http://127.0.0.1:8000/noticeboard/notices/${id}/noticedelete/`
+                `${process.env.REACT_APP_API_URL}/noticeboard/notices/${id}/noticedelete/`
             );
 
             // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
@@ -70,7 +70,7 @@ const NoticeDetail = () => {
             };
             // 새로운 댓글 작성 API 요청으로 수정
             const response = await api.post(
-                `http://127.0.0.1:8000/noticeboard/notices/${id}/comments/`,
+                `${process.env.REACT_APP_API_URL}/noticeboard/notices/${id}/comments/`,
                 commentData
             );
             if (response.status === 201) {
@@ -93,7 +93,7 @@ const NoticeDetail = () => {
     const handleDeleteComment = async (commentId) => {
         try {
             const response = await api.delete(
-                `http://127.0.0.1:8000/noticeboard/notices/${commentId}/delete/`
+                `${process.env.REACT_APP_API_URL}/noticeboard/notices/${commentId}/delete/`
             );
             if (response.status === 200 || response.status === 204) {
                 setComments(
@@ -113,7 +113,7 @@ const NoticeDetail = () => {
     const handleUpdateComment = async (commentId, content) => {
         try {
             const response = await api.put(
-                `http://127.0.0.1:8000/noticeboard/notices/${commentId}/update/`,
+                `${process.env.REACT_APP_API_URL}/noticeboard/notices/${commentId}/update/`,
                 { content }
             );
             if (response.status === 200) {
@@ -134,9 +134,9 @@ const NoticeDetail = () => {
         }
     };
 
-      const handleBoard = () => {
-        navigate("../DashBoard")
-      }
+    const handleBoard = () => {
+        navigate("../DashBoard");
+    };
 
   return (
     <section id="postdetail_section">
@@ -161,8 +161,8 @@ const NoticeDetail = () => {
               <span className='noticepost_file'>
                   {Notice.notice_files && Notice.notice_files.map((file, index) => (
                       <span key={index}>
-                        <a href={`http://127.0.0.1:8000/media/notice_uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
-                        {/* <div>{`${file.src}`}</div> */}
+                          <a className="file-link" href={`${process.env.REACT_APP_API_URL}/noticeboard${file.src}`} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                          {/* <div>{`${file.src}`}</div> */}
                       </span>
                   ))}
               </span>

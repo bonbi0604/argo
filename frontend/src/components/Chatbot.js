@@ -71,16 +71,13 @@ const Chatbot = () => {
         setMessages((currentMessages) => [...currentMessages, userMessage]);
         setInput("");
         try {
-            const response = await fetch(
-                "http://127.0.0.1:8000/chatbot/",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({ message: input }),
-                }
-            );
+            const response = await fetch("`${process.env.REACT_APP_API_URL}/chatbot/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ message: input }),
+            });
             const data = await response.json();
             setMessages((currentMessages) => [
                 ...currentMessages,
@@ -97,20 +94,17 @@ const Chatbot = () => {
         if (!localSessionTitle || messages.length === 0) return;
         const chatContent = JSON.stringify(messages);
         try {
-            await fetch(
-                "http://127.0.0.1:8000/chatbot/api/chat-sessions/",
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        user_no: user.user_no,
-                        session_title: localSessionTitle,
-                        chat_content: chatContent,
-                    }),
-                }
-            );
+            await fetch(`${process.env.REACT_APP_API_URL}/chatbot/api/chat-sessions/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_no: user.user_no,
+                    session_title: localSessionTitle,
+                    chat_content: chatContent,
+                }),
+            });
             console.log("Chat session saved successfully");
         } catch (error) {
             console.error("Error saving chat session:", error);

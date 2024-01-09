@@ -22,6 +22,9 @@ from langchain_core.runnables import RunnableParallel, RunnablePassthrough
 from account.models import User
 from openai import OpenAI
 
+from dotenv import load_dotenv
+load_dotenv()
+
 # ChatSessionViewSet 정의
 class ChatSessionViewSet(viewsets.ModelViewSet):
     queryset = ChatSession.objects.all()
@@ -59,7 +62,7 @@ class ChatSessionViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
     
-os.environ["OPENAI_API_KEY"] = "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"
+os.environ["OPENAI_API_KEY"] = os.getenv('OPENAI_API_KEY')
 persist_directory = str(settings.BASE_DIR)
 
 embedding = OpenAIEmbeddings()
