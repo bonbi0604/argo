@@ -33,7 +33,8 @@ python manage.py migrate
 
 ## BE 실행 (Gunicorn)
 conda activate {env_name}
-python gunicorn_start.py
+python manage.py runserver // 윈도우
+python gunicorn_start.py // 리눅스
 
 ## FE 실행 (React)
 cd ../frontend  
