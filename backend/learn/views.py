@@ -748,7 +748,7 @@ def get_wrong_question(request):
         user =instance.answer_no.content
     # 문제 내용 뽑기
     question = Question.objects.get(question_no = instance.question_no.question_no).content
-   
+    kor = Question.objects.get(question_no = instance.question_no.question_no).korean
     answer = Answer.objects.filter(question_no = instance.question_no.question_no, is_correct = 1)
     answer = answer.first().content
     question_number = instance.question_no.question_no
@@ -767,8 +767,8 @@ def get_wrong_question(request):
         'question_content' : question,
         'answer_content' : answer,
         'answer_ratio' : answer_ration,
-        'question_no' : question_number
-       
+        'question_no' : question_number,
+        'korean' : kor,
     }
     return JsonResponse({'content':result})
 
