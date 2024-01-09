@@ -148,9 +148,33 @@
   background-color: #FAE3A9;
 }
 
+.history_message_user_0 {
+  /* margin-left: auto; */
+  background-color: #FAE3A9;
+  border: solid #ff0000 2px;
+}
+
+.history_message_user_1 {
+  /* margin-left: auto; */
+  background-color: #FAE3A9;
+  border: solid #53af5f 2px;
+}
+
+.history_message_user_2 {
+  /* margin-left: auto; */
+  background-color: #FAE3A9;
+  border: solid #ccc 2px;
+}
+
 .history_message_chatbot {
   /* margin-right: auto; */
   background-color: #D3E3F7;
+}
+
+.history_message_system {
+  background-color: #fff;
+  width: max-content;
+  min-width: 100%;
 }
 
 

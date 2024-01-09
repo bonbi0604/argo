@@ -1,10 +1,13 @@
 from django.urls import path, include
 from .views import *
+from .view_comm import *
 
 app_name = "learn"
 
 urlpatterns = [
-    path('communication/study/', chatbot_response, name='communication_study'),
+    path('communication/study/', chatbot_response1, name='communication_study'),
+    path('communication/study/first/', chatbot_response1_first, name='communication_study_first'),
+    path('communication/study/check/', check_guideline, name='check_guideline'),
     path('communication/label/', labeling_7cs, name='communication_labeling'),
     path('communication/save/', comm_save, name = 'communication_save'),
     path('communication/history/', comm_view_history, name = 'communication_history'),

@@ -81,6 +81,7 @@ class Comm_History_Sentence(models.Model):
     label_complete = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_complete')
     label_courteous = models.PositiveSmallIntegerField(blank=True, null=True, default=None, db_column='label_courteous')
     timestamp = models.DateTimeField(blank=True, null=True, db_column='timestamp')
+    label_check = models.PositiveSmallIntegerField(blank=True, null=True, default=2, db_column='label_check')
 
     class Meta:
         managed = False

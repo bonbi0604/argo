@@ -1,6 +1,7 @@
 from .views import post_list_create, post_detail, delete_post, comments_list_create, user_detail, delete_comment, update_comment, notice_list_create, notice_detail, notice_comments_list_create  # post_detail 뷰 함수를 임포트합니다.
 from django.urls import path, include
 from . import views
+from .download_file_view import *
 
 
 urlpatterns = [
@@ -19,6 +20,9 @@ urlpatterns = [
     path('user/detail/', user_detail, name='user_detail'),
     path('', views.getRoutes),
     path('password_reset/', include('django.contrib.auth.urls')),  # 패스워드 재설정
+    
+    
+    path('notice_uploads/<str:file_name>/', download_file_view, name='download_file'),
 
 ]
 

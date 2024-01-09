@@ -1,6 +1,9 @@
+import os
 from openai import OpenAI
+from dotenv import load_dotenv
+load_dotenv()
 
-client = OpenAI(api_key='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')
+client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
 
 
 def create_chatbot_message(user_input, chat_history, user_name):
