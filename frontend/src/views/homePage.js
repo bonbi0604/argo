@@ -98,11 +98,11 @@ const Home = () => {
         <section id="banner" className="major">
           <div className="inner">
             <header className="major">
-              <h1>안녕하세요</h1>
+              <h1>여러분의 성공을 위한 파트너</h1>
             </header>
             <div className="content">
-              <p>신입사원분들의 역량 개발을 도와드립니다.<br />
-                사내규정을 챗봇에게 물어보세요.</p>
+              <p>역량 강화로 전문성을 쌓으세요 <br />
+              모르는 것은 챗봇에게 물어보세요</p>
               <ul className="actions">
                 <li><a href="#one" className="button next scrolly">Get Started</a></li>
               </ul>
@@ -119,7 +119,7 @@ const Home = () => {
               </span>
               <header className="major">
                 <h3><Link to="/result" className="link">피드백</Link></h3>
-                <p>Ipsum dolor sit amet</p>
+                <p>개인별 맞춤 피드백으로 성장하기</p>
               </header>
             </article>
             <article>
@@ -128,7 +128,7 @@ const Home = () => {
               </span>
               <header className="major">
                 <h3><Link to="/learn" className="link">역량개발</Link></h3>
-                <p>feugiat amet tempus</p>
+                <p>커뮤니케이션과 기초 업무 능력을 강화하기</p>
               </header>
             </article>
             <article>
@@ -137,7 +137,7 @@ const Home = () => {
               </span>
               <header className="major">
                 <h3><Link to="/chat" className="link">사내규정 도우미</Link></h3>
-                <p>Lorem etiam nullam</p>
+                <p>사내규정에 대해 알아보기</p>
               </header>
             </article>
             <article>
@@ -146,7 +146,7 @@ const Home = () => {
               </span>
               <header className="major">
                 <h3><Link to="/DashBoard" className="link">게시판</Link></h3>
-                <p>Nisl sed aliquam</p>
+                <p>공지사항과 소식 확인하기</p>
               </header>
             </article>
           </section>
@@ -154,9 +154,12 @@ const Home = () => {
           <section id="two">
             <div className="inner">
               <header className="major">
-                <h2>sdfa</h2>
+                <h2>About Us</h2>
               </header>
-              <p>Nullam eue condimentum sem. In efficitur ligula tate urna. Maecenas laoreet massa vel lacinia pellentesque lorem ipsum dolor. Nullam et orci eu lorem consequat tincidunt. Vivamus et sagittis libero. Mauris aliquet magna magna sed nunc rhoncus amet pharetra et feugiat tempus.</p>
+              <p>저희 ARGO는 신입사원들이 회사에 빠르게 적응하기 위한 필요한 역량을 개발할 수 있도록 지원합니다.<br></br> 
+                또한 사내규정 챗봇을 통해 언제든지 회사 정보를 얻을 수 있는 접근성을 제공합니다.<br></br> 
+                ARGO에서는 개인의 역량 강화뿐만 아니라, 팀워크와 협업을 중시하는 문화를 조성하고 있습니다. <br></br> 
+                이를 통해 신입사원들은 자신의 경력을 발전시키는 동시에 회사의 성공에 기여할 수 있는 가치를 창출합니다.</p>
               <ul className="actions">
                 <li><a href = '#one' className="button next scrolly">Get Started</a></li>
               </ul>

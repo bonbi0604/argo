@@ -3581,6 +3581,7 @@ input, select, textarea {
 
 	#main {
 		background-color: #2a2f4a;
+		text-align: left;
 	}
 
 		#main > * {
