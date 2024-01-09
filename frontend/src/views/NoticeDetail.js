@@ -158,7 +158,7 @@ const NoticeDetail = () => {
               <span className='noticepost_file'>
                   {Notice.notice_files && Notice.notice_files.map((file, index) => (
                       <span key={index}>
-                        <a href={`http://127.0.0.1:8000/notice_uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
+                        <a href={`http://127.0.0.1:8000/media/notice_uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
                         {/* <div>{`${file.src}`}</div> */}
                       </span>
                   ))}

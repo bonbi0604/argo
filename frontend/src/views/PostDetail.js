@@ -163,7 +163,7 @@ const PostDetail = () => {
               <span className='post_file'>
                 {post.files && post.files.map((file, index) => (
                   <span key={index}>
-                      <a href={`http://127.0.0.1:8000/post_uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
+                      <a href={`http://127.0.0.1:8000/media/uploads/${encodeURIComponent(file.name)}`}>{file.name}</a>
                       {/* <div>{`${file.src}`}</div> */}
                   </span>
                 ))}
