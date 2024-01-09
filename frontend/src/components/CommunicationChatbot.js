@@ -275,6 +275,17 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
               if (!A.includes(key)) {
                 B[key] = 0;
               }
+              else if (key == "Correct" || key == "Coherent") {
+                if (last.check == 1 ) {
+                  B[key] = 3;
+                }
+                else if (last.check == 2) {
+                  B[key] = 0;
+                }
+                else {
+                  B[key] = 1;
+                }
+              }
             });
 
             console.log(B);
