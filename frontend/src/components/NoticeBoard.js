@@ -169,6 +169,7 @@ const NoticeBoard = () => {
                     </tbody>
                 </table>
             </div>
+            
             {/* 페이지네이션 */}
             <Pagination
                 totalItems={

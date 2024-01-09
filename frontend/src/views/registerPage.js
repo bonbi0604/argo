@@ -66,7 +66,7 @@ function Register() {
             if (currConfirmPwd !== password) {
                 setConfirmPwdMsg("비밀번호가 일치하지 않습니다.");
             } else {
-                setConfirmPwdMsg("올바른 비밀번호입니다.");
+                setConfirmPwdMsg("비밀번호가 일치합니다.");
             }
         },
         [password]
@@ -429,7 +429,7 @@ function Register() {
               <LoginModal isOpen={isModalOpen} onClose={handleModalClose}>
                 <h3>제 1 장 총칙</h3>
                 <h4>제 1 조 (목적)</h4>
-                본 약관은 (주)제이피 이노베이션(이하 “회사”라 합니다)이 운영하는 웹사이트 ‘어반런드렛’ (www.urbanlaunderette.com) (이하 “웹사이트”라 합니다)에서 제공하는 온라인 서비스(이하 “서비스”라 한다)를 이용함에 있어 사이버몰과 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
+                본 약관은 아르고(이하 “회사”라 합니다)이 운영하는 웹사이트 'ARGO' (https://www.argo12.duckdns.org) (이하 “웹사이트”라 합니다)에서 제공하는 온라인 서비스(이하 “서비스”라 한다)를 이용함에 있어 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다.
                 <h4>제 2 조 (용어의 정의)</h4>
                 본 약관에서 사용하는 용어는 다음과 같이 정의한다.
                 
