@@ -2,7 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
-import "./WritePost.css";
+import "./WritePost.css"
 
 const WritePost = () => {
     const { user } = useContext(AuthContext); // 현재 로그인한 사용자 정보를 가져옵니다.
@@ -83,15 +83,9 @@ const WritePost = () => {
                 <div className="write-post-container">
                     <div className="write-post-form-container">
                         <h2 className="write-post-heading">새 게시물 작성</h2>
-                        <form
-                            onSubmit={handleSubmit}
-                            className="write-post-form"
-                        >
+                        <form onSubmit={handleSubmit} className="write-post-form">
                             <div className="write-post-input-group">
-                                <label
-                                    htmlFor="postTitle"
-                                    className="write-post-label"
-                                >
+                                <label htmlFor="postTitle" className="write-post-label">
                                     제목
                                 </label>
                                 <input
@@ -104,11 +98,9 @@ const WritePost = () => {
                                 />
                             </div>
 
+
                             <div className="write-post-input-group">
-                                <label
-                                    htmlFor="postContent"
-                                    className="write-post-label"
-                                >
+                                <label htmlFor="postContent" className="write-post-label">
                                     내용
                                 </label>
                                 <textarea
@@ -118,21 +110,18 @@ const WritePost = () => {
                                     rows="10"
                                     value={content}
                                     onChange={(e) => setContent(e.target.value)}
-                                />
+                                    />
                             </div>
 
                             <div className="write-post-input-group">
-                                <label
-                                    htmlFor="postFile"
-                                    className="write-post-label"
-                                >
+                                <label htmlFor="postFile" className="write-post-label">
                                     파일
                                 </label>
                                 <input
                                     type="file"
                                     id="postFile"
                                     className="write-post-file-input"
-                                    accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt" // 허용할 파일 형식 지정
+                                    accept=".jpg, .jpeg, .png, .gif, .pdf, .hwp, .xlsx, .docx, .ppt, .txt" // 허용할 파일 형식 지정
                                     onChange={handleFileChange} // 파일 선택 핸들러 연결
                                     multiple
                                 />
@@ -144,9 +133,7 @@ const WritePost = () => {
                                     <input
                                         type="checkbox"
                                         checked={isNotice}
-                                        onChange={(e) =>
-                                            setIsNotice(e.target.checked)
-                                        }
+                                        onChange={(e) => setIsNotice(e.target.checked)}
                                     />
                                     공지사항 작성
                                 </label>

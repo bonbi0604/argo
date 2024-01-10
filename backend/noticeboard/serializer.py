@@ -3,9 +3,22 @@ from .models import NoticeComment, Post, Comment, FileModel, Notice, NoticeFile
 from account.models import User
 
 class FileModelSerializer(serializers.ModelSerializer):
+    src = serializers.SerializerMethodField()
+
     class Meta:
         model = FileModel
         fields = ['src', 'name', 'post_id']
+
+    def get_src(self, obj):
+        if hasattr(obj.src, 'url'):
+            # request가 있는 경우 build_absolute_uri 사용, 없으면 url만 반환
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.src.url)
+            else:
+                return obj.src.url
+        else:
+            return None
 
 class PostSerializer(serializers.ModelSerializer):
     files = FileModelSerializer(many=True, read_only=True)
@@ -32,13 +45,27 @@ class CommentSerializer(serializers.ModelSerializer):
         fields = ['comm_no', 'post_id', 'user_no', 'content', 'timestamp']
         
 class NoticeFileSerializer(serializers.ModelSerializer):
+    src = serializers.SerializerMethodField()
+
     class Meta:
         model = NoticeFile
         fields = ['src', 'name', 'notice_id']
 
+    def get_src(self, obj):
+        if hasattr(obj.src, 'url'):
+            # request가 있는 경우 build_absolute_uri 사용, 없으면 url만 반환
+            request = self.context.get('request')
+            if request:
+                return request.build_absolute_uri(obj.src.url)
+            else:
+                return obj.src.url
+        else:
+            return None
+
 class NoticeSerializer(serializers.ModelSerializer):
     notice_files = NoticeFileSerializer(many=True, read_only=True)
     user_id = serializers.ReadOnlyField(source='user_no.id', required=False, allow_null=True)
+
 
     class Meta:
         model = Notice

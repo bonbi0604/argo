@@ -2,7 +2,7 @@ from .views import post_list_create, post_detail, delete_post, comments_list_cre
 from django.urls import path, include
 from . import views
 from .download_file_view import *
-
+from .download_file_view import download_file_view, download_notice_file
 
 urlpatterns = [
     path('posts/', post_list_create, name='post_list_create'),
@@ -21,8 +21,7 @@ urlpatterns = [
     path('', views.getRoutes),
     path('password_reset/', include('django.contrib.auth.urls')),  # 패스워드 재설정
     
-    
-    path('notice_uploads/<str:file_name>/', download_file_view, name='download_file'),
+    path('post_uploads/<str:file_name>/', download_file_view, name='download_file_view'),
+    path('notice_uploads/<str:file_name>/', download_notice_file, name='download_notice_file'),
 
 ]
-
