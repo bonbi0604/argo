@@ -177,7 +177,7 @@ const Home = () => {
                 <tbody>
                   <tr className="pic">
                   <td><img src="https://avatars.githubusercontent.com/u/97078660?v=4" alt="강재영" /></td>
-                  <td><img src="https://img.freepik.com/premium-photo/a-cat-near-a-computer-mouse-work-in-the-office-at-the-computer-square-format_199743-1487.jpg" alt="구본욱" /></td>
+                  <td><img src="https://avatars.githubusercontent.com/u/152830888?v=4" alt="구본욱" /></td>
                   <td><img src="https://avatars.githubusercontent.com/u/70127344?v=4" alt="배지현" /></td>
                   <td><img src="https://avatars.githubusercontent.com/u/16444222?v=4" alt="심원보" /></td>
                   <td><img src="https://avatars.githubusercontent.com/u/141791716?v=4" alt="이운규" /></td>
@@ -188,14 +188,14 @@ const Home = () => {
                     <td>gock98@gmail.com</td>
                     <td>bonwook@outlook.com</td>
                     <td>baejihyun970519@gmail.com</td>
-                    <td>test@test.com</td>
+                    <td>wonbo123@korea.ac.kr</td>
                     <td>woongyu1221@gmail.com</td>
                     <td>snowlaxc@gmail.com</td>
                     <td>wendy1009@naver.com</td>
                   </tr>
                   <tr className="github">
                     <td>github.com/kkkkkk0312</td>
-                    <td>Row 3, Col 2</td>
+                    <td>github.com/bonbi0604</td>
                     <td>github.com/BaeJihyun97</td>
                     <td>github.com/zaGamer95</td>
                     <td>github.com/woongyu1221</td>
