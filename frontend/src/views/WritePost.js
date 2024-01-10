@@ -26,7 +26,7 @@ const WritePost = () => {
                 // 파일이 있을 때만 파일 데이터를 추가
                 for (let i = 0; i < files.length; i++) {
                     formData.append("file_field_name", files[i]);
-                    formData.append("file_name", files[i].name);
+                    formData.append("file_name", encodeURIComponent(files[i].name));
                 }
             }
             for (let key of formData.keys()) {
@@ -36,7 +36,7 @@ const WritePost = () => {
                 const endpoint = isNotice ? "/notices/" : "/posts/";
                 try {
                     const response = await api.post(
-                        `${process.env.REACT_APP_API_URL}/noticeboard${endpoint}`,
+                        `http://127.0.0.1:8000/noticeboard${endpoint}`,
                         formData,
                         {
                             headers: {
@@ -53,7 +53,7 @@ const WritePost = () => {
             } else {
                 try {
                     const response = await api.post(
-                        `${process.env.REACT_APP_API_URL}/noticeboard/posts/`,
+                        `http://127.0.0.1:8000/noticeboard/posts/`,
                         formData,
                         {
                             headers: {

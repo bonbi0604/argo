@@ -595,10 +595,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
         question_total = question_query.count()
         question_correct_num =question_query.filter(is_correct = 1).count()
         answer_ration = round((question_correct_num / question_total) * 100,2)
-        if content.question_no.content[:15] =='다음 문장을 해석하세요 : ':
-           content_value = content.question_no.content[15:29]
-        else:
-            content_value= content.question_no.content[:15]
+        content_value= content.question_no.content[:15]
         dic = {
                 'question_no' : content.question_no.question_no,
                 'category_no' : content.question_no.category_no_id,
@@ -606,7 +603,7 @@ def get_wrong_question_list(filter_no, count, user_no=None):
                 'result_no' : content.result_no,
                 'timestamp' : content.timestamp,
                 'answer_ratio' : answer_ration,
-                'answer_no' : content.answer_no.answer_no
+                'answer_no' : content.answer_no.answer_no,
                 }
         question.append(dic)
     return question
@@ -671,7 +668,9 @@ def give_question(request):
     question = list(question)
     shuffle(question)
     question = question[0]
+    kor = question.korean
     choice = Answer.objects.filter(question_no = question.question_no)
+    kor = question.korean
     choice_list = []
     
     
@@ -699,7 +698,8 @@ def give_question(request):
         'question_content': question.content,
         'choices': choice_list,
         'correct_answer': answer,
-        'is_many_choice' : is_many_choice
+        'is_many_choice' : is_many_choice,
+        'korean' : kor,
     }
     return JsonResponse({'wrong_question' : data })
 
@@ -752,8 +752,7 @@ def get_wrong_question(request):
     answer = Answer.objects.filter(question_no = instance.question_no.question_no, is_correct = 1)
     answer = answer.first().content
     question_number = instance.question_no.question_no
-   
-   
+    
     # 정답률
     question_number = instance.question_no.question_no
     question_query = Result.objects.filter(question_no = question_number)
@@ -777,6 +776,12 @@ def get_avg_score(request):
     data = json.loads(request.body)
     user_no = data.get('user_no')
     cat = data.get('cat')
+    
+    dic = {
+            'total_avg' : 0,
+            'user_avg' : 0
+        }
+    
     if cat == 'occupation':
         number = 4
     elif cat=='commonsense':

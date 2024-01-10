@@ -14,10 +14,14 @@
     margin-top: auto;
     margin-bottom: auto;
     font-size: 1.1em;
+    /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
+    background-color: rgb(232, 232, 232);
 }
 
 .communication_page_button:hover {
     cursor: pointer;
+    box-shadow: none;
+    background-color: rgb(216, 216, 216);
 }
 
 .communication_page_top {
