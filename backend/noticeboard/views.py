@@ -8,6 +8,7 @@ from django.http import JsonResponse
 from account.models import User
 from django.db.models import Q
 import logging
+import json
 
 @api_view(['GET'])
 def getRoutes(request):
@@ -41,6 +42,8 @@ def notice_list_create(request):
             print(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+
 @api_view(['GET', 'POST'])
 def post_list_create(request):
     if request.method == 'GET':
@@ -49,6 +52,7 @@ def post_list_create(request):
         if search_query:
             posts = posts.filter(Q(title__icontains=search_query) | Q(content__icontains=search_query))
         serializer = PostSerializer(posts, many=True)
+        
         return Response(serializer.data)
     elif request.method == 'POST':
         serializer = PostSerializer(data=request.data, context={'request': request})
@@ -69,6 +73,7 @@ def post_detail(request, id):
     post = get_object_or_404(Post, pk=id)
     if request.method == 'GET':
         serializer = PostSerializer(post)
+        print(serializer.data)
         return Response(serializer.data)
     elif request.method == 'PUT':
         # 파일 이름을 request에서 가져오기 (파일 업데이트를 위해 필요하다면)

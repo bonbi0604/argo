@@ -16,15 +16,15 @@
     display:block;
 	margin:0 6px;
 	float:left;
-	border:2px solid #8b8b8b;
+	/* border:2px solid #8b8b8b; */
 	width:28px;
 	height:28px;
 	line-height:28px;
 	text-align:center;
-	background-color:#fff;
+	/* background-color:#fff; */
 	font-size:13px;
-	color:#42454c;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+	/* color:#42454c;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); */
 	text-decoration:none;
     cursor: pointer;
   }
@@ -38,7 +38,7 @@
   }
   
   .currunt_page {
-    background-color:#8b8b8b;
-	color:#fff;
+    /* background-color:#8b8b8b;
+	color:#fff; */
 	/* border:2px solid #42454c; */
   }

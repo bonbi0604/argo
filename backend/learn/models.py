@@ -13,7 +13,7 @@ from django.conf import settings
 class Question(models.Model):
     content = models.CharField(max_length=500, db_collation='utf8mb4_unicode_ci', blank=True, null=True)
     question_no = models.IntegerField(primary_key=True)
-    category_no = models.ForeignKey('Category', models.DO_NOTHING, db_column='category_no', blank=True, null=True)
+    category_no = models.ForeignKey('Category', models.CASCADE, db_column='category_no', blank=True, null=True)
     korean = models.CharField(max_length=255, db_collation='utf8mb4_unicode_ci', blank=True, null=True)
  
     class Meta:
@@ -23,7 +23,7 @@ class Question(models.Model):
 
 class Answer(models.Model):
     content = models.TextField(blank=True, null=True)
-    question_no = models.ForeignKey(Question, models.DO_NOTHING, db_column='question_no', blank=True, null=True)
+    question_no = models.ForeignKey(Question, models.CASCADE, db_column='question_no', blank=True, null=True)
     answer_no = models.AutoField(primary_key=True)
     is_correct = models.IntegerField(blank=True, null=True)
 
@@ -44,12 +44,12 @@ class Category(models.Model):
 
 class Result(models.Model):
     result_no = models.AutoField(primary_key=True, db_column='result_no')
-    user_no = models.ForeignKey(User, models.DO_NOTHING, db_column='user_no')
-    answer_no = models.ForeignKey(Answer, models.DO_NOTHING, db_column='answer_no')
+    user_no = models.ForeignKey(User, models.CASCADE, db_column='user_no')
+    answer_no = models.ForeignKey(Answer, models.CASCADE, db_column='answer_no')
     timestamp = models.DateTimeField()
     is_correct = models.IntegerField()
     content = models.TextField()
-    question_no = models.ForeignKey(Question, models.DO_NOTHING, db_column='question_no')
+    question_no = models.ForeignKey(Question, models.CASCADE, db_column='question_no')
 
     class Meta:
         managed = False
