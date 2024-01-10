@@ -70,7 +70,7 @@ vectordb = Chroma(
     persist_directory=persist_directory,
     embedding_function=embedding)
 retriever = vectordb.as_retriever(
-    search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.4}
+    search_type="similarity_score_threshold", search_kwargs={"score_threshold": 0.5}
 )
 template =  """
 You are a kind company's internal regulations 도우미 for new employees at Argo.
@@ -89,7 +89,7 @@ Answer:
 
 prompt = ChatPromptTemplate.from_template(template)
 model = ChatOpenAI(temperature=0.1,
-                    max_tokens=2500,
+                    max_tokens=3000,
                     model_name='gpt-3.5-turbo-1106',)
 output_parser = StrOutputParser()
 setup_and_retrieval = RunnableParallel(
