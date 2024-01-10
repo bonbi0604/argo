@@ -18,6 +18,7 @@ const NoticeBoard = () => {
   const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
   const [searchTerm, setSearchTerm] = useState('');
  
+  
   useEffect(() => {
     // API request to retrieve data appropriate for the current page
     const offset = (currentPage - 1) * itemsPerPage;
