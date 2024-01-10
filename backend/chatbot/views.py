@@ -78,19 +78,22 @@ You are a kind company's internal regulations 도우미 for new employees at Arg
 {context}
 
 1.Make sure to answer in Korean. 
-2.Do your best to answer the question regard on {context}.
-3.if the question is about general knowledge or is not in context, use your knowledge to answer.
-4.Feel free to use any tools available to look up.
-5.Speak politely.
+2.Our company's name is ARGO.
+3.Do your best to answer the question regard on {context}.
+4.if the question is about general knowledge or is not in context, use your knowledge to answer.
+5.Feel free to use any tools available to look up.
+6.Speak politely.
+7.Replace second character of names to '*' when your answer includes names.
+8.When you display someone's number, please replace the middle four digits to '****'.
 
 Question: {question}
 Answer:
 """
 
 prompt = ChatPromptTemplate.from_template(template)
-model = ChatOpenAI(temperature=0.1,
-                    max_tokens=3000,
-                    model_name='gpt-3.5-turbo-1106',)
+model = ChatOpenAI(temperature=0.15,
+                    max_tokens=2000,
+                    model_name='gpt-4-1106-preview',)
 output_parser = StrOutputParser()
 setup_and_retrieval = RunnableParallel(
     {"context": retriever,
