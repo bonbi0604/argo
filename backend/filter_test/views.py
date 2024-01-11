@@ -94,11 +94,11 @@ def feedback(request):
 
     # 사용자 피드백 생성
     feedback = {}
-    for category in ['english', 'korean', 'current_affairs']:
-        user_score = user_category_scores.get(f'category_no{category[-1]}', 0)
-        group_avg = average_scores.get(f'category_no{category[-1]}', 0)
-        score_diff = user_score - group_avg
-
+    for idx, category in enumerate(['english', 'korean', 'current_affairs'], start=1):
+        user_score = user_category_scores.get(f'category_no{idx}', 0)
+        group_avg = average_scores.get(f'category_no{idx}', 0)
+        score_diff = (user_score - group_avg) * 100
+        
         # 스크립트 id 결정
         if score_diff >= 5:
             script_id = 0
@@ -106,8 +106,9 @@ def feedback(request):
             script_id = 1
         elif -5 <= score_diff < 0:
             script_id = 3
-        else:  # score_diff < -5
+        elif score_diff < -5:
             script_id = 2
+        print(script_id) 
         # 해당 스크립트 id에 맞는 피드백 찾기
         for script in feedback_scripts[category]:
             if script['id'] == script_id:
