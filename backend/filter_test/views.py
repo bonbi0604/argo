@@ -1,52 +1,105 @@
+# from django.shortcuts import render
+# from learn.models import Result, Question
+# from django.http import JsonResponse
+# from .utils import (
+#     create_interaction_matrix, create_problem_embeddings,
+#     generate_recommendations
+# )
+# from django.views.decorators.http import require_http_methods
+# from django.views.decorators.csrf import csrf_exempt
+# import json
+# import pandas as pd
+
+# @csrf_exempt
+# @require_http_methods(["POST"])
+# def recommend_problems_view(request):
+#     try:
+#         data = json.loads(request.body)
+#         user_no = data['user_no']
+        
+#         # 모든 사용자의 상호작용 데이터와 문제 데이터를 불러옵니다.
+#         results_data = Result.objects.all().values()
+#         questions_data = Question.objects.filter(category_no__in=[1, 2, 3]).values()
+    
+#         # 상호작용 데이터프레임과 문제 데이터프레임을 생성합니다.
+#         interaction_matrix, filtered_questions = create_interaction_matrix(
+#             pd.DataFrame(list(results_data)),
+#             pd.DataFrame(list(questions_data)),
+#             category_ids=[1, 2, 3]
+#         )
+#         # 문제 임베딩과 추천을 생성합니다.
+#         problem_embeddings = create_problem_embeddings(interaction_matrix)
+        
+#         recommendations = generate_recommendations(user_no, interaction_matrix, problem_embeddings)
+        
+#         return JsonResponse({'recommended_problems': recommendations})
+#     except json.JSONDecodeError:
+#         return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     except KeyError:
+#         return JsonResponse({'error': 'user_no is required'}, status=400)
+
+
 from django.shortcuts import render
-from learn.models import Question, Result
+from learn.models import Result, Question
 from django.http import JsonResponse
-from sklearn.decomposition import TruncatedSVD
+from .utils import (
+    create_interaction_matrix, calculate_similarity, create_problem_embeddings,
+    generate_recommendations,group_similar_problems,recommend_difficult_problems,recommend_problems_by_category
+)
+from django.views.decorators.http import require_http_methods
+from django.views.decorators.csrf import csrf_exempt
 import json
-import numpy as np
-from .utils import (create_interaction_matrix, calculate_similarity, create_problem_embeddings,
-                    predict_problem_solving, train_knn, get_knn_recommendations)
-#데이터 쿼리 및 전처리
-def get_user_interaction_data(user_no):
-    # 특정 사용자의 문제 풀이 데이터 쿼리
-    results = Result.objects.filter(user_no=user_no).values('user_no', 'question_no', 'is_correct')
-    return create_interaction_matrix(results)
+import pandas as pd
 
-#유사도 행렬 계산
-def get_similarity_matrix(interaction_matrix):
-    return calculate_similarity(interaction_matrix)
+# @csrf_exempt
+# @require_http_methods(["POST"])
+# def recommend_problems_view(request):
+#     try:
+#         data = json.loads(request.body)
+#         user_no = data['user_no']
 
-#Truncated SVD를 사용하여 Embedding 구현
-def create_embeddings(interaction_matrix, n_components=20):
-    svd = TruncatedSVD(n_components=n_components)
-    problem_embeddings = svd.fit_transform(interaction_matrix)
-    return problem_embeddings
+#         # 데이터 불러오기 및 상호작용 매트릭스 생성
+#         results_data = Result.objects.all().values()
+#         questions_data = Question.objects.filter(category_no__in=[1, 2, 3]).values()
+#         interaction_matrix, _ = create_interaction_matrix(
+#             pd.DataFrame(list(results_data)),
+#             pd.DataFrame(list(questions_data)),
+#             category_ids=[1, 2, 3]
+#         )
 
-# 사용자별 문제 추천을 반환하는 뷰
+#         # 코사인 유사도 계산 및 유사 문제 그룹화
+#         similarity_matrix = calculate_similarity(interaction_matrix)
+#         similar_problems = group_similar_problems(similarity_matrix)
+
+#         # 문제 임베딩 생성
+#         problem_embeddings = create_problem_embeddings(interaction_matrix)
+
+#         # 오답률이 높을 것으로 예상되는 문제 추천
+#         recommendations = recommend_difficult_problems(user_no, interaction_matrix, similar_problems, problem_embeddings)
+
+#         return JsonResponse({'recommended_problems': recommendations})
+#     except json.JSONDecodeError:
+#         return JsonResponse({'error': 'Invalid JSON'}, status=400)
+#     except KeyError:
+#         return JsonResponse({'error': 'user_no is required'}, status=400)
+    
+    
+@csrf_exempt
+@require_http_methods(["POST"])
 def recommend_problems_view(request):
     try:
-        data = json.loads(request.body)  # JSON 데이터를 파싱합니다.
+        data = json.loads(request.body)
         user_no = data['user_no']
-        # 사용자-문제 상호작용 행렬 생성
-        interaction_matrix = get_user_interaction_data(user_no)
-        
-        # 문제 임베딩 생성
-        problem_embeddings = create_problem_embeddings(interaction_matrix)
-        
-        # 문제 해결 확률 예측
-        solving_probabilities = predict_problem_solving(user_no, problem_embeddings, interaction_matrix)
-        
-        # KNN 모델 훈련
-        knn_algo = train_knn(interaction_matrix.reset_index().melt(id_vars='user_no', var_name='problem_id', value_name='solved'))
-        
-        # KNN 모델을 사용하여 추천 생성
-        knn_recommendations = get_knn_recommendations(knn_algo, user_no, interaction_matrix)
-        
-        # 결과 반환
-        return JsonResponse({
-            'solving_probabilities': solving_probabilities.tolist(),
-            'knn_recommendations': knn_recommendations
-        })
+
+        # 데이터 불러오기
+        results_data = pd.DataFrame(list(Result.objects.all().values()))
+        questions_data = pd.DataFrame(list(Question.objects.all().values()))
+
+        # 카테고리별 문제 추천
+        category_ids = [1, 2, 3]
+        category_recommendations = recommend_problems_by_category(user_no, category_ids, results_data, questions_data)
+
+        return JsonResponse({'recommended_problems': category_recommendations})
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
     except KeyError:
