@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
+import { Navigate } from "react-router-dom";
 import AuthContext from "../context/AuthContext";
 import "./myPage.css";
 import React, { useState, useContext, useCallback } from "react";
@@ -11,7 +12,8 @@ const MyPage = ({ cat }) => {
     const api = useAxios(); // useAxios 훅 사용
 
     if (!user) {
-        return <navigate to="/login" />;
+        // console.log("redirect");
+        return <Navigate to="/login" />;
     }
 
     const handlePasswordResetRequest = () => {
