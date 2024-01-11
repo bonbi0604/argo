@@ -4,6 +4,7 @@ import "./resultPage.css";
 import DonutCharts from "../components/DonutCharts";
 import AuthContext from "../context/AuthContext";
 import LineChart from "../components/LineChart";
+import HorizontalBarChart from "../components/HorizontalBarChart";
 
 const data = {
     occupation: {
@@ -14,6 +15,8 @@ const data = {
         avg: [45, 23, 56, 76, 78, 80],
         score: [34, 54, 33, 23, 67, 78],
         description: "occupation...",
+        cat : ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O"],
+        percentage: [23, 45, 56, 43, 65, 76, 56, 75, 86, 100, 24, 57, 57, 86, 75],
     },
     communication: {
         time: [
@@ -23,6 +26,8 @@ const data = {
         avg: [34, 54, 33, 23, 67, 78],
         score: [35, 56, 76, 87, 98, 100],
         description: "communication...",
+        cat : ["Clear", "Concise", "Concrete", "Correct", "Coherent", "Complete", "Courteous"],
+        percentage: [15, 20, 50, 23, 0, 20, 45],
     },
     commonsense: {
         time: [
@@ -31,7 +36,9 @@ const data = {
         ],
         avg: [35, 56, 76, 87, 98, 100],
         score: [34, 45, 56, 67, 78, 89],
-        description: "commonsense...",
+        description: "한국어에 대한 능력에서는 평균 이상의 수준을 보이고 있으며, 언어적으로 풍부한 표현을 사용하고 있습니다. 그러나 영어 부분에서는 몇몇 어려움이 나타나고 있습니다. 문법적인 부분에서는 조금 더 주의가 필요하며, 특히 동사 시제와 명사-동사 일치에 주의를 기울이면 도움이 될 것입니다. 또한, 어휘력은 양호하지만 다양한 어휘를 활용하여 더 풍부한 표현을 할 수 있도록 노력하는 것이 중요합니다. 발음에 대해서는 명확하게 표현하면서도 더 자연스러운 억양과 발음 연습을 통해 개선할 수 있을 것입니다. 영어 능력을 향상시키기 위해 뉴스 기사나 영어 소설 등 다양한 자료를 활용하여 독해와 어휘 확장에 노력하는 것이 도움이 될 것입니다. 또한, 영어로 대화를 나누는 연습을 통해 실전에서의 언어 활용 능력을 향상시킬 수 있습니다. 언어적인 도전에 적극적으로 대처하면서 발전해 나가는 데에 흥미와 의지를 가지면 좋을 것입니다.",
+        cat : ["영어", "한국어", "시사"],
+        percentage: [56, 90, 72],
     },
     tools: {
         time: [
@@ -41,6 +48,8 @@ const data = {
         avg: [34, 45, 56, 67, 78, 89],
         score: [65, 57, 86, 75, 68, 86],
         description: "tools...",
+        cat : [],
+        percentage: [],
     },
     ethic: {
         time: [
@@ -50,6 +59,8 @@ const data = {
         avg: [65, 57, 86, 75, 68, 86],
         score: [45, 23, 56, 76, 78, 80],
         description: "ethic...",
+        cat : [],
+        percentage: [],
     },
 };
 
@@ -138,7 +149,8 @@ const ResultPage = () => {
                     className="result_page_desc_inner"
                     style={{ borderColor: `${color[cat]}` }}
                 >
-                    <p className="title">{`${user.name} 님의 ${catN2S[cat]} 설명입니다.`}</p>
+                    <p className="title_occ">{`${user.name} 님의 ${catN2S[cat]} 설명입니다.`}</p>
+                    <HorizontalBarChart catData={data[catN2S[cat]]["percentage"]} labels= {data[catN2S[cat]]["cat"] } color={color[cat]}/>
                     {descriptionData}
                 </div>
             </div>

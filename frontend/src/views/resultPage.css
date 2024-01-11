@@ -23,8 +23,9 @@
 
 .result_page {
     background-color: #383737;
-    height: 120%;
+    min-height: 120%;
     width: 100%;
+    height: auto;
 }
 
 .iconStructure {
@@ -76,6 +77,6 @@
     margin-top: 3%;
 }
 
-.result_page_desc_inner .title {
+.result_page_desc_inner .title_occ {
     font-size: 1.2em;
 }
