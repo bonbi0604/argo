@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useAxios from "../utils/useAxios";
 import Pagination from "../components/Pagination";
+import AuthContext from "../context/AuthContext";
 import "./NoticeBoard.css";
 
 import "./NoticeBoard.css"
@@ -13,9 +14,11 @@ const NoticeBoard = () => {
   const api = useAxios(); // 커스텀 Axios 훅을 사용하여 API 요청을 수행합니다.
   const itemsPerPage = 10;
   const [currentPage, setCurrentPage] = useState(1);
+  const { user } = useContext(AuthContext);
   const navigate = useNavigate(); // useNavigate를 사용하여 navigate 함수를 가져옵니다.
   const [searchTerm, setSearchTerm] = useState('');
  
+  
   useEffect(() => {
     // API request to retrieve data appropriate for the current page
     const offset = (currentPage - 1) * itemsPerPage;
@@ -148,10 +151,12 @@ const NoticeBoard = () => {
                     </tbody>
                 </table>
       </div>
-      {/* '글쓰기' 버튼 */}
-      <div className="write-button">
-        <Link to="/writepost">글쓰기</Link>
-      </div>
+      {/* 글쓰기 버튼 - 관리자인 경우에만 공지사항 탭에서 보이도록 수정 */}
+      {selectedTab === 'posts' || (selectedTab === 'notices' && user.is_admin) ? (
+        <div className="write-button">
+          <Link to="/writepost">글쓰기</Link>
+        </div>
+      ) : null}
       {/* 페이지네이션 */}
       <div className='board_pagination'>
         <Pagination

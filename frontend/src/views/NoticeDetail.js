@@ -164,7 +164,7 @@ const NoticeDetail = () => {
               <span className='noticepost_file'>
                   {Notice.notice_files && Notice.notice_files.map((file, index) => (
                       <span key={index}>
-                          <a className="file-link" href={`${process.env.REACT_APP_API_URL}/media/notice_uploads/${encodeURIComponent(file.name)}`} download>{file.name}</a> {/* 파일 이름 표시 및 다운로드 링크 제공 */}
+                          <a className="file-link" href={`${process.env.REACT_APP_API_URL}/media/notice_uploads/${encodeURIComponent(file.name)}`} download>{file.name}</a>
                           {/* <div>{`${file.src}`}</div> */}
                       </span>
                   ))}

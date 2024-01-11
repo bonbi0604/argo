@@ -26,6 +26,7 @@ urlpatterns = [
     path('noticeboard/', include("noticeboard.urls")),
     path('learn/', include("learn.urls")),
     path('filter/', include("filter.urls")),
+    path('filter_test/', include("filter_test.urls")),
 ]
 
 if settings.DEBUG:
