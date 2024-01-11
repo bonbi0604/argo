@@ -3,13 +3,16 @@ from django.contrib.auth.models import (BaseUserManager, AbstractBaseUser)
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, dept, password=None):
+    def create_user(self, id, name, phone, email, dept, password=None):
         if not email:
             raise ValueError('Users must have an email address')
 
         user = self.model(
             email=self.normalize_email(email),
             dept = dept,
+            id = id,
+            name = name,
+            phone = phone,
         )
 
         user.set_password(password)
@@ -30,23 +33,32 @@ class UserManager(BaseUserManager):
 # AbstractBaseUser: 내가 쓴것만
 # AbstractUser: 원래 있던 필드도
 class User(AbstractBaseUser):
-    id = models.AutoField(primary_key=True)
+    class Meta:
+        managed = False
+        db_table = 'User'
+        
+    user_no = models.AutoField(primary_key=True)
+    id = models.CharField(max_length=128, unique=True)
     password = models.CharField(max_length=128)
     is_admin = models.BooleanField(default=False)
+    image = models.TextField(blank=True, null=True)
     email = models.EmailField(
         verbose_name='email',
         max_length=255,
         unique=True,
     )
-    dept = models.CharField(max_length=255)
+    
+    dept = models.IntegerField()
     name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=128)
+    image = models.TextField(blank=True, null=True)
 
     objects = UserManager()
 
     # 뭐로 로그인할건지
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'id'
     # 필수 필드
-    REQUIRED_FIELDS = ['dept', 'name']
+    REQUIRED_FIELDS = ['dept', 'name', 'phone']
 
     # 관리자 페이지에서 객체 표시할 때 사용
     def __str__(self):
@@ -64,3 +76,4 @@ class User(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+    
