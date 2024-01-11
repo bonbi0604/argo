@@ -243,7 +243,7 @@ function Register() {
             }),
         });
         const data = await response.json();
-        console.log(data);
+        // console.log(data);
         setBackCode(data.code);
     }, [email]);
 
