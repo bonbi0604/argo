@@ -12,6 +12,8 @@ import pandas as pd
 import mlflow.pyfunc
 from django.db.models import Avg,Q
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 @csrf_exempt
 @require_http_methods(["POST"])
@@ -37,8 +39,7 @@ def recommend_problems_view(request):
 
 
 # MLflow 추적 서버 설정
-mlflow.set_tracking_uri("https://mlflow.aivle0412.duckdns.org")
-
+mlflow.set_tracking_uri(os.getenv('MLFLOW_URL'))
 # 모델 로드
 model_name = "grouping_model"
 model_group = mlflow.pyfunc.load_model(f"models:/{model_name}/Production")
