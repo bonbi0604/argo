@@ -176,22 +176,22 @@ const Home = () => {
                 </thead>
                 <tbody>
                   <tr className="pic">
-                  <td><img src="https://avatars.githubusercontent.com/u/97078660?v=4" alt="강재영" /></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/152830888?v=4" alt="구본욱" /></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/70127344?v=4" alt="배지현" /></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/16444222?v=4" alt="심원보" /></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/141791716?v=4" alt="이운규" /></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/113158954?v=4" alt="천광현" /></td>
-                  <td><img src="https://avatars.githubusercontent.com/u/126137988?v=4" alt="홍승연" /></td>
+                  <td><img src="img/about_us/jy.jpg" alt="강재영" /></td>
+                  <td><img src="img/about_us/bw.jpg" alt="구본욱" /></td>
+                  <td><img src="img/about_us/jh.jpg" alt="배지현" /></td>
+                  <td><img src="img/about_us/wb.jpg" alt="심원보" /></td>
+                  <td><img src="img/about_us/wg.jpg" alt="이운규" /></td>
+                  <td><img src="img/about_us/gh.jpg" alt="천광현" /></td>
+                  <td><img src="img/about_us/sy.jpg" alt="홍승연" /></td>
                   </tr>
-                  <tr className="email">
-                    <td>gock98@gmail.com</td>
-                    <td>bonwook@outlook.com</td>
-                    <td>baejihyun970519@gmail.com</td>
-                    <td>wonbo123@korea.ac.kr</td>
-                    <td>woongyu1221@gmail.com</td>
-                    <td>snowlaxc@gmail.com</td>
-                    <td>wendy1009@naver.com</td>
+                  <tr className="role">
+                    <td>AI, BE</td>
+                    <td>DB, BE</td>
+                    <td>AI, FE</td>
+                    <td>PM, 총괄</td>
+                    <td>AI, BE</td>
+                    <td>INFRA, AI</td>
+                    <td>BE, AI</td>
                   </tr>
                   <tr className="github">
                     <td>github.com/kkkkkk0312</td>
