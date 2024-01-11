@@ -87,11 +87,38 @@ def feedback(request):
     group_descriptions = load_group_descriptions()
     group_description = group_descriptions.get(target_user_group, "No description available.")
     
+    # 사용자 카테고리별 피드백
+    # JSON 파일에서 피드백 스크립트 로드
+    feedback_scripts = load_feedback_scripts()
+
+    # 사용자 피드백 생성
+    feedback = {}
+    for category in ['english', 'korean', 'current_affairs']:
+        user_score = user_category_scores.get(f'category_no{category[-1]}', 0)
+        group_avg = average_scores.get(f'category_no{category[-1]}', 0)
+        score_diff = user_score - group_avg
+
+        # 스크립트 id 결정
+        if score_diff >= 5:
+            script_id = 0
+        elif 0 < score_diff < 5:
+            script_id = 1
+        elif -5 <= score_diff < 0:
+            script_id = 3
+        else:  # score_diff < -5
+            script_id = 2
+        # 해당 스크립트 id에 맞는 피드백 찾기
+        for script in feedback_scripts[category]:
+            if script['id'] == script_id:
+                feedback[category] = script['feedback']
+                break
+        
     return JsonResponse({
         'user_acg': user_category_scores,
         'pred_group': int(target_user_group),
         'group_avg': average_scores,
-        'script': group_description
+        'script': group_description,
+        'user_feedback':feedback
     })
     
 
@@ -127,3 +154,9 @@ def load_group_descriptions():
     with open(file_path, 'r', encoding='utf-8') as file:
         data = json.load(file)
         return {item['id']: item['description'] for item in data['items']}
+    
+def load_feedback_scripts():
+    current_dir = os.path.dirname(__file__)
+    file_path = os.path.join(current_dir, 'description.json')
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return json.load(file)
