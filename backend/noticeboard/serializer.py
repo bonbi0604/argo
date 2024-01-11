@@ -39,10 +39,11 @@ class PostSerializer(serializers.ModelSerializer):
 
 class CommentSerializer(serializers.ModelSerializer):
     user_no = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    user_id = serializers.ReadOnlyField(source='user_no.id')
 
     class Meta:
         model = Comment
-        fields = ['comm_no', 'post_id', 'user_no', 'content', 'timestamp']
+        fields = ['comm_no', 'post_id', 'user_no', 'user_id', 'content', 'timestamp']
         
 class NoticeFileSerializer(serializers.ModelSerializer):
     src = serializers.SerializerMethodField()
@@ -102,7 +103,8 @@ class NoticeSerializer(serializers.ModelSerializer):
         return data
 class NoticeCommentSerializer(serializers.ModelSerializer):
     user_no = serializers.PrimaryKeyRelatedField(queryset=User.objects.all(), required=False)
+    user_id = serializers.ReadOnlyField(source='user_no.id')
 
     class Meta:
         model = NoticeComment
-        fields = ['comm_no', 'notice_id', 'user_no', 'content', 'timestamp']
+        fields = ['comm_no', 'notice_id', 'user_no', 'user_id', 'content', 'timestamp']

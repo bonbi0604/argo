@@ -160,6 +160,51 @@ const Home = () => {
                 또한 사내규정 챗봇을 통해 언제든지 회사 정보를 얻을 수 있는 접근성을 제공합니다.<br></br> 
                 ARGO에서는 개인의 역량 강화뿐만 아니라, 팀워크와 협업을 중시하는 문화를 조성하고 있습니다. <br></br> 
                 이를 통해 신입사원들은 자신의 경력을 발전시키는 동시에 회사의 성공에 기여할 수 있는 가치를 창출합니다.</p>
+              <br></br>
+              {/* Create a 3x7 table */}
+              <table>
+                <thead>
+                <tr className="name">
+                  <th>강재영</th>
+                  <th>구본욱</th>
+                  <th>배지현</th>
+                  <th>심원보</th>
+                  <th>이운규</th>
+                  <th>천광현</th>
+                  <th>홍승연</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <tr className="pic">
+                  <td><img src="img/about_us/jy.jpg" alt="강재영" /></td>
+                  <td><img src="img/about_us/bw.jpg" alt="구본욱" /></td>
+                  <td><img src="img/about_us/jh.jpg" alt="배지현" /></td>
+                  <td><img src="img/about_us/wb.jpg" alt="심원보" /></td>
+                  <td><img src="img/about_us/wg.jpg" alt="이운규" /></td>
+                  <td><img src="img/about_us/gh.jpg" alt="천광현" /></td>
+                  <td><img src="img/about_us/sy.jpg" alt="홍승연" /></td>
+                  </tr>
+                  <tr className="role">
+                    <td>AI, BE</td>
+                    <td>DB, BE</td>
+                    <td>AI, FE</td>
+                    <td>PM, 총괄</td>
+                    <td>AI, BE</td>
+                    <td>INFRA, AI</td>
+                    <td>BE, AI</td>
+                  </tr>
+                  <tr className="github">
+                    <td>github.com/kkkkkk0312</td>
+                    <td>github.com/bonbi0604</td>
+                    <td>github.com/BaeJihyun97</td>
+                    <td>github.com/zaGamer95</td>
+                    <td>github.com/woongyu1221</td>
+                    <td>github.com/snowlaxc</td>
+                    <td>github.com/hhssyyh</td>
+                  </tr>
+                </tbody>
+              </table>
+              <br></br>
               <ul className="actions">
                 <li><a href = '#one' className="button next scrolly">Get Started</a></li>
               </ul>

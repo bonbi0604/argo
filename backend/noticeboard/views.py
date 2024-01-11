@@ -126,6 +126,7 @@ def comments_list_create(request, id):
             return Response({'detail': '로그인이 필요합니다.'}, status=status.HTTP_401_UNAUTHORIZED)
 
         serializer = CommentSerializer(data=request.data)
+        print(request.data)
         if serializer.is_valid():
             # save() 호출 시 user_no에 request.user를 전달합니다.
             serializer.save(post_id=post, user_no=request.user)
