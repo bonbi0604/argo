@@ -22,4 +22,6 @@ urlpatterns = [
     path('searchList/', search_list, name='search_list'),
     path('wrongQuestion/', get_wrong_question, name='get_wrong_question'),
     path('getAvgScore/', get_avg_score, name='get_avg_score'),
+    
+    path('check_result/', check_result, name='check_result'),
 ]

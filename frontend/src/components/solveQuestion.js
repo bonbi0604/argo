@@ -56,7 +56,6 @@ const SolveQuestion = ({ cat, question }) => {
     };
     //시사상식일 때
     const chooseCommonsenseAnswer = async (choose, user_content) => {
-        console.log('hi')
         try {
             // setAnswerNo(choose);
    
@@ -73,21 +72,45 @@ const SolveQuestion = ({ cat, question }) => {
                     user_content,
                 }),
             });
-   
-            //문제 불러오기
-            const response2 = await fetch(
-                `${process.env.REACT_APP_API_URL}/filter_test/recommend_problems_view/`,
+            // 사용자 카테고리별 문제 체크
+            const checkResponse = await fetch(
+                `${process.env.REACT_APP_API_URL}/learn/check_result`,
                 {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({
-                        cat,
-                        user_no
-                    }),
+                    body: JSON.stringify({ user_no }),
                 }
             );
+            const checkData = await checkResponse.json();
+
+            let response2;
+            if (checkResponse.ok && checkData.completed_all_categories) {
+                // 모든 카테고리를 완료했으면 추천 문제 불러오기
+                response2 = await fetch(
+                    `${process.env.REACT_APP_API_URL}/filter_test/recommend_problems_view/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ cat, user_no }),
+                    }
+                );
+            } else {
+                // 완료하지 않았으면 일반 문제 불러오기
+                response2 = await fetch(
+                    `${process.env.REACT_APP_API_URL}/learn/getQuestion/`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ cat }),
+                    }
+                );
+            }    
             const data2 = await response2.json();
    
             if (response2.ok) {

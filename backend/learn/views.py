@@ -828,3 +828,17 @@ def get_avg_score(request):
             'user_avg' : user_avg
         }
     return JsonResponse({'score': dic})
+
+@csrf_exempt
+def check_result(request):
+    data = json.loads(request.body)
+    user_no = data.get('user_no')
+    # user_no가 Result 테이블에 없으면 False 반환
+    if not Result.objects.filter(user_no=user_no).exists():
+        return JsonResponse({'check_result': False})
+    has_completed_all_categories = all(
+            Result.objects.filter(user_no=user_no, question_no__category_no=category_id).exists()
+            for category_id in [1, 2, 3]
+        )
+    print(has_completed_all_categories)
+    return JsonResponse({'check_result': has_completed_all_categories})

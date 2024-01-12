@@ -31,17 +31,46 @@ const LearnCommonSense = () => {
     useEffect(() => {
         const getLearnPageData = async () => {
             try {
-                //풀 문제
-                const response1 = await fetch(
-                    `${process.env.REACT_APP_API_URL}/filter_test/recommend_problems_view/`,
+                //카테고리별 문제 풀었는지 확인
+                const checkResponse = await fetch(
+                    `${process.env.REACT_APP_API_URL}/learn/check_result/`,
                     {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ cat, user_no }),
+                        body: JSON.stringify({ user_no }),
                     }
                 );
+                const checkData = await checkResponse.json();
+
+                //풀 문제
+                let response1;
+                if (checkResponse.ok && checkData.completed_all_categories) {
+                    // 모든 카테고리를 완료했으면 추천 문제 불러오기
+                    response1 = await fetch(
+                        `${process.env.REACT_APP_API_URL}/filter_test/recommend_problems_view/`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ cat, user_no }),
+                        }
+                    );
+                } else {
+                    // 완료하지 않았으면 일반 문제 불러오기
+                    response1 = await fetch(
+                        `${process.env.REACT_APP_API_URL}/learn/getQuestion/`,
+                        {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ cat }),
+                        }
+                    );
+                } 
                 const data1 = await response1.json();
                 console.log("서버 응답:", data1); // 로깅 추가
 
