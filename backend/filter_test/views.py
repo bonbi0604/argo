@@ -32,18 +32,15 @@ def recommend_problems_view(request):
         category_ids = [1, 2, 3]
         category_recommendations = recommend_problems_by_category(user_no, category_ids, results_data, questions_data)
         
-        # 랜덤하게 카테고리별 1문제 선택
-        selected_problems = []
-        for category, problems in category_recommendations.items():
-            if problems:
-                selected_problems.append(random.choice(problems))
+        # 카테고리 중에서 랜덤하게 하나를 선택
+        selected_category = random.choice(list(category_recommendations.keys()))
 
-        # 랜덤으로 선택된 문제 중 하나를 최종적으로 선택
-        if selected_problems:
-            final_recommendation = random.choice(selected_problems)
+        # 선택된 카테고리에서 문제 중 하나를 랜덤하게 선택
+        if category_recommendations[selected_category]:
+            final_recommendation = random.choice(category_recommendations[selected_category])
         else:
             final_recommendation = None
-        
+            
         #선택된 문제 json화
         question = Question.objects.get(question_no = final_recommendation)
         choice = Answer.objects.filter(question_no = question.question_no)
