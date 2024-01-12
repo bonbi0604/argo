@@ -46,17 +46,9 @@ const LoginPage = () => {
         e.preventDefault();
         const oldPassword = e.target.oldPassword.value;
 
-        const csrfToken = document.cookie.split('; ').find(row => row.startsWith('csrftoken=')).split('=')[1];
+        // csrfToken 확인 필요
 
-        const config = {
-            headers: {
-                "Content-Type": "application/json",
-                "X-CSRFToken": csrfToken,
-                Authorization: `Bearer ${authTokens.access}`,
-            },
-        };
-
-        changePassword(oldPassword, newPassword, newPassword2, config);
+        changePassword(oldPassword, newPassword, newPassword2);
     };
 
     const isPwdValid = validatePwd(newPassword);
