@@ -73,6 +73,18 @@ def feedback(request):
     # 특정 사용자의 카테고리별 평균 점수 계산
     user_category_scores = get_user_category_scores(user_no)
     
+    # 사용자가 카테고리별로 최소 한 문제라도 풀었는지 확인
+    if all(score == 0 for score in user_category_scores.values()):
+        # 모든 카테고리의 점수가 0인 경우
+        return JsonResponse({
+            "time": [0, 0, 0, 0, 0, 0],
+            "avg": [0, 0, 0, 0, 0, 0],
+            "score": [0, 0, 0, 0, 0, 0],
+            "description": "평가를 할 수 없습니다. 문제를 더 풀어주세요",
+            "cat": ["영어", "한국어", "시사"],
+            "percentage": [0, 0, 0]
+        })
+    
     # 사용자와 같은 그룹의 평균
     # 모든 사용자에 대한 그룹 예측
     all_users_data = predict_groups_for_all_users()
@@ -120,7 +132,7 @@ def feedback(request):
                 break
         
     # 그룹 설명과 카테고리별 피드백을 결합
-    description = group_description + "\n\n" + "\n\n".join([f"{cat.capitalize()}: {fb}" for cat, fb in feedback.items()])
+    description = group_description + " " + " ".join([fb for _, fb in feedback.items()])
     
     time = get_last_six_days(user_no)
     avg = get_avg_score_except_user(user_no, time)
