@@ -54,16 +54,66 @@ const SolveQuestion = ({ cat, question }) => {
 
         setUserContent("");
     };
-
+    //시사상식일 때
+    const chooseCommonsenseAnswer = async (choose, user_content) => {
+        console.log('hi')
+        try {
+            // setAnswerNo(choose);
+   
+            //Result 저장
+            await fetch(`${process.env.REACT_APP_API_URL}/learn/insertResult/`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user_no,
+                    answer_no: choose,
+                    question_no,
+                    user_content,
+                }),
+            });
+   
+            //문제 불러오기
+            const response2 = await fetch(
+                `${process.env.REACT_APP_API_URL}/filter_test/recommend_problems_view/`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        cat,
+                        user_no
+                    }),
+                }
+            );
+            const data2 = await response2.json();
+   
+            if (response2.ok) {
+                setNowQuestion(data2.wrong_question);
+            } else {
+            }
+        } catch (error) {}
+   
+        setUserContent("");
+    };
     return (
         <div id="solve_question">
             <div id="learn_down">
-                <LearnDown_2
+                {cat==='commonsense' ?
+                  <LearnDown_2
+                    chooseAnswer={chooseCommonsenseAnswer}
+                    question={now_question}
+                    user_content={user_content}
+                    setUserContent={setUserContent}/>
+                : <LearnDown_2
                     chooseAnswer={chooseAnswer}
                     question={now_question}
                     user_content={user_content}
                     setUserContent={setUserContent}
-                />
+                />}
+               
             </div>
         </div>
     );
