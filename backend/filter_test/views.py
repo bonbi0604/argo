@@ -5,12 +5,13 @@ from .utils import (
     create_interaction_matrix, calculate_similarity, create_problem_embeddings,
     generate_recommendations,group_similar_problems,recommend_difficult_problems,recommend_problems_by_category
 )
+from datetime import datetime, timedelta
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 import json
 import pandas as pd
 import mlflow.pyfunc
-from django.db.models import Avg,Q
+from django.db.models import Avg,Q,Count
 import os
 from dotenv import load_dotenv
 load_dotenv()
@@ -83,6 +84,10 @@ def feedback(request):
     same_group_users = all_users_data[all_users_data['predicted_group'] == target_user_group]
     average_scores = same_group_users[['category_no1', 'category_no2', 'category_no3']].mean().to_dict()
 
+    # 카테고리와 평균 점수 분리
+    cat = ["영어", "한국어", "시사"]
+    percentage = [average_scores.get(f'category_no{idx}', 0) for idx in range(1, 4)]
+    
     # JSON 파일에서 그룹 설명 로드
     group_descriptions = load_group_descriptions()
     group_description = group_descriptions.get(target_user_group, "No description available.")
@@ -107,19 +112,27 @@ def feedback(request):
             script_id = 3
         elif score_diff < -5:
             script_id = 2
-        print(script_id) 
+         
         # 해당 스크립트 id에 맞는 피드백 찾기
         for script in feedback_scripts[category]:
             if script['id'] == script_id:
                 feedback[category] = script['feedback']
                 break
         
+    # 그룹 설명과 카테고리별 피드백을 결합
+    description = group_description + "\n\n" + "\n\n".join([f"{cat.capitalize()}: {fb}" for cat, fb in feedback.items()])
+    
+    time = get_last_six_days(user_no)
+    avg = get_avg_score_except_user(user_no, time)
+    score = get_user_score(user_no, time)
+    
     return JsonResponse({
-        'user_acg': user_category_scores,
-        'pred_group': int(target_user_group),
-        'group_avg': average_scores,
-        'script': group_description,
-        'user_feedback':feedback
+        'time': time,
+        'avg': avg,
+        'score': score,
+        'description': description,
+        'cat': cat,
+        'percentage': percentage
     })
     
 
@@ -161,3 +174,35 @@ def load_feedback_scripts():
     file_path = os.path.join(current_dir, 'description.json')
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
+
+# 유저가 문제를 푼 날짜 중 최근 6개의 날짜를 UNIX 시간으로 변환하는 함수
+def get_last_six_days(user_no):
+    unique_days = Result.objects.filter(user_no=user_no).dates('timestamp', 'day', order='DESC').distinct()[:6]
+    days_as_timestamp = [int(datetime.combine(day, datetime.min.time()).timestamp() * 1000) for day in unique_days]
+    # 6일보다 적은 경우 마지막 날짜로 채움
+    while len(days_as_timestamp) < 6:
+        days_as_timestamp.append(days_as_timestamp[-1])
+    
+    return days_as_timestamp
+
+# 다른 모든 사용자의 시사/상식 평균 점수 계산
+def get_avg_score_except_user(user_no, unique_days):
+    avg_scores = []
+    for day in unique_days:
+        day_date = datetime.fromtimestamp(day / 1000).date()
+        avg_score = Result.objects.exclude(user_no=user_no).filter(
+            timestamp__date=day_date, question_no__category_no__classification='시사/상식'
+        ).aggregate(Avg('is_correct'))['is_correct__avg']
+        avg_scores.append(avg_score * 100 if avg_score else 0)
+    return avg_scores
+
+# 사용자의 시사/상식 평균 점수 계산
+def get_user_score(user_no, unique_days):
+    user_scores = []
+    for day in unique_days:
+        day_date = datetime.fromtimestamp(day / 1000).date()
+        user_score = Result.objects.filter(
+            user_no=user_no, timestamp__date=day_date, question_no__category_no__classification='시사/상식'
+        ).aggregate(Avg('is_correct'))['is_correct__avg']
+        user_scores.append(user_score * 100 if user_score else 0)
+    return user_scores
