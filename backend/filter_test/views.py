@@ -98,7 +98,7 @@ def feedback(request):
 
     # 카테고리와 평균 점수 분리
     cat = ["영어", "한국어", "시사"]
-    percentage = [average_scores.get(f'category_no{idx}', 0) for idx in range(1, 4)]
+    percentage = [round(average_scores.get(f'category_no{idx}', 0) * 100) for idx in range(1, 4)]
     
     # JSON 파일에서 그룹 설명 로드
     group_descriptions = load_group_descriptions()
