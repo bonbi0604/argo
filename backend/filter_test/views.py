@@ -46,19 +46,21 @@ def recommend_problems_view(request):
         
         #선택된 문제 json화
         question = Question.objects.get(question_no = final_recommendation)
-        choice = Answer.objects.get(question_no = question.question_no)
+        choice = Answer.objects.filter(question_no = question.question_no)
         kor = question.korean
         choice_list = []
         # 주관식이면 0 
         # 객관식이면 1
         is_many_choice = None
-        tmp_dic = {
-            'answer_content' : choice.content,
-            'answer_no': choice.answer_no
-        }
-        choice_list.append(tmp_dic)
-        if choice.is_correct ==1:
-            answer = choice.content
+        for item in choice:
+            tmp_dic = {
+                'answer_content' : item.content,
+                'answer_no': item.answer_no
+            }
+            choice_list.append(tmp_dic)
+            
+            if item.is_correct ==1:
+                answer = item.content
         if len(choice_list) ==1:
             is_many_choice = 0
         else:

@@ -30,16 +30,17 @@ const LearnCommonSense = () => {
 
     useEffect(() => {
         const getLearnPageData = async () => {
+            console.log('hi')
             try {
                 //풀 문제
                 const response1 = await fetch(
-                    `${process.env.REACT_APP_API_URL}/learn/getQuestion/`,
+                    `${process.env.REACT_APP_API_URL}/filter_test/recommend_problems_view/`,
                     {
                         method: "POST",
                         headers: {
                             "Content-Type": "application/json",
                         },
-                        body: JSON.stringify({ cat }),
+                        body: JSON.stringify({ cat, user_no }),
                     }
                 );
                 const data1 = await response1.json();
