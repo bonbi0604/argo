@@ -56,7 +56,7 @@ def recommend_difficult_problems(user_no, interaction_matrix, similar_problems, 
             group_scores = interaction_matrix.loc[user_no, similar_group]
             group_mean = group_scores.mean()
             difficulty_scores[problem] = group_mean
-    top_difficult = sorted(difficulty_scores, key=difficulty_scores.get, reverse=True)[:3]
+    top_difficult = sorted(difficulty_scores, key=difficulty_scores.get, reverse=True)[:1]
     return top_difficult
 
 # 카테고리별 문제 추천 및 확률 계산

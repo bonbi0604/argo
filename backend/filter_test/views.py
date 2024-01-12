@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from learn.models import Result, Question
+from learn.models import Result, Question, Answer
 from django.http import JsonResponse
 from .utils import (
     create_interaction_matrix, calculate_similarity, create_problem_embeddings,
@@ -13,6 +13,7 @@ import pandas as pd
 import mlflow.pyfunc
 from django.db.models import Avg,Q,Count
 import os
+import random
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -30,8 +31,49 @@ def recommend_problems_view(request):
         # 카테고리별 문제 추천
         category_ids = [1, 2, 3]
         category_recommendations = recommend_problems_by_category(user_no, category_ids, results_data, questions_data)
+        
+        # 랜덤하게 카테고리별 1문제 선택
+        selected_problems = []
+        for category, problems in category_recommendations.items():
+            if problems:
+                selected_problems.append(random.choice(problems))
 
-        return JsonResponse({'recommended_problems': category_recommendations})
+        # 랜덤으로 선택된 문제 중 하나를 최종적으로 선택
+        if selected_problems:
+            final_recommendation = random.choice(selected_problems)
+        else:
+            final_recommendation = None
+        
+        #선택된 문제 json화
+        question = Question.objects.get(question_no = final_recommendation)
+        choice = Answer.objects.get(question_no = question.question_no)
+        kor = question.korean
+        choice_list = []
+        # 주관식이면 0 
+        # 객관식이면 1
+        is_many_choice = None
+        tmp_dic = {
+            'answer_content' : choice.content,
+            'answer_no': choice.answer_no
+        }
+        choice_list.append(tmp_dic)
+        if choice.is_correct ==1:
+            answer = choice.content
+        if len(choice_list) ==1:
+            is_many_choice = 0
+        else:
+            is_many_choice = 1
+
+        
+        data = {
+            'question_no': question.question_no,
+            'question_content': question.content,
+            'choices': choice_list,
+            'correct_answer': answer,
+            'is_many_choice' : is_many_choice,
+            'korean' : kor,
+        }
+        return JsonResponse({'wrong_question': data})
     except json.JSONDecodeError:
         return JsonResponse({'error': 'Invalid JSON'}, status=400)
     except KeyError:
