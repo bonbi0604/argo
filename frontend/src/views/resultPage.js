@@ -122,7 +122,39 @@ const ResultPage = () => {
         setDescriptionData(getDictData(data, [catN2S[cat], "description"]));
         // console.log(cat);
     }, [cat]);
-
+    useEffect(() => {
+        const fetchCommonsenseData = async () => {
+            try {
+                const response = await fetch(
+                    `${process.env.REACT_APP_API_URL}/filter_test/feedback/`,
+                    {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ user_no: user.user_no }),
+                });
+    
+                if (response.ok) {
+                    const commonsenseData = await response.json();
+                    // Update the commonsense part of your data object
+                    data.commonsense = {
+                        ...commonsenseData,
+                    };
+                    // Update the state if necessary
+                    // setScoreData({...data});
+                } else {
+                    console.error("Failed to fetch commonsense data");
+                }
+            } catch (error) {
+                console.error("Error fetching commonsense data", error);
+            }
+        };
+    
+        if (user) {
+            fetchCommonsenseData();
+        }
+    }, [user]);
     if (!user) {
         // console.log("redirect");
         return <Navigate to="/login" />;

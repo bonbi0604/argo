@@ -30,7 +30,6 @@ const LearnCommonSense = () => {
 
     useEffect(() => {
         const getLearnPageData = async () => {
-            console.log('hi')
             try {
                 //풀 문제
                 const response1 = await fetch(

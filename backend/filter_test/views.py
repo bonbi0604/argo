@@ -230,11 +230,11 @@ def load_feedback_scripts():
 
 # 유저가 문제를 푼 날짜 중 최근 6개의 날짜를 UNIX 시간으로 변환하는 함수
 def get_last_six_days(user_no):
-    unique_days = Result.objects.filter(user_no=user_no).dates('timestamp', 'day', order='DESC').distinct()[:6]
+    unique_days = Result.objects.filter(user_no=user_no).dates('timestamp', 'day', order='ASC').distinct()[:6]
     days_as_timestamp = [int(datetime.combine(day, datetime.min.time()).timestamp() * 1000) for day in unique_days]
-    # 6일보다 적은 경우 마지막 날짜로 채움
+    # 6일보다 적은 경우 첫 날짜로 채움
     while len(days_as_timestamp) < 6:
-        days_as_timestamp.append(days_as_timestamp[-1])
+        days_as_timestamp.insert(0, days_as_timestamp[0])
     
     return days_as_timestamp
 
