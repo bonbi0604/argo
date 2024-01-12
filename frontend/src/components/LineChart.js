@@ -59,24 +59,44 @@ const LineChart = ({data, cat}) => {
         // data[catN2S[cat], 'time'],
     useEffect(() => {
         // console.log(getDictData(data, [catN2S[cat], 'score']));
-        const tempdata = {
+        let tempdata = {}
+        if (getDictData(data, [catN2S[cat], 'score']).length > 0) {
+          tempdata = {
             // labels: data[catN2S[cat], 'time'],
-            labels: getDictData(data, [catN2S[cat], 'time']).map(elem => convertTimestampToTime2(elem)),
-            datasets: [
-              {
-                label: `${user.name} 님`,
-                data: getDictData(data, [catN2S[cat], 'score']),
-                borderColor: `${color[cat]}`,
-                backgroundColor: `${color[cat]}`,
-              },
-              {
-                label: 'avg',
-                data: getDictData(data, [catN2S[cat], 'avg']),
-                borderColor: '#ccc',
-                backgroundColor: '#ccc',
-              },
-            ],
-        };
+
+              labels: getDictData(data, [catN2S[cat], 'time']).map(elem => convertTimestampToTime2(elem)),
+              datasets: [
+                {
+                  label: `${user.name} 님`,
+                  data: getDictData(data, [catN2S[cat], 'score']),
+                  borderColor: `${color[cat]}`,
+                  backgroundColor: `${color[cat]}`,
+                },
+                {
+                  label: 'avg',
+                  data: getDictData(data, [catN2S[cat], 'avg']),
+                  borderColor: '#ccc',
+                  backgroundColor: '#ccc',
+                },
+              ],
+          };
+        }
+        else {
+          tempdata = {
+            // labels: data[catN2S[cat], 'time'],
+
+              labels: getDictData(data, [catN2S[cat], 'time']).map(elem => convertTimestampToTime2(elem)),
+              datasets: [
+                {
+                  label: `${user.name} 님`,
+                  data: getDictData(data, [catN2S[cat], 'score']),
+                  borderColor: `${color[cat]}`,
+                  backgroundColor: `${color[cat]}`,
+                },
+              ],
+          };
+        }
+
 
 
         const tempoptions = {

@@ -118,9 +118,9 @@ def feedback(request):
     if all(score == 0 for score in user_category_scores.values()):
         # 모든 카테고리의 점수가 0인 경우
         return JsonResponse({
-            "time": [0, 0, 0, 0, 0, 0],
-            "avg": [0, 0, 0, 0, 0, 0],
-            "score": [0, 0, 0, 0, 0, 0],
+            "time": [],
+            "avg": [],
+            "score": [],
             "description": "평가를 할 수 없습니다. 문제를 더 풀어주세요",
             "cat": ["영어", "한국어", "시사"],
             "percentage": [0, 0, 0]

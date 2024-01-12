@@ -37,16 +37,39 @@ const HorizontalBarChart = ({catData, labels, color}) => {
   };
 
   // 그래프 옵션 설정
-  const options = {
+  let options = {
     indexAxis: 'y',
+    // scales: {
+    //   x: {
+    //     beginAtZero: true,
+    //   },
+    // },
     scales: {
       x: {
-        beginAtZero: true,
-      },
+          beginAtZero: true,
+          // grid: {
+          //   color: 'rgba(255, 255, 255, 0.8)', // x 축의 그리드 색상
+          // },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.8)', // x 축의 눈금 색상
+          },
+        },
+        y: {
+          // grid: {
+          //   color: 'rgba(255, 255, 255, 0.8)', // y 축의 그리드 색상
+          // },
+          ticks: {
+            color: 'rgba(255, 255, 255, 0.8)', // y 축의 눈금 색상
+          },
+        },
     },
     plugins: {
         legend: {
           position: 'right',
+          display: false,
+          labels: {
+            color: 'white', // legend 텍스트 색상
+          },
         },
         title: {
           display: false,
@@ -66,6 +89,10 @@ const HorizontalBarChart = ({catData, labels, color}) => {
         }
       },
   };
+
+  // if (catData.length > 0) {
+  //   options.plugins.legend.display = true;
+  // }
 
   return (
     <div style={{width:'70%'}}>
