@@ -16,6 +16,8 @@ yarn = 1.22.21
 백엔드 환경
 conda create -n {env_name} python=3.10
 pip install -r requirements.txt
+//surprise install 오류 발생시 실행하세요
+conda install -c conda-forge scikit-surprise
 
 프론트엔드 환경  
 // node, npm 버전 확인하기  
