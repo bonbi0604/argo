@@ -3,6 +3,10 @@ html, body, #root, .App {
   width: 100%;
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 html {
   background: linear-gradient(rgba(157, 194, 237, 0.8), rgba(206, 224, 246, 0.5)), url('../public/background.jpg');
   background-size: cover; /* 배경 이미지를 화면에 꽉 차게 설정 */
