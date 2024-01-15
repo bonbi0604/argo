@@ -74,7 +74,7 @@ const SolveQuestion = ({ cat, question }) => {
             });
             // 사용자 카테고리별 문제 체크
             const checkResponse = await fetch(
-                `${process.env.REACT_APP_API_URL}/learn/check_result`,
+                `${process.env.REACT_APP_API_URL}/learn/check_result/`,
                 {
                     method: "POST",
                     headers: {
