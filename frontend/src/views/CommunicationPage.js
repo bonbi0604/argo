@@ -31,7 +31,7 @@ const CommunicationPage = () => {
         );
         recieveData = recieveData ? recieveData : {};
         setScore(recieveData);
-        console.log(recieveData);
+        // console.log(recieveData);
 
         setAvgAvg(
             Object.values(recieveData).reduce((sum, { avg }) => sum + avg, 0) /
@@ -46,7 +46,7 @@ const CommunicationPage = () => {
     };
 
     useEffect(() => {
-        console.log(avgScore, avgAvg);
+        // console.log(avgScore, avgAvg);
     }, [avgAvg, avgScore]);
 
     const handleButtonClick = () => {

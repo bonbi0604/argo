@@ -9,7 +9,7 @@ import { Link } from "react-router-dom";
 import './Navbar.css'
 
 // sanity check - 추후 완성되면 지우기
-console.log("navbar");
+// console.log("navbar");
 
 // 좌측 중단 사이드 네비게이션 바
 const Navbar = () => {
