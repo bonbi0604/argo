@@ -142,8 +142,9 @@ const WritePost = () => {
                                 <button
                                     type="submit"
                                     className="write-post-submit-button"
+                                    disabled
                                 >
-                                    작성 완료
+                                    용량 제한으로 인한 글쓰기 비활성화
                                 </button>
                             </div>
                         </form>
