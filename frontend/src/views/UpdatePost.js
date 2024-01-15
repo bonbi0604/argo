@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
+import "./WritePost.css"
 import "./UpdatePost.css";
 
 const UpdatePost = () => {
