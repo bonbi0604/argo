@@ -105,7 +105,7 @@ const Chatbot = () => {
                     chat_content: chatContent,
                 }),
             });
-            console.log("Chat session saved successfully");
+            // console.log("Chat session saved successfully");
         } catch (error) {
             console.error("Error saving chat session:", error);
         }

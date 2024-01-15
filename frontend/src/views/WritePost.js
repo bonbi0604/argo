@@ -30,7 +30,7 @@ const WritePost = () => {
                 }
             }
             for (let key of formData.keys()) {
-                console.log(key, formData.getAll(key));
+                // console.log(key, formData.getAll(key));
             }
             if (user.is_admin) {
                 const endpoint = isNotice ? "/notices/" : "/posts/";

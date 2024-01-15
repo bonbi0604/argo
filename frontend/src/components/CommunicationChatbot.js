@@ -288,7 +288,7 @@ const CommunicationChatbot = ({ stopped, stateN, setStateN, setStopped }) => {
               }
             });
 
-            console.log(B);
+            // console.log(B);
             
             setMessages((prevMessages) => {
               const updatedMessages = [...prevMessages];

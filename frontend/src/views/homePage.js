@@ -3,7 +3,7 @@ import UserInfo from "../components/UserInfo"; // UserInfo 컴포넌트를 가�
 import AuthContext from "../context/AuthContext"; // 커스텀 인증 컨텍스트를 가져옵니다.
 import "./homePage.css"
 import { Link } from "react-router-dom";
-console.log("homepage"); // "homepage"을 콘솔에 출력합니다.
+// console.log("homepage"); // "homepage"을 콘솔에 출력합니다.
 
 const Home = () => {
   useEffect(() => {
@@ -68,7 +68,7 @@ const Home = () => {
       for (const src of scripts) {
         try {
           await loadScript(src);
-          console.log(`Loaded script: ${src}`);
+          // console.log(`Loaded script: ${src}`);
         } catch (error) {
           console.error(`Error loading script: ${src}`);
         }

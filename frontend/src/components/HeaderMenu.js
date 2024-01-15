@@ -5,7 +5,7 @@ import './HeaderMenu.css'
 
 
 // sanity check - 추후 완성되면 지우기
-console.log("header menu");
+// console.log("header menu");
 
 // 상단 네비게이션 바
 const HeaderMenu = () => {

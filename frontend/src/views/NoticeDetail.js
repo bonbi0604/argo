@@ -3,6 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import useAxios from "../utils/useAxios";
 import AuthContext from "../context/AuthContext";
 import "./NoticeDetail.css";
+import "./WritePost.css";
+import "./UpdatePost.css";
 
 const NoticeDetail = () => {
     const { id } = useParams();
@@ -24,7 +26,7 @@ const NoticeDetail = () => {
                 );
                 if (response.status === 200 && response.data) {
                     setNotice(response.data);
-                    console.log(response.data);
+                    // console.log(response.data);
                 } else {
                     console.error("응답 오류:", response);
                 }
@@ -52,7 +54,7 @@ const NoticeDetail = () => {
 
             // 응답 상태 코드가 성공적인 경우 (예: 200, 204)
             if (response.status === 200 || response.status === 204) {
-                console.log("게시물이 성공적으로 삭제되었습니다.");
+                // console.log("게시물이 성공적으로 삭제되었습니다.");
 
                 // 게시물 삭제 후 다른 페이지로 이동하거나, 목록을 업데이트하는 로직을 추가할 수 있습니다.
                 navigate("/DashBoard"); // 게시판 목록 페이지로 이동

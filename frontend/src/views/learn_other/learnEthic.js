@@ -43,7 +43,7 @@ const LearnCommonSense = () => {
                     }
                 );
                 const data1 = await response1.json();
-                console.log("서버 응답:", data1); // 로깅 추가
+                // console.log("서버 응답:", data1); // 로깅 추가
 
                 if (response1.ok) {
                     const wrongQuestion = data1.wrong_question;
